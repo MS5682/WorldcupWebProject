@@ -14,7 +14,7 @@ public class MainController {
     private final WorldcupService worldcupService;
     @GetMapping("")
     public String main(){
-        log.info("list:" + worldcupService.getWorldcupList());
+
         return "/main/main.html";
     }
 }
