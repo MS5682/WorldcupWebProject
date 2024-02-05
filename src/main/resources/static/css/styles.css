@@ -1,0 +1,177 @@
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+
+  @media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+      font-size: 3.5rem;
+    }
+  }
+
+  .b-example-divider {
+    width: 100%;
+    height: 3rem;
+    background-color: rgba(0, 0, 0, .1);
+    border: solid rgba(0, 0, 0, .15);
+    border-width: 1px 0;
+    box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+  }
+
+  .b-example-vr {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 100vh;
+  }
+
+  .bi {
+    vertical-align: -.125em;
+    fill: currentColor;
+  }
+
+  .nav-scroller {
+    position: relative;
+    z-index: 2;
+    height: 2.75rem;
+    overflow-y: hidden;
+  }
+
+  .nav-scroller .nav {
+    display: flex;
+    flex-wrap: nowrap;
+    padding-bottom: 1rem;
+    margin-top: -1px;
+    overflow-x: auto;
+    text-align: center;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .btn-bd-primary {
+    --bd-violet-bg: #712cf9;
+    --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+    --bs-btn-font-weight: 600;
+    --bs-btn-color: var(--bs-white);
+    --bs-btn-bg: var(--bd-violet-bg);
+    --bs-btn-border-color: var(--bd-violet-bg);
+    --bs-btn-hover-color: var(--bs-white);
+    --bs-btn-hover-bg: #6528e0;
+    --bs-btn-hover-border-color: #6528e0;
+    --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+    --bs-btn-active-color: var(--bs-btn-hover-color);
+    --bs-btn-active-bg: #5a23c8;
+    --bs-btn-active-border-color: #5a23c8;
+  }
+  .bd-mode-toggle {
+    z-index: 1500;
+  }
+
+
+
+  .card-text{
+    height: 80px;
+  }
+
+  .worldcup-name{
+    text-align: center;
+    font-size: 20px;
+  }
+  .choice-name{
+    text-align: center;
+  }
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+  .input-group{
+    width: 400px;
+  }
+  .navbar{
+    height: 80px;
+  }
+
+  #reportModal .modal-body {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+  }
+
+  .register,
+    .register-choice {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      background-color: white;
+    }
+    
+    .register-th,
+    .register-td {
+      border: 1px solid #ddd;
+      padding: 5px;
+    }
+
+    .register-choice-th,
+    .register-choice-td {
+      border: 1px solid #ddd;
+      padding: 0px;
+    }
+
+    .register-th,
+    .register-choice-th
+    {
+      text-align: center;
+      width: 10%;
+      padding: 10px;
+    }
+    .choice,
+    .link{
+      width: 100%;
+    }
+    .choice-th,
+    .choice-td {
+      padding: 8px;
+      text-align: center;
+      border-top: none;
+      border-bottom: 1px solid #ddd;
+      border-left:none ;
+      border-right: 1px solid #ddd;
+    }
+
+    .choice tr:first-child th {
+      border-top: none;
+    }
+
+    .choice tr:last-child td {
+      border-bottom: none;
+    }
+    .choice tr th:last-child {
+      border-right: none;
+    }
+
+    .choice tr td:last-child {
+      border-right: none;
+    }
+
+    .border-none-input{
+      border: none;
+      width: 90%;
+    }
+    .video-link{
+      width: 70%;
+    }
+   
+    #addVideoBtn,
+    #addPhotoBtn{
+      margin: 5px;
+    }
+
+.warning{
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: white;
+}
