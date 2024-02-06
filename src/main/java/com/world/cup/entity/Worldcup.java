@@ -25,7 +25,10 @@ public class Worldcup {
     @Column(name="regdate",updatable = false)
     private Date regDate;
 
+    @CreatedDate
     @LastModifiedDate
     @Column(name="moddate")
     private Date modDate;
+
+    private int viewCnt;
 }
