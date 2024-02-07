@@ -143,6 +143,11 @@
             $('.modal').modal('hide');
         })
 
+        function returnClick() {
+            $('.oddImg').css("pointer-events", "auto")
+            $('.evenImg').css("pointer-events", "auto")
+        }
+
         $('.oddImg').on('click', function () {
             clearInterval(timerID);
 
@@ -151,6 +156,9 @@
             $('.oddImg').animate({minWidth: '100vh'})
             $('.evenImg').animate({minWidth: '100vh'})
 
+            $('.oddImg').css("pointer-events", "none")
+            $('.evenImg').css("pointer-events", "none")
+
             currentRound -= 2;
             console.log('라운드 진행 : ' + currentRound);
             progress += 1;
@@ -158,6 +166,8 @@
             $('.progress-bar').css("width", progress / (totalRound - 1) * 100 + "%");
 
             checkRound();
+
+            setTimeout(returnClick, 2000);
 
             timer(time);
         })
@@ -170,6 +180,9 @@
             $('.evenImg').animate({minWidth: '100vh'})
             $('.oddImg').animate({minWidth: '100vh'})
 
+            $('.oddImg').css("pointer-events", "none")
+            $('.evenImg').css("pointer-events", "none")
+
             currentRound -= 2;
             console.log('라운드 진행 : ' + currentRound);
             progress += 1;
@@ -177,6 +190,8 @@
             $('.progress-bar').css("width", progress / (totalRound - 1) * 100 + "%");
 
             checkRound();
+
+            setTimeout(returnClick, 2000);
 
             timer(time);
         })
@@ -196,6 +211,7 @@
 
             if (nextRound == 0.5) {
                 alert('끝')
+                clearInterval(timerID)
             }
         }
     </script>
