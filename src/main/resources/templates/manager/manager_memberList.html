@@ -1,0 +1,49 @@
+<div class="mb-4">
+  <div class="d-flex align-items-center mb-4">
+    <div class="bg-secondary rounded-circle h-12 w-12"></div>
+    <span class="font-weight-bold" style="font-size: 24px;">회원 정보 관리</span>
+  </div>
+  <hr>
+  <div>
+    <table id="board-table" class="table table-bordered text-center">
+      <thead>
+        <tr>
+          <th>번호</th>
+          <th>회원명</th>
+          <th>가입 날짜</th>
+          <th>회원이 만든 월드컵 수</th>
+          <th>회원 관리</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1번</td>
+          <td>김찬희</td>
+          <td>2023-02-07</td>
+          <td>1개</td>
+          <td><div>
+            <button class="btn btn-dark" id="manager_member">확인</button>
+          </div></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="mb-4">
+      <div>
+        <button class="btn btn-dark" id="manager_Home">홈으로</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(function() {
+      $('#manager_Home').click(function(e) {
+          e.preventDefault();
+          window.location.href = '/manager';
+      });
+      $('#manager_member').click(function(e) {
+          alert("회원 정보 상세")
+          e.preventDefault();
+          loadPage('/manager/manager_member','main');
+      });
+  });
+</script>
