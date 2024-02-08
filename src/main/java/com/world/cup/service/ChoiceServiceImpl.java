@@ -19,7 +19,7 @@ public class ChoiceServiceImpl implements ChoiceService {
     private final ChoiceRepository choiceRepository;
 
     @Override
-    public WorldcupDTO addChoiceToWorldcup(WorldcupDTO worldcupDTO) {
+    public WorldcupDTO getChoiceToWorldcup(WorldcupDTO worldcupDTO) {
         int worldcupNum = worldcupDTO.getWorldcupNum();
         List<Choice> choices = choiceRepository.getChoiceByWorldcupNum(worldcupNum);
 
@@ -30,5 +30,11 @@ public class ChoiceServiceImpl implements ChoiceService {
         worldcupDTO.setChoice(choiceDTOs);
 
         return worldcupDTO;
+    }
+
+    @Override
+    public void addChoice(ChoiceDTO choiceDTO) {
+        Choice choice = dtoToEntity(choiceDTO);
+        choiceRepository.save(choice);
     }
 }
