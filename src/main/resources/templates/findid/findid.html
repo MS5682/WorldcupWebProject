@@ -27,11 +27,16 @@
 							<span class="fa fa-user-o"></span>
 						</div>
 						<h3 class="text-center mb-4">아이디 찾기</h3>
-						<form action="#" class="login-form">
-							<div class="form-group">
-								<input type="text" class="form-control rounded-left" placeholder="Email" required>
+						<form id="findIdForm" th:action="@{/worldcup/findid}" th:method="post" class="login-form">
+							<div id="inputId" th:if="!${msg}" class="form-group">
+								<input type="text" name="email" class="form-control rounded-left" placeholder="Email" required>
 							</div>
-								<button type="submit" class="btn btn-primary rounded submit w-100">아이디 찾기</button>
+							<div id="findId" th:if="${msg}" >
+								<p class="text-center fs-3" id="msg" th:text="${msg}"></p>
+							</div>
+								<button id="findBtn" th:if="!${msg}" type="submit" class="btn btn-primary rounded submit w-100">아이디 찾기</button>
+							<a th:href="@{/worldcup/login}" th:if="${success}" id="loginBtn"><button type="button" class="btn btn-primary rounded w-100">로그인 화면으로</button></a>
+							<a th:href="@{/worldcup/findid}" th:if="${msg}=='아이디를 찾을 수 없습니다.'" id="reFindIdBtn"><button type="button" class="btn btn-primary rounded w-100">아이디 다시 찾기</button></a>
 
 	         			 </form>
 	       		 	</div>
@@ -44,6 +49,7 @@
 	<script th:src="@{../findid/js/popper.js}"></script>
 	<script th:src="@{../findid/js/bootstrap.min.js}"></script>
 	<script th:src="@{../findid/js/main.js}"></script>
+
 
 	</body>
 </html>
