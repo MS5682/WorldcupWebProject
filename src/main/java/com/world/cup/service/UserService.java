@@ -9,6 +9,8 @@ public interface UserService {
     void signup(UserDTO userDTO);
 
     boolean login(UserDTO userDTO);
+
+    String findId(String email);
     boolean isIdExists(String id);
 
     boolean isEmailExists(String email);
