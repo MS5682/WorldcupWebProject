@@ -7,7 +7,10 @@ import com.world.cup.entity.Worldcup;
 
 
 public interface ChoiceService {
-    WorldcupDTO addChoiceToWorldcup(WorldcupDTO worldcupDTO);
+    WorldcupDTO getChoiceToWorldcup(WorldcupDTO worldcupDTO);
+
+    void addChoice(ChoiceDTO choiceDTO);
+
     default Choice dtoToEntity(ChoiceDTO choiceDTO){
         Worldcup worldcup = Worldcup.builder()
                 .worldcupNum(choiceDTO.getWorldcupNum())
@@ -16,7 +19,9 @@ public interface ChoiceService {
                 .name(choiceDTO.getName())
                 .choiceNum(choiceDTO.getChoiceNum())
                 .first(choiceDTO.getChoiceNum())
-                .link(choiceDTO.getLink())
+                .path(choiceDTO.getPath())
+                .uuid(choiceDTO.getUuid())
+                .imgName(choiceDTO.getImgName())
                 .type(choiceDTO.getType())
                 .worldcup(worldcup)
                 .build();
@@ -27,7 +32,9 @@ public interface ChoiceService {
         ChoiceDTO choiceDTO = ChoiceDTO.builder()
                 .choiceNum(choice.getChoiceNum())
                 .first(choice.getFirst())
-                .link(choice.getLink())
+                .imgName(choice.getImgName())
+                .path(choice.getPath())
+                .uuid(choice.getUuid())
                 .name(choice.getName())
                 .type(choice.getType())
                 .choiceNum(choice.getChoiceNum())

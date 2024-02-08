@@ -16,8 +16,11 @@ public class Choice {
 
     private String name;
     private Byte type;
-    private String link;
     private int first;
+
+    private String path;
+    private String uuid;
+    private String imgName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Worldcup worldcup;

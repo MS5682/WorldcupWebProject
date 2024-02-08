@@ -24,7 +24,8 @@ public class WorldcupServiceImpl implements WorldcupService{
     @Override
     public PageResultDTO<WorldcupDTO, Object[]> getWorldcupList(PageRequestDTO pageRequestDTO){
         Function<Object[], WorldcupDTO> fn = ((en) -> entityToDto((Worldcup)en[0], (String) en[1],(String) en[2],
-                (Byte) en[3],(Byte) en[4],(String) en[5],(String) en[6]));
+                (Byte) en[3],(Byte) en[4],(String) en[5],(String) en[6],(String) en[7],(String) en[8],
+                (String) en[9],(String) en[10]));
 
         Sort sort = null;
         if (pageRequestDTO.getOrder() == 0) {

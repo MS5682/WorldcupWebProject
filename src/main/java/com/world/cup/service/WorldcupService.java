@@ -39,11 +39,14 @@ public interface WorldcupService {
         return worldcupDTO;
     }
     default WorldcupDTO entityToDto(Worldcup worldcup,String name1,String name2,
-                                    Byte type1,Byte type2,String link1,String link2){
+                                    Byte type1,Byte type2,
+                                    String uuid1,String uuid2,
+                                    String imgName1,String imgName2,
+                                    String path1,String path2){
 
         List<ChoiceDTO> choices = new ArrayList<>();
-        choices.add(ChoiceDTO.builder().name(name1).type(type1).link(link1).build());
-        choices.add(ChoiceDTO.builder().name(name2).type(type2).link(link2).build());
+        choices.add(ChoiceDTO.builder().name(name1).type(type1).path(path1).uuid(uuid1).imgName(imgName1).build());
+        choices.add(ChoiceDTO.builder().name(name2).type(type2).path(path2).uuid(uuid2).imgName(imgName2).build());
 
         WorldcupDTO worldcupDTO = WorldcupDTO.builder()
                 .worldcupNum(worldcup.getWorldcupNum())
