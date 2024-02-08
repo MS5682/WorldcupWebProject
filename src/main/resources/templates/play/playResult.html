@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        ul {list-style: none}
+        .graph_wrap {margin: 0 auto;padding:20px;}
+        .graph {position: relative;height: 500px;margin-top: 15px;}
+        .graph .y-axis {position: absolute;width: 100%;height: 100%;z-index: 1;}
+        .graph .y-axis > li {position: relative;width:calc(100% - 20px);height: calc(100% / 8);margin-left: 20px;border-top: 1px solid #8c8c8c;text-align: left;}
+        .graph .y-axis > li span {position: absolute;top: -7px;left: -20px;font-size: 12px;line-height: 1;}
+        .graph .x-axis {display: flex;justify-content: space-around;position: absolute;bottom: -8px;left: 20px;width: calc(100% - 20px);text-align: center;z-index: 2;}
+        .graph .x-axis > li {font-size: 12px;}
+        .graph .bar {display: flex;justify-content: space-around;align-items: flex-end;position: absolute;bottom: 45px;left: 20px;width: calc(100% - 20px);height: calc(100% - 16px);text-align: center;z-index: 3;}
+        .graph .bar > li {flex-grow:1;margin: 0 10px;}
+        .graph .bar > li span {display: inline-block;width: 100%;height: 100%;max-width: 40px;background: #8ab4f8;}
+
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous"
+</head>
+<body style="background-color: lightgray">
+    <div class="container" style="background-color: white">
+        <!-- Content here -->
+        <p class="text-center fs-1 fw-bold">월드컵 이름</p>
+
+        <p class="text-center">월드컵 횟수 : 1</p>
+    </div>
+
+    <hr>
+
+    <div class="container" style="background-color: white; padding-top: 10px">
+        <p class="text-center fs-1 fw-bold">순위</p>
+        <div class="row">
+            <div class="col d-flex justify-content-center">
+                <div class="card" style="width: 18rem;">
+                    <p class="text-center fs-3">1위</p>
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">이름</h5>
+                        <p class="card-text">승률 : </p>
+                        <p class="card-text">우승 횟수 : </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 10px">
+            <div class="col d-flex justify-content-center">
+                <div class="card" style="width: 18rem;">
+                    <p class="text-start fs-3 text-center">2위</p>
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">이름</h5>
+                        <p class="card-text">승률 : </p>
+                        <p class="card-text">우승 횟수 : </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col d-flex justify-content-center">
+                <div class="card" style="width: 18rem;">
+                    <p class="text-start fs-3 text-center">3위</p>
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">이름</h5>
+                        <p class="card-text">승률 : </p>
+                        <p class="card-text">우승 횟수 : </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col" style="width: 5%">등수</th>
+                <th scope="col" style="width: 15%">이름</th>
+                <th scope="col" style="width: 40%">승률</th>
+                <th scope="col" style="width: 40%">우승 횟수</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">4</th>
+                <td>이름</td>
+                <td>
+                    <div class="progress" role="progressbar" aria-label="Info striped example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="progress" role="progressbar" aria-label="Info striped example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">5</th>
+                <td>이름</td>
+                <td>
+                    <div class="progress" role="progressbar" aria-label="Info striped example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="progress" role="progressbar" aria-label="Info striped example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">6</th>
+                <td>이름</td>
+                <td>
+                    <div class="progress" role="progressbar" aria-label="Info striped example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="progress" role="progressbar" aria-label="Info striped example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">7</th>
+                <td>이름</td>
+                <td>
+                    <div class="progress" role="progressbar" aria-label="Info striped example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="progress" role="progressbar" aria-label="Info striped example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">8</th>
+                <td>이름</td>
+                <td>
+                    <div class="progress" role="progressbar" aria-label="Info striped example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="progress" role="progressbar" aria-label="Info striped example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">9</th>
+                <td>이름</td>
+                <td>
+                    <div class="progress" role="progressbar" aria-label="Info striped example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="progress" role="progressbar" aria-label="Info striped example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">10</th>
+                <td>이름</td>
+                <td>
+                    <div class="progress" role="progressbar" aria-label="Info striped example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="progress" role="progressbar" aria-label="Info striped example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped bg-info" style="width: 50%"></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr>
+
+    <div class="container" style="background-color: white">
+        <!-- Content here -->
+        <p class="text-start fs-1 fw-bold">그래프</p>
+
+        <div class="graph_wrap">
+            <div class="graph">
+                <!-- 기준 -->
+                <ul class="y-axis">
+                    <li><span>35</span></li>
+                    <li><span>30</span></li>
+                    <li><span>25</span></li>
+                    <li><span>20</span></li>
+                    <li><span>15</span></li>
+                    <li><span>10</span></li>
+                    <li><span>5</span></li>
+                    <li><span>0</span></li>
+                </ul>
+                <!-- 목록 -->
+                <ul class="x-axis">
+                    <li><span>목록1</span></li>
+                    <li><span>목록2</span></li>
+                    <li><span>목록3</span></li>
+                    <li><span>목록4</span></li>
+                    <li><span>목록5</span></li>
+                    <li><span>목록6</span></li>
+                    <li><span>목록7</span></li>
+                    <li><span>목록8</span></li>
+                    <li><span>목록9</span></li>
+                    <li><span>목록10</span></li>
+                </ul>
+                <!-- 바 그래프 (백분율 만큼 height값) -->
+                <ul class="bar">
+                    <li style="height:100%;"><span></span></li>
+                    <li style="height:90%;"><span></span></li>
+                    <li style="height:80%;"><span></span></li>
+                    <li style="height:70%;"><span></span></li>
+                    <li style="height:60%;"><span></span></li>
+                    <li style="height:50%;"><span></span></li>
+                    <li style="height:40%;"><span></span></li>
+                    <li style="height:30%;"><span></span></li>
+                    <li style="height:20%;"><span></span></li>
+                    <li style="height:10%;"><span></span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="container" style="background-color: white">
+        <div class="row">
+            <div class="col border">
+                <p class="fs-4">댓글</p>
+
+                <form class="row row-cols-lg-auto g-3 align-items-center">
+                    <div class="col-12" style="width: 80%">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="replyInput" placeholder="name@example.com">
+                            <label for="floatingInput">댓글 작성</label>
+                        </div>
+                    </div>
+
+                    <div class="col-12" style="min-width: 20px; min-height: 20px">
+                        <button type="submit" class="btn btn-primary">작성</button>
+                    </div>
+                </form>
+
+<!--                댓글 내용 표시 시작-->
+                <div class="media mb-4">
+                    <div class="media-body">
+                        <h6 class="mt-0">닉네임 들어감</h6>
+                        <p class="fs-6">댓글</p>
+                    </div>
+                </div>
+<!--                댓글 내용 표시 끝-->
+                <div class="media mb-4">
+                    <div class="media-body">
+                        <h6 class="mt-0">닉네임 들어감</h6>
+                        <p class="fs-6">댓글</p>
+                    </div>
+                </div>
+
+                <div class="media mb-4">
+                    <div class="media-body">
+                        <h6 class="mt-0">닉네임 들어감</h6>
+                        <p class="fs-6">댓글</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col border">
+                <p class="fs-4">요청</p>
+
+                <form class="row row-cols-lg-auto g-3 align-items-center">
+                    <div class="col-12" style="width: 80%">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="requestInput" placeholder="name@example.com">
+                            <label for="floatingInput">댓글로 후보 요청</label>
+                        </div>
+                    </div>
+
+                    <div class="col-12" style="min-width: 20px; min-height: 20px">
+                        <button type="submit" class="btn btn-primary">작성</button>
+                    </div>
+                </form>
+
+                <div class="media mb-4">
+                    <div class="media-body">
+                        <h6 class="mt-0">닉네임 들어감</h6>
+                        <p class="fs-6">댓글</p>
+                    </div>
+                </div>
+
+                <div class="media mb-4">
+                    <div class="media-body">
+                        <h6 class="mt-0">닉네임 들어감</h6>
+                        <p class="fs-6">댓글</p>
+                    </div>
+                </div>
+
+                <div class="media mb-4">
+                    <div class="media-body">
+                        <h6 class="mt-0">닉네임 들어감</h6>
+                        <p class="fs-6">댓글</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</body>
+</html>
