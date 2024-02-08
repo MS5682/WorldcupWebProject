@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body>
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+<!--                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trophy" viewBox="0 0 16 16">-->
+<!--                        <path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5c0 .538-.012 1.05-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255L6.5 13.11v-2.173c-.955-.234-2.043-1.146-2.833-3.012a3 3 0 1 1-1.132-5.89A33.076 33.076 0 0 1 2.5.5zm.099 2.54a2 2 0 0 0 .72 3.935c-.333-1.05-.588-2.346-.72-3.935zm10.083 3.935a2 2 0 0 0 .72-3.935c-.133 1.59-.388 2.885-.72 3.935zM3.504 1c.007.517.026 1.006.056 1.469.13 2.028.457 3.546.87 4.667C5.294 9.48 6.484 10 7 10a.5.5 0 0 1 .5.5v2.61a1 1 0 0 1-.757.97l-1.426.356a.5.5 0 0 0-.179.085L4.5 15h7l-.638-.479a.501.501 0 0 0-.18-.085l-1.425-.356a1 1 0 0 1-.757-.97V10.5A.5.5 0 0 1 9 10c.516 0 1.706-.52 2.57-2.864.413-1.12.74-2.64.87-4.667.03-.463.049-.952.056-1.469H3.504z"/>-->
+<!--                    </svg>-->
+
+                    <h1 class="modal-title fs-5 modal-dialog-centered" id="staticBackdropLabel">무슨 이상형 월드컵</h1>
+                </div>
+                <div class="modal-body">
+                    <select class="form-select totalRound" aria-label="Default select example" style="margin-bottom: 5px">
+                        <option selected>몇강</option>
+                        <option value="1">2강</option>
+                        <option value="2">4강</option>
+                        <option value="3">8강</option>
+                        <option value="4">16강</option>
+                        <option value="5">32강</option>
+                    </select>
+
+                    <div class="form-check-inline form-switch" style="width: 30%">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">타임어택</label>
+                    </div>
+
+                    <select class="form-select-inline form-select-sm limitTime" aria-label="Small select example" style="width: 60%; visibility: hidden">
+                        <option selected>시간</option>
+                        <option value="1">1분</option>
+                        <option value="2">2분</option>
+                        <option value="3">3분</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary okButton">시작</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-bg-dark p-3" style="min-height: 100vh">
+        <h1 class="position-absolute start-50 translate-middle worldcup-name">월드컵 이름 들어갈 자리</h1>
+
+        <ul class="nav justify-content-end">
+            <li class="nav-item viewTimer">
+
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active link-light" aria-current="page" href="#">저장</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled link-light" aria-disabled="true">Disabled</a>
+            </li>
+        </ul>
+
+        <div class="progress" role="progressbar" aria-label="Example 1px high" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 20px">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"></div>
+        </div>
+
+        <img src="..." class="img-thumbnail oddImg" alt="..." style="min-width: 100vh; min-height: 85vh; margin-top: 10px">
+        <img src="..." class="img-thumbnail evenImg" alt="..." style="min-width: 100vh; min-height: 85vh; margin-top: 10px">
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script th:inline="javascript">
+        $(document).ready(function() {
+            $('.modal').modal('show');
+        });
+
+        $('.form-check-input').on('click', function () {
+            if ($('.form-check-input').is(':checked')) {
+                $('.limitTime').css("visibility", "visible");
+            } else {
+                $('.limitTime').css("visibility", "hidden");
+            }
+        })
+
+        var timerID;
+        var count;
+
+        function timer(time) {
+            count = time / 1000;
+
+            timerID = setInterval(function () {
+                count--;
+                console.log('타이머 남은 시간 : ' + count);
+                var timerText = document.querySelector('.viewTimer');
+                timerText.innerHTML = '<h2>' + count + "</h2>";
+
+                if (count == 0) {
+                    ranNum = Math.floor(Math.random() * 2 + 1)
+                    console.log('1, 2 무작위 숫자 : ' + ranNum);
+                    randomClick(ranNum);
+
+                    count = time / 1000;
+                }
+            }, 1000)
+        }
+
+        function randomClick(num) {
+            if (num == 1) {
+                $('.oddImg').click();
+            } else if (num == 2) {
+                $('.evenImg').click();
+            }
+        }
+
+        var totalRound = 1;
+        var currentRound;
+        var nextRound;
+        var progress = 0;
+
+        $('.okButton').on('click', function () {
+            var name = document.querySelector('.worldcup-name');
+            for (i = 0; i < $('.totalRound').val(); i++) {
+                totalRound = totalRound * 2;
+            }
+            name.innerText += ' ' + totalRound + '강';
+            currentRound = totalRound;
+            nextRound = totalRound/2;
+
+            var progressbar = document.querySelector('.progress-bar');
+            progressbar.innerText = currentRound + '강';
+
+            if ($('.form-check-input').is(':checked')) {
+                console.log('고른 제한 시간 : ' + $('.limitTime').val())
+                time = $('.limitTime').val() * 1000 * 60;
+
+                timer(time);
+                console.log('타이머에 적용 될 숫자 : ' + time);
+            }
+            $('.modal').modal('hide');
+        })
+
+        $('.oddImg').on('click', function () {
+            clearInterval(timerID);
+
+            $('.oddImg').animate({minWidth: '1600px'}, 2000)
+            $('.evenImg').animate({minWidth: '0px'}, 2000)
+            $('.oddImg').animate({minWidth: '100vh'})
+            $('.evenImg').animate({minWidth: '100vh'})
+
+            currentRound -= 2;
+            console.log('라운드 진행 : ' + currentRound);
+            progress += 1;
+
+            $('.progress-bar').css("width", progress / (totalRound - 1) * 100 + "%");
+
+            checkRound();
+
+            timer(time);
+        })
+
+        $('.evenImg').on('click', function () {
+            clearInterval(timerID);
+
+            $('.evenImg').animate({minWidth: '1600px'}, 2000)
+            $('.oddImg').animate({minWidth: '0px'}, 2000)
+            $('.evenImg').animate({minWidth: '100vh'})
+            $('.oddImg').animate({minWidth: '100vh'})
+
+            currentRound -= 2;
+            console.log('라운드 진행 : ' + currentRound);
+            progress += 1;
+
+            $('.progress-bar').css("width", progress / (totalRound - 1) * 100 + "%");
+
+            checkRound();
+
+            timer(time);
+        })
+
+        function checkRound() {
+            if (currentRound == 0) {
+                var name = document.querySelector('.worldcup-name');
+                name.innerText = ' ' + nextRound + '강';
+                currentRound = nextRound;
+                nextRound = currentRound/2;
+
+                console.log('마지막 nextRound 체크 : ' + nextRound)
+
+                var progressbar = document.querySelector('.progress-bar');
+                progressbar.innerText = currentRound + '강';
+            }
+
+            if (nextRound == 0.5) {
+                alert('끝')
+            }
+        }
+    </script>
+</body>
+</html>
