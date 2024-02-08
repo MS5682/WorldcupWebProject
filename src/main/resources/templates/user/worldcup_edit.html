@@ -35,33 +35,30 @@
         <div><h2>이상형 월드컵 수정 및 선택지 추가</h2></div>
       </div>
 
-      <form>
-        <input type="hidden" name="worldcupNum" value="값">
+      <form th:action="@{/update}" th:object="${result}" method="post">
+        <input type="hidden" th:field="*{worldcupNum}">
         <table class="register">
           <tr>
             <th class="register-th">제목</th>
             <td class="register-td">
-                <input class="border-none-input" placeholder="제목을 입력하세요" name="title" value="배달음식 월드컵">
+              <input class="border-none-input" placeholder="제목을 입력하세요" th:value="*{title}">
             </td>
           </tr>
           <tr>
             <th class="register-th">설명</th>
             <td class="register-td">
-                <input class="border-none-input" placeholder="설명을 입력하세요" name="description" value="최고의 배달음식을 뽑는 월드컵입니다.">
+              <input class="border-none-input" placeholder="설명을 입력하세요" th:value="*{description}">
             </td>
           </tr>
           <tr>
             <th class="register-th">공개 여부</th>
             <td class="register-td">
               <label style="margin-left:5px;">
-                  <input type="radio" name="disclosure" value="public" checked>
-                  공개
+                <input type="radio" name="disclosure" value="1" th:checked="${result.disclosure == 1}">공개
               </label>
               <label>
-                  <input type="radio" name="disclosure" value="private">
-                  비공개
+                <input type="radio" name="disclosure" value="0" th:checked="${result.disclosure == 0}">비공개
               </label>
-              
             </td>
           </tr>
           <tr>

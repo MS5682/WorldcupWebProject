@@ -13,6 +13,11 @@ import java.util.List;
 public interface WorldcupService {
 
     PageResultDTO<WorldcupDTO, Object[]> getWorldcupList(PageRequestDTO pageRequestDTO);
+
+    int register(WorldcupDTO worldcupDTO);
+
+    WorldcupDTO getWorldcup(WorldcupDTO worldcupDTO);
+
     default Worldcup dtoToEntity(WorldcupDTO worldcupDTO){
         Worldcup worldcup = Worldcup.builder()
                 .worldcupNum(worldcupDTO.getWorldcupNum())

@@ -12,7 +12,8 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class Worldcup {
+@ToString
+public class Worldcup extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int worldcupNum;
@@ -21,14 +22,6 @@ public class Worldcup {
     private String description;
     private Byte disclosure;
 
-    @CreatedDate
-    @Column(name="regdate",updatable = false)
-    private Date regDate;
-
-    @CreatedDate
-    @LastModifiedDate
-    @Column(name="moddate")
-    private Date modDate;
 
     private int viewCnt;
 }

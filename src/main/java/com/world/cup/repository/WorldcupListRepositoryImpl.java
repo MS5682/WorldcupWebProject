@@ -27,8 +27,8 @@ public class WorldcupListRepositoryImpl extends QuerydslRepositorySupport implem
         QChoice choice2 = new QChoice("choice2");
 
         JPQLQuery<Worldcup> jpqlQuery = from(worldcup);
-        jpqlQuery.join(choice1).on(worldcup.eq(choice1.worldcup));
-        jpqlQuery.join(choice2).on(worldcup.eq(choice2.worldcup).and(choice1.choiceNum.lt(choice2.choiceNum)));
+        jpqlQuery.leftJoin(choice1).on(worldcup.eq(choice1.worldcup));
+        jpqlQuery.leftJoin(choice2).on(worldcup.eq(choice2.worldcup).and(choice1.choiceNum.gt(choice2.choiceNum)));
         JPQLQuery<Tuple> tuple = jpqlQuery.select(worldcup, choice1.name, choice2.name,
                 choice1.type, choice2.type, choice1.link, choice2.link);
 
