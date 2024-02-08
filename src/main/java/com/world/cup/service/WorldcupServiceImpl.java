@@ -42,4 +42,21 @@ public class WorldcupServiceImpl implements WorldcupService{
 
         return new PageResultDTO<>(result,fn);
     }
+
+    @Override
+    public int register(WorldcupDTO worldcupDTO) {
+        log.info(worldcupDTO);
+        Worldcup worldcup = dtoToEntity(worldcupDTO);
+        log.info(worldcup);
+        worldcupRepository.save(worldcup);
+        return worldcup.getWorldcupNum();
+    }
+
+    @Override
+    public WorldcupDTO getWorldcup(WorldcupDTO worldcupDTO) {
+        Object result = worldcupRepository.getWorldcupByWorldcupNum(worldcupDTO.getWorldcupNum());
+        return entityToDto((Worldcup)result);
+    }
+
+
 }

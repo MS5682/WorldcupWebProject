@@ -7,6 +7,7 @@ import com.world.cup.entity.Worldcup;
 
 
 public interface ChoiceService {
+    WorldcupDTO addChoiceToWorldcup(WorldcupDTO worldcupDTO);
     default Choice dtoToEntity(ChoiceDTO choiceDTO){
         Worldcup worldcup = Worldcup.builder()
                 .worldcupNum(choiceDTO.getWorldcupNum())

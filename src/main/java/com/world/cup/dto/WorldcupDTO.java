@@ -5,7 +5,8 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.sql.Date;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -18,8 +19,9 @@ public class WorldcupDTO {
     private String title;
     private String description;
     private Byte disclosure;
-    private Date regDate;
-    private Date modDate;
+    private LocalDate regDate;
+    private LocalDate modDate;
 
     private List<ChoiceDTO> choice;
+
 }
