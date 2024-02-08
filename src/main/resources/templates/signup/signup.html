@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+  	<title>회원가입화면</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+	<link rel="stylesheet" th:href="@{../signup/css/style.css}">
+
+
+	</head>
+	<body>
+	<th:block th:include="main/header :: header"></th:block>
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section"></h2>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-md-7 col-lg-6 col-xl-5">
+					<div class="login-wrap p-4 p-md-5">
+		      	<div class="icon d-flex align-items-center justify-content-center">
+		      		<span class="fa fa-edit"></span>
+		      	</div>
+		      	<h3 class="text-center mb-4">회원 가입</h3>
+						<form th:action="@{/worldcup/signup}" th:method="post" class="signup-form" onsubmit="return validateForm()">
+		      		<div class="form-group mb-3">
+		      			<label class="label" >아이디</label>
+		      			<input id="inputId" name="id" type="text" class="form-control" placeholder="아이디를 입력하세요." required>
+						<div id="idErrorMessage" class="error-message"></div>
+						<div class="text-right">
+							<button type="button" class="btn btn-secondary rounded submit mt-2"
+									onclick="checkIdDuplicate()">아이디 중복 검사</button>
+						</div>
+
+		      		</div>
+
+		      		<div class="form-group mb-3">
+		      			<label class="label" >이메일</label>
+		      			<input id="inputEmail" name="email" type="text" class="form-control" placeholder="tech2334@gmail.com" required>
+						<div id="emailErrorMessage" class="error-message"></div>
+						<div class="text-right">
+							<button type="button" class="btn btn-secondary rounded submit mt-2"
+									onclick="checkEmailDuplicate()">이메일 중복 검사</button>
+						</div>
+		      		</div>
+	            <div class="form-group mb-3">
+	            	<label class="label" >비밀번호</label>
+	              <input id="password-field" name="password" type="password" class="form-control" placeholder="Password" required>
+	              <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+	            </div>
+	            <div class="form-group d-md-flex">
+	            	<div class="w-100 text-left">
+<!--		            	<label class="checkbox-wrap checkbox-primary">I agree all statements in terms of service-->
+<!--									  <input type="checkbox" checked>-->
+<!--									  <span class="checkmark"></span>-->
+<!--									</label>-->
+								</div>
+	            </div>
+	            <div class="form-group">
+	            	<button type="submit" class="form-control btn btn-primary rounded submit px-3">회원가입</button>
+	            </div>
+	          </form>
+	          <p>이미 회원이신가요?   <a th:href="@{/worldcup/login}"> &nbsp;&nbsp;로그인</a></p>
+	        </div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script>
+		function validateForm() {
+			var idErrorMessage = document.getElementById("idErrorMessage");
+			var emailErrorMessage = document.getElementById("emailErrorMessage");
+
+			if (idErrorMessage.innerText === "아이디가 사용 가능합니다" && emailErrorMessage.innerText === "이메일이 사용 가능합니다") {
+				// 서버로 중복 확인 요청을 보내서 중복이 아닌 경우에만 true 반환
+				if (checkServerForDuplicates()) {
+					return true;
+				} else {
+					alert("아이디와 이메일 중복을 확인해주세요.");
+					return false;
+				}
+			} else {
+				alert("아이디와 이메일 중복을 확인해주세요.");
+				return false;
+			}
+		}
+
+		function checkServerForDuplicates() {
+			// 서버로 중복 여부 확인 요청을 보내고, 중복이 아니면 true 반환
+			var id = document.getElementById("inputId").value;
+			var email = document.getElementById("inputEmail").value;
+
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", "/worldcup/checkIdAndEmailDuplicate?id=" + id + "&email=" + email, false);
+			xhr.send();
+
+			var response = JSON.parse(xhr.responseText);
+			return !response.idDuplicate && !response.emailDuplicate;
+		}
+
+		function checkIdDuplicate() {
+			var id = document.getElementById("inputId").value;
+			var idErrorMessage = document.getElementById("idErrorMessage")
+
+			if (id.trim() === "") {
+				idErrorMessage.style.color = "red";
+				idErrorMessage.innerText = "아이디를 입력하세요.";
+				return;
+    		}
+			// AJAX 요청
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", "/worldcup/checkIdDuplicate?id=" + id, true);
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					var response = JSON.parse(xhr.responseText);
+					if (response.idDuplicate) {
+						idErrorMessage.style.color = "red";
+						idErrorMessage.innerText = "이미 존재하는 아이디입니다";
+					}
+					else {
+						idErrorMessage.style.color = "green";
+						idErrorMessage.innerText = "아이디가 사용 가능합니다";
+					}
+				}
+			};
+			xhr.send();
+		}
+
+		function checkEmailDuplicate() {
+			var email = document.getElementById("inputEmail").value;
+			var emailErrorMessage = document.getElementById("emailErrorMessage")
+			if (email.trim() === "") {
+				emailErrorMessage.style.color = "red";
+				emailErrorMessage.innerText = "이메일을 입력하세요.";
+				return;
+    		}
+			// AJAX 요청
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", "/worldcup/checkEmailDuplicate?email=" + email, true);
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					var response = JSON.parse(xhr.responseText);
+					if (response.emailDuplicate) {
+						emailErrorMessage.style.color = "red";
+						emailErrorMessage.innerText = "이미 존재하는 이메일입니다";
+					} else {
+						emailErrorMessage.style.color = "green";
+						emailErrorMessage.innerText = "이메일이 사용 가능합니다";
+					}
+				}
+			};
+			xhr.send();
+		}
+	</script>
+
+	<script>
+		/*<![CDATA[*/
+
+        // 실패 메시지 가져오기
+        var errorMessage = "[[${msg}]]";
+
+        // 실패 메시지가 있으면 알림창 띄우기
+        if (errorMessage.trim() !== '') {
+            alert(errorMessage);
+        }
+
+        /*]]>*/
+	</script>
+
+
+	<script th:src="@{../signup/js/jquery.min.js}"></script>
+	<script th:src="@{../signup/js/popper.js}"></script>
+	<script th:src="@{../signup/js/bootstrap.min.js}"></script>
+	<script th:src="@{../signup/js/main.js}"></script>
+	<th:block th:include="main/footer :: footer"></th:block>
+	</body>
+</html>
+
