@@ -11,4 +11,9 @@ public class PlayingController {
     public void playing() {
 
     }
+
+    @GetMapping("/playResult")
+    public void playResult() {
+
+    }
 }
