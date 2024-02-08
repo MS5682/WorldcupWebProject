@@ -1,6 +1,8 @@
 package com.world.cup.service;
 
 import com.world.cup.dto.ChoiceDTO;
+import com.world.cup.dto.PageRequestDTO;
+import com.world.cup.dto.PageResultDTO;
 import com.world.cup.dto.WorldcupDTO;
 import com.world.cup.entity.Worldcup;
 
@@ -10,7 +12,12 @@ import java.util.List;
 
 public interface WorldcupService {
 
-    List<WorldcupDTO> getWorldcupList();
+    PageResultDTO<WorldcupDTO, Object[]> getWorldcupList(PageRequestDTO pageRequestDTO);
+
+    int register(WorldcupDTO worldcupDTO);
+
+    WorldcupDTO getWorldcup(WorldcupDTO worldcupDTO);
+
     default Worldcup dtoToEntity(WorldcupDTO worldcupDTO){
         Worldcup worldcup = Worldcup.builder()
                 .worldcupNum(worldcupDTO.getWorldcupNum())

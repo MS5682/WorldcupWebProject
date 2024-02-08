@@ -4,15 +4,19 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
+@EntityListeners(value={AuditingEntityListener.class})
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class Worldcup {
+@ToString
+public class Worldcup{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int worldcupNum;
@@ -21,11 +25,14 @@ public class Worldcup {
     private String description;
     private Byte disclosure;
 
+
+    private int viewCnt;
+
     @CreatedDate
     @Column(name="regdate",updatable = false)
-    private Date regDate;
+    private LocalDate regDate;
 
     @LastModifiedDate
     @Column(name="moddate")
-    private Date modDate;
+    private LocalDate modDate;
 }
