@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -107,9 +108,27 @@ public class UserController {
 
     }
 
-    @PostMapping("logout")
+    @PostMapping("/logout")
     public String logout(HttpSession session){
         session.invalidate();
         return "redirect:/worldcup/login";
+    }
+
+    @PostMapping("/findid")
+    public String findid(@RequestParam String email,Model model){
+        String id = userService.findId(email);
+        System.out.println(id);
+        String msg;
+        boolean success = false;
+        if (id != null) {
+            success=true;
+            msg = "당신의 아이디는 " + id + "입니다.";
+        } else {
+            msg = "아이디를 찾을 수 없습니다.";
+        }
+        model.addAttribute("success", success);
+        model.addAttribute("msg", msg);
+
+        return "findid/findid";
     }
 }
