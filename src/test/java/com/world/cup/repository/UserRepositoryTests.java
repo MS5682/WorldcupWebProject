@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.util.List;
+
 @SpringBootTest
 public class UserRepositoryTests {
     @Autowired
@@ -20,5 +22,16 @@ public class UserRepositoryTests {
                 .userRole("user")
                 .build();
         userRepository.save(user);
+    }
+
+    @Test
+    public void getAllUsers() {
+        List<User> userList = userRepository.findAll();
+        for (User user : userList) {
+            System.out.println("ID: " + user.getId() +
+                    ", Email: " + user.getEmail() +
+                    ", Password: " + user.getPassword() +
+                    ", UserRole: " + user.getUserRole());
+        }
     }
 }

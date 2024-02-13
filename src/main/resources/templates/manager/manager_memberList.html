@@ -8,23 +8,26 @@
     <table id="board-table" class="table table-bordered text-center">
       <thead>
         <tr>
-          <th>번호</th>
-          <th>회원명</th>
+          <th>아이디</th>
+          <th>이메일</th>
           <th>가입 날짜</th>
           <th>회원이 만든 월드컵 수</th>
           <th>회원 관리</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>1번</td>
-          <td>김찬희</td>
-          <td>2023-02-07</td>
-          <td>1개</td>
-          <td><div>
-            <button class="btn btn-dark" id="manager_member">확인</button>
-          </div></td>
-        </tr>
+      <tr th:each="dto : ${result.dtoList}" >
+        <td>
+          [[${dto.id}]]
+        </td>
+        <td>[[${dto.email}]]</td>
+        <td>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
+        <td>월드컵 수</td>
+        <td>
+          <div>
+            <button class="btn btn-dark manager_member" >확인</button>
+          </div>
+        </td>
       </tbody>
     </table>
     <div class="mb-4">
@@ -33,6 +36,23 @@
       </div>
     </div>
   </div>
+  <ul class="pagination h-100 justify-content-center align-items-center">
+
+    <li class="page-item " th:if="${result.prev}">
+      <a class="page-link" th:href="@{/manager/manager_memberList(page= ${result.start -1}) }" tabindex="-1">이전</a>
+    </li>
+
+    <li th:class=" 'page-item ' + ${result.page == page?'active':''} " th:each="page: ${result.pageList}">
+      <a class="page-link" th:href="@{/manager/manager_memberList(page = ${page})}">
+        [[${page}]]
+      </a>
+    </li>
+
+    <li class="page-item" th:if="${result.next}">
+      <a class="page-link" th:href="@{/manager/manager_memberList(page= ${result.end + 1})}">다음</a>
+    </li>
+
+  </ul>
 </div>
 <script>
   $(function() {
@@ -40,10 +60,13 @@
           e.preventDefault();
           window.location.href = '/manager';
       });
-      $('#manager_member').click(function(e) {
-          alert("회원 정보 상세")
+
+      $('.manager_member').click(function(e) {
           e.preventDefault();
-          loadPage('/manager/manager_member','main');
+          var memberId = $(this).parents('tr').find('td:first-child').text().trim();
+          alert(memberId+"가 클릭되었습니다");
+          var currentPage = [[${result.page}]]; // 현재 페이지 번호를 Thymeleaf 템플릿 엔진으로부터 가져옴
+          loadPage('/manager/manager_member?id=' + memberId + '&page=' + currentPage,'main-content');
       });
   });
 </script>
