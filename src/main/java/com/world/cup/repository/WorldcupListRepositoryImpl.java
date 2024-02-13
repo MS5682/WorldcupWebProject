@@ -30,7 +30,8 @@ public class WorldcupListRepositoryImpl extends QuerydslRepositorySupport implem
         jpqlQuery.leftJoin(choice1).on(worldcup.eq(choice1.worldcup));
         jpqlQuery.leftJoin(choice2).on(worldcup.eq(choice2.worldcup).and(choice1.choiceNum.gt(choice2.choiceNum)));
         JPQLQuery<Tuple> tuple = jpqlQuery.select(worldcup, choice1.name, choice2.name,
-                choice1.type, choice2.type, choice1.link, choice2.link);
+                choice1.type, choice2.type, choice1.uuid, choice2.uuid,
+                choice1.imgName, choice2.imgName, choice1.path, choice2.path);
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         if (type != null) {
