@@ -15,6 +15,9 @@ public interface UserService {
 
     boolean isEmailExists(String email);
 
+    boolean userCheck(UserDTO userDTO);
+
+
     default User dtoToEntity(UserDTO userDTO){
         User user = User.builder().id(userDTO.getId()).email(userDTO.getEmail()).password(userDTO.getPassword())
                 .build();

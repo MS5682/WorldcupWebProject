@@ -21,4 +21,5 @@ public class UserRepositoryTests {
                 .build();
         userRepository.save(user);
     }
+
 }
