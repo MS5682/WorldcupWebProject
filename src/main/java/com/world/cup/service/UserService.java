@@ -27,6 +27,10 @@ public interface UserService {
 
     void DeleteMember(String id);
 
+    boolean userCheck(UserDTO userDTO);
+
+
+
     default User dtoToEntity(UserDTO userDTO){
         User user = User.builder().id(userDTO.getId()).email(userDTO.getEmail()).password(userDTO.getPassword())
                 .build();

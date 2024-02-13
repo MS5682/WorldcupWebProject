@@ -24,14 +24,4 @@ public class UserRepositoryTests {
         userRepository.save(user);
     }
 
-    @Test
-    public void getAllUsers() {
-        List<User> userList = userRepository.findAll();
-        for (User user : userList) {
-            System.out.println("ID: " + user.getId() +
-                    ", Email: " + user.getEmail() +
-                    ", Password: " + user.getPassword() +
-                    ", UserRole: " + user.getUserRole());
-        }
-    }
 }

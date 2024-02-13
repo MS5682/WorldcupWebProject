@@ -129,7 +129,8 @@
       padding: 10px;
     }
     .choice,
-    .link{
+    .link,
+    .name{
       width: 100%;
     }
     .choice-th,

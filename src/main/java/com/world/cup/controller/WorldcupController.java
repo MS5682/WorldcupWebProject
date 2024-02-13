@@ -72,13 +72,7 @@ public class WorldcupController {
 
     @PostMapping("/choice/upload")
     public ResponseEntity<Boolean> upload(ChoiceDTO choiceDTO) throws IOException {
-
-        log.info(choiceDTO);
-        if(choiceDTO.getType() == 0){ //영상
-            // 영상 업로드 처리
-
-
-        } else {  //이미지
+        if(choiceDTO.getType() == 1){
             this.uploadDir = env.getProperty("user.dir") +File.separator + "src" +
                     File.separator + "main" + File.separator + "resources" +
                     File.separator + "uploads" + File.separator;
@@ -103,10 +97,9 @@ public class WorldcupController {
             choiceDTO.setImgName(fileName);
             choiceDTO.setUuid(uuid);
             choiceDTO.setPath(folderPath);
-            log.info(choiceDTO);
-            choiceService.addChoice(choiceDTO);
-
         }
+        log.info(choiceDTO);
+        choiceService.addChoice(choiceDTO);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
