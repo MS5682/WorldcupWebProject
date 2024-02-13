@@ -51,4 +51,18 @@ public class UserServiceImpl implements UserService{
     public boolean isEmailExists(String email) {
         return userRepository.existsByEmail(email);
     }
+
+    @Override
+    public boolean userCheck(UserDTO userDTO) {
+        Optional<User> result = userRepository.findByIdAndEmail(userDTO.getId(), userDTO.getEmail());
+
+        if (result.isPresent() && result.get().getId().equals(userDTO.getId())
+                && result.get().getEmail().equals(userDTO.getEmail())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 }
