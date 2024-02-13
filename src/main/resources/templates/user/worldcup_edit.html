@@ -71,105 +71,37 @@
             <table class="choice">
               <tr>
                 <th class="choice-th col-1">순서</th>
-                <th class="choice-th col-2">선택지 이름</th>
-                <th class="choice-th col-3">이미지 미리보기</th>
-                <th class="choice-th col-4">이미지 or 영상링크</th>
-                <th class="choice-th col-1">수정하기</th>
+                <th class="choice-th col-3">선택지 이름</th>
+                <th class="choice-th col-2">이미지 미리보기</th>
+                <th class="choice-th col-3">이미지 or 영상링크</th>
                 <th class="choice-th col-1">삭제</th>
               </tr>
 
 
-              <tr>
-                <form>
-                  <td class="choice-td">1</td>
-                  <input type="hidden" name="choiceNum" value="값">
-                  <input type="hidden" name="type" value="0">
-                  <td class="choice-td">
-                    <input name="name" value="이미지">
-                  </td>
-                  <td class="choice-td image-preview-td">
-                    <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
-                      <title>Placeholder</title>
-                      <rect width="100%" height="100%" fill="#55595c"/>
-                      <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                    </svg>
-                  </td>
-                  <td class="choice-td"><input type="file" name="image" class="image-upload-field"></td>
-                  <td class="choice-td"><button type="submit" class="btn btn-sm btn-outline-secondary">수정하기</button></td>
-                </form>
-                <form>
-                  <input type="hidden" name="choiceNum" value="값">
-                  <td class="choice-td"><button type="submit" class="btn btn-sm btn-outline-secondary">삭제하기</button></td>
-                </form>
-              </tr>
-              <tr>
-                <form>
-                  <td class="choice-td">1</td>
-                  <input type="hidden" name="choiceNum" value="값">
-                  <input type="hidden" name="type" value="0">
-                  <td class="choice-td">
-                    <input name="name" value="이미지">
-                  </td>
-                  <td class="choice-td image-preview-td">
-                    <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
-                      <title>Placeholder</title>
-                      <rect width="100%" height="100%" fill="#55595c"/>
-                      <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                    </svg>
-                  </td>
-                  <td class="choice-td">
-                    <input type="file" name="image" class="image-upload-field">
-                  </td>
-                  <td class="choice-td"><button type="submit" class="btn btn-sm btn-outline-secondary">수정하기</button></td>
-                </form>
-                <form>
-                  <input type="hidden" name="choiceNum" value="값">
-                  <td class="choice-td"><button type="submit" class="btn btn-sm btn-outline-secondary">삭제하기</button></td>
-                </form>
-              </tr>
-              <tr>
-                <form>
-                  <td class="choice-td">2</td>
-                  <input type="hidden" name="choiceNum" value="값">
-                  <input type="hidden" name="type" value="0">
-                  <td class="choice-td">
-                    <input name="name" value="영상">
-                  </td>
-                  <td class="choice-td">
-                    
-                  </td>
-                  <td class="choice-td"><input type="text" name="link" class="link"></td>
-                  <td class="choice-td"><button type="submit" class="btn btn-sm btn-outline-secondary">수정하기</button></td>
-                </form>
-                <form>
-                  <input type="hidden" name="choiceNum" value="값">
-                  <td class="choice-td"><button type="submit" class="btn btn-sm btn-outline-secondary">삭제하기</button></td>
-                </form>
-              </tr>
 
 
-              <tr th:each="choice : ${result.choice}">
-                <form th:action="@{/updateChoice}" th:object="${choice}" method="post">
-                  <td class="choice-td"></td>
+              <tr th:each="choice, choiceStat : ${result.choice}">
+                  <td class="choice-td" th:text="${choiceStat.count}"></td>
                   <td class="choice-td">
-                    <input name="name" th:value="${choice.name}">
+                    <form>
+                      <input name="name" class="form-control name" th:value="${choice.name}">
+                      <button type="submit" class="btn btn-sm btn-outline-secondary">수정하기</button>
+                    </form>
                   </td>
                   <td class="choice-td image-preview-td">
-                    <!-- 이미지 미리보기 추가 -->
-                    <img th:if="${choice.type == 1}" th:src="@{/worldcup/choice/display(fileName=${choice.getImageURL()})}" style="max-width: 100%; max-height: 150px;">
-
+                    <img th:if="${choice.type == 1}" th:src="@{/worldcup/choice/display(fileName=${choice.getImageURL()})}" style="max-width: 200px; max-height: 200px;">
+                    <img th:if="${choice.type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${choice.imgName} + '/0.jpg'}" style="max-width: 200px; max-height: 200px;">
                   </td>
                   <td class="choice-td">
-                    <input type="file" name="image" class="image-upload-field" th:if="${choice.type == 1}">
-                    <input type="text" name="link" class="link" th:if="${choice.type == 0}" th:value="${choice.path}">
+                    <form>
+                      <input type="file" name="image" class="image-upload-field" th:if="${choice.type == 1}">
+                      <input type="text" name="link" class="form-control link" th:if="${choice.type == 0}" th:value="${choice.path}">
+                      <button type="submit" class="btn btn-sm btn-outline-secondary">수정하기</button>
+                    </form>
                   </td>
                   <td class="choice-td">
-                    <button type="submit" class="btn btn-sm btn-outline-secondary">수정하기</button>
+                    <button class="btn btn-sm btn-outline-secondary">삭제하기</button>
                   </td>
-                </form>
-                <form th:action="@{/deleteChoice}" th:object="${choice}" method="post">
-                  <td class="choice-td"><button class="btn btn-sm btn-outline-secondary">삭제하기</button></td>
-                </form>
               </tr>
 
               <tr>
@@ -232,11 +164,14 @@
       </div>
       <div class="modal-body">
         <form id="videoForm">
+          <input type="hidden" name="type" value="0">
+          <input type="hidden" name="worldcupNum" th:value="${result.worldcupNum}">
           <label for="videoTitle" class="form-label">제목</label>
-          <input type="text" class="form-control" id="videoTitle" name="title" required>
+          <input type="text" class="form-control" id="videoTitle" name="name" required>
           
-          <label for="videoLink" class="form-label">영상 링크</label>
-          <input type="text" class="form-control" id="videoLink" name="link" required>
+          <label for="videoLink" class="form-label">영상 링크(유튜브만 지원)</label>
+          <input type="text" class="form-control" id="videoLink" name="path" required>
+          <div class="invalid-feedback"></div>
         </form>
       </div>
       <div class="modal-footer">
@@ -282,14 +217,47 @@
   }
 
   function submitVideoForm() {
-    var formData = new FormData(document.getElementById('videoForm'));
+      var videoLink = $('#videoLink').val();
 
-    // 여기서 AJAX 또는 fetch를 사용하여 서버에 POST 요청 보내기
+      if (videoLink.startsWith("https://www.youtube.com/watch?v=")) {
+          var videoId = extractYouTubeVideoId(videoLink);
 
-    $('#addVideoModal').modal('hide');
+          var formData = new FormData(document.getElementById('videoForm'));
+          formData.append('imgName', videoId);
 
-    location.reload();
+          $.ajax({
+              url: '/worldcup/choice/upload',
+              type: 'POST',
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function (response) {
+                  console.log(response);
+                  $('#addVideoModal').modal('hide');
+                  location.reload();
+              },
+              error: function (xhr, status, error) {
+                  console.error(error);
+                  alert('영상 링크 추가에 실패했습니다.');
+              }
+          });
+      } else {
+          // 유효하지 않은 경우 알림 표시
+          alert('유효한 YouTube 영상 링크를 입력하세요.');
+      }
   }
+
+  // YouTube 링크에서 비디오 ID를 추출하는 함수
+  function extractYouTubeVideoId(url) {
+      var videoId = null;
+      var match = url.match(/[?&]v=([^&]+)/);
+      if (match) {
+          videoId = match[1];
+      }
+      return videoId;
+  }
+
+
 
 
   function previewImage() {
@@ -319,6 +287,21 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
   $(document).ready(function () {
+     $('#videoLink').on('input', function() {
+        var inputValue = $(this).val();
+        var youtubePrefix = "https://www.youtube.com/watch?v=";
+
+        if (!inputValue.startsWith(youtubePrefix)) {
+            $(this).addClass('is-invalid');
+            $(this).removeClass('is-valid');
+            $(this).siblings('.invalid-feedback').text('"https://www.youtube.com/watch?v=" 로 시작해야 합니다.');
+        } else {
+            $(this).removeClass('is-invalid');
+            $(this).addClass('is-valid');
+            $(this).siblings('.invalid-feedback').text('');
+        }
+    });
+
     $('.image-upload-field').change(function () {
       
       var input = $(this);
