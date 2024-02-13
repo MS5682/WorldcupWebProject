@@ -24,5 +24,5 @@ public class WorldcupDTO {
     private LocalDate modDate;
     @Builder.Default
     private List<ChoiceDTO> choice = new ArrayList<>();;
-
+    private String id;
 }

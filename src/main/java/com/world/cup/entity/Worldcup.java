@@ -35,4 +35,7 @@ public class Worldcup{
     @LastModifiedDate
     @Column(name="moddate")
     private LocalDate modDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 }

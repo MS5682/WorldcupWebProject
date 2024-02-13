@@ -115,7 +115,9 @@ public class WorldcupController {
         String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 
         String folderPath =  str.replace("//", File.separator);
-
+        this.uploadDir = env.getProperty("user.dir") +File.separator + "src" +
+                File.separator + "main" + File.separator + "resources" +
+                File.separator + "uploads" + File.separator;
         File uploadPathFolder = new File(uploadDir, folderPath);
 
         if (uploadPathFolder.exists() == false) {
@@ -130,6 +132,9 @@ public class WorldcupController {
         String srcFileName = null;
         try {
             srcFileName = URLDecoder.decode(fileName,"UTF-8");
+            this.uploadDir = env.getProperty("user.dir") +File.separator + "src" +
+                    File.separator + "main" + File.separator + "resources" +
+                    File.separator + "uploads" + File.separator;
             File file = new File(uploadDir +File.separator+ srcFileName);
             boolean result = file.delete();
 
@@ -150,6 +155,9 @@ public class WorldcupController {
         try {
             String srcFileName =  URLDecoder.decode(fileName,"UTF-8");
 
+            this.uploadDir = env.getProperty("user.dir") +File.separator + "src" +
+                    File.separator + "main" + File.separator + "resources" +
+                    File.separator + "uploads" + File.separator;
             File file = new File(uploadDir +File.separator+ srcFileName);
 
             HttpHeaders header = new HttpHeaders();
