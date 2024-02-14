@@ -1,3 +1,4 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <header data-bs-theme="dark">
     <div class="navbar navbar-dark bg-dark shadow-sm">
         <div class="container">
@@ -9,8 +10,9 @@
             </div>
 
             <div>
-                <a href="#">회원가입</a>
-                <a href="#">로그인</a>
+                <a th:if="${session.userId==null}" th:href="@{/worldcup/login}">로그인</a>
+                <a th:if="${session.userId!=null}" th:href="@{/worldcup/editpw}">비밀번호 변경</a>
+                <a th:if="${session.userId!=null}" th:href="@{/worldcup/logout}">로그아웃</a>
             </div>
         </div>
     </div>

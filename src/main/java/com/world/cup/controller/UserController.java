@@ -1,6 +1,8 @@
 package com.world.cup.controller;
 
+import com.world.cup.dto.MailDTO;
 import com.world.cup.dto.UserDTO;
+import com.world.cup.service.EmailSendService;
 import com.world.cup.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -23,8 +25,8 @@ import java.util.Map;
 @RequestMapping("/worldcup")
 public class UserController {
 
-    @Autowired
     private final UserService userService;
+    private final EmailSendService emailSendService;
 
     @GetMapping("/login")
     public String login(){
@@ -108,7 +110,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public String logout(HttpSession session){
         session.invalidate();
         return "redirect:/worldcup/login";
@@ -130,5 +132,24 @@ public class UserController {
         model.addAttribute("msg", msg);
 
         return "findid/findid";
+    }
+
+    @PostMapping("/findpw")
+    public String findpw(UserDTO userDTO, Model model) {
+        String msg;
+        boolean success = userService.userCheck(userDTO);
+
+        if (success) {
+            MailDTO mailDTO = emailSendService.createMailAndChargePassword(userDTO);
+            emailSendService.mailSend(mailDTO);
+            msg = "임시 비밀번호가 이메일로 발송되었습니다.";
+        } else {
+            msg = "비밀번호 찾기에 실패하셨습니다.";
+        }
+
+        model.addAttribute("success", success);
+        model.addAttribute("msg", msg);
+
+        return "findpw/findpw";
     }
 }

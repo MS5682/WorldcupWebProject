@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
-
+	  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	
 	<link rel="stylesheet" th:href="@{../findpw/css/style.css}">
+	  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 	</head>
 	<body>
@@ -27,15 +28,20 @@
 							<span class="fa fa-user-o"></span>
 						</div>
 						<h3 class="text-center mb-4">비밀번호 찾기</h3>
-						<form action="#" class="login-form">
-							<div class="form-group">
-								<input type="text" class="form-control rounded-left" placeholder="ID" required>
+						<form th:action="@{/worldcup/findpw}" th:method="post" class="login-form">
+							<div class="form-group" th:if="!${msg}">
+								<input type="text" name="id" class="form-control rounded-left" placeholder="ID" required>
 							</div>
-							<div class="form-group">
-								<input type="text" class="form-control rounded-left" placeholder="Email" required>
+							<div class="form-group" th:if="!${msg}">
+								<input type="text" name="email" class="form-control rounded-left" placeholder="Email" required>
 							</div>
-								<button type="submit" class="btn btn-primary rounded submit w-100">비밀번호 찾기</button>
+							<div  th:if="${msg}" >
+								<p class="text-center fs-6"  id="msg" th:text="${msg}"></p>
+							</div>
 
+								<button  th:if="!${msg}" type="submit" class="btn btn-primary rounded submit w-100">비밀번호 찾기</button>
+							<a th:href="@{/worldcup/findpw}" style="font-size:10px;" th:if="${success}==false" id="reFindPwBtn"><button type="button" class="btn btn-primary rounded w-100">비밀번호 다시 찾기</button></a>
+							<a th:href="@{/worldcup/login}" style="font-size:10px;" th:if="${success}==true" id="toLoginBtn"><button type="button" class="btn btn-primary rounded w-100">로그인 화면으로</button></a>
 	         			 </form>
 	       		 	</div>
 				</div>

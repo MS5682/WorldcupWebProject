@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -28,6 +28,6 @@ public class UserDTO {
     private String password;
 
     private String userRole;
-    private LocalDate regDate;
-
+    private LocalDateTime regDate;
+    private String worldCupTitle;
 }
