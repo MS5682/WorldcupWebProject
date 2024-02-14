@@ -16,8 +16,8 @@ public class UserRepositoryTests {
     @Test
     public void insertUser(){
         User user = User.builder()
-                .id("testuser1")
-                .email("testuser1@gmail.com")
+                .id("testuser10")
+                .email("testuser10@gmail.com")
                 .password("1234")
                 .userRole("user")
                 .build();

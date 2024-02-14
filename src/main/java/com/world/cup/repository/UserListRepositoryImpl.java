@@ -31,8 +31,7 @@ public class UserListRepositoryImpl extends QuerydslRepositorySupport implements
 
         JPQLQuery<User> jpqlQuery = from(user);
         jpqlQuery.leftJoin(worldcup).on(user.eq(worldcup.user));
-        JPQLQuery<Tuple> tuple = jpqlQuery.select(user,worldcup.title)
-                .orderBy(user.regDate.desc());
+        JPQLQuery<Tuple> tuple = jpqlQuery.select(user,worldcup.title);
 
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
@@ -67,7 +66,7 @@ public class UserListRepositoryImpl extends QuerydslRepositorySupport implements
         });
 
 
-        tuple.groupBy(user.regDate);
+        //tuple.groupBy(user.regDate);
         // 페이징 처리
         tuple.offset(pageable.getOffset());
         tuple.limit(pageable.getPageSize());
