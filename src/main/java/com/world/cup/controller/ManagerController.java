@@ -3,13 +3,12 @@ package com.world.cup.controller;
 import com.world.cup.dto.PageRequestDTO;
 import com.world.cup.dto.UserDTO;
 import com.world.cup.service.UserService;
+import com.world.cup.service.WorldcupService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -18,6 +17,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ManagerController {
 
     private final UserService userService;
+
+    private final WorldcupService worldcupService;
+
     @GetMapping("/manager")
     public String manager(){
         return "/manager/manager_main.html";
@@ -43,6 +45,15 @@ public class ManagerController {
         return("redirect:/manager/manager_memberList");
     }
 
+    @PostMapping("/manager/disclosureUpdate")
+    public String disclosureUpdate(int worldcupNum, RedirectAttributes redirectAttributes){
+        worldcupService.updateDisclousre(worldcupNum);
+        redirectAttributes.addFlashAttribute("msg",worldcupNum);
+
+        return("redirect:/manager/manager_memberList");
+    }
+
+
     @GetMapping("/manager/manager_report")
     public String manager_report(){
         return "/manager/manager_report.html";
@@ -55,12 +66,13 @@ public class ManagerController {
 
 
     @GetMapping("/manager/manager_worldcup")
-    public String manager_worldcup(){
-        return "/manager/manager_worldcup.html";
+    public void manager_worldcup(PageRequestDTO pageRequestDTO, Model model){
+        model.addAttribute("result", worldcupService.getPublicWorldcupList(pageRequestDTO));
+
     }
 
     @GetMapping("/manager/manager_private")
-    public String manager_private(){
-        return "/manager/manager_private.html";
+    public void manager_private(PageRequestDTO pageRequestDTO, Model model){
+        model.addAttribute("result", worldcupService.getPrivateWorldcupList(pageRequestDTO));
     }
 }
