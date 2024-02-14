@@ -95,7 +95,8 @@ public class UserServiceImpl implements UserService{
     public void DeleteMember(String id) {
         userRepository.deleteById(id);
         //user 테이블의 id를 외래키로 가지고 있는 걸 전부 삭제해야함
-
+    }
+    
     @Override
     public boolean userCheck(UserDTO userDTO) {
         Optional<User> result = userRepository.findByIdAndEmail(userDTO.getId(), userDTO.getEmail());
