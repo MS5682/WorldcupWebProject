@@ -55,6 +55,37 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public boolean findPassword(String id,String password) {
+        Optional<User> result = userRepository.findById(id);
+
+        if(result.isPresent()){
+            String pw = result.get().getPassword();
+            System.out.println("DB pass:"+pw);
+            if (pw.equals(password)){
+                System.out.println("input current pass:"+password);
+                return true;
+            }else {
+                System.out.println("incorrect password");
+                return false;
+            }
+        }else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean editPassword(String id,String newPassword) {
+        Optional<User> result = userRepository.findById(id);
+        if(result.isPresent()){
+            User user = result.get();
+            user.setPassword(newPassword);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public boolean isIdExists(String id) {
         return userRepository.existsById(id);
     }

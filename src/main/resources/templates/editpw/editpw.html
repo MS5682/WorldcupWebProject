@@ -28,12 +28,12 @@
 							<span class="fa fa-user-o"></span>
 						</div>
 						<h3 class="text-center mb-4">비밀번호 변경</h3>
-						<form th:action="@{/worldcup/editpw}" th:mehod="post" class="login-form">
+						<form th:action="@{/worldcup/editpw}" th:method="post" class="login-form">
 							<div class="form-group">
-								<input name="pw" type="text" class="form-control rounded-left" placeholder="현재 비밀번호" required>
+								<input name="pw" type="password" class="form-control rounded-left" placeholder="현재 비밀번호" required>
 							</div>
 							<div class="form-group">
-								<input name="npw" type="text" class="form-control rounded-left" placeholder="새 비밀번호" required>
+								<input name="npw" type="password" class="form-control rounded-left" placeholder="새 비밀번호" required>
 							</div>
 								<button type="submit" class="btn btn-primary rounded submit w-100">회원정보 수정</button>
 
@@ -50,5 +50,14 @@
 	<script th:src="@{../editpw/js/bootstrap.min.js}"></script>
 	<script th:src="@{../editpw/js/main.js}"></script>
 	</body>
+
+	<script th:inline="javascript">
+	    var status = [[${status}]];
+		var msg = [[${msg}]];
+
+		if (status > 0) {
+            alert(msg);
+        }
+	</script>
 </html>
 
