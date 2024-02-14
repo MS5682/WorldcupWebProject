@@ -56,7 +56,7 @@
                 <div class="col-md-6">
                     <button type="submit" class="btn btn-dark btn-rounded mt-3" id="black_member"
                             th:data-id="${dto.id}">
-                        블랙하기
+                        회원 삭제
                     </button>
                 </div>
                 <div class="form-outline col-md-6">
@@ -87,8 +87,12 @@
                 url: '/manager/manager_memberDelete',
                 data: { id : id},
                 success: function(response) {
-                    alert(id+'를 가진 회원 정보가 삭제되었습니다.');
-                    loadPage('/manager/manager_memberList','main-content');
+                    if(confirm("삭제하시겠습니까?")){
+                        alert(id+'를 가진 회원 정보가 삭제되었습니다.');
+                        loadPage('/manager/manager_memberList','main-content');
+                    }else{
+
+                    }
                 },
                 error: function() {
                     // 삭제에 실패한 경우 처리
