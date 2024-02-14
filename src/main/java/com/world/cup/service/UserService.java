@@ -17,6 +17,10 @@ public interface UserService {
     boolean login(UserDTO userDTO);
 
     String findId(String email);
+
+    boolean findPassword(String id,String password);
+
+    boolean editPassword(String id,String newPassword);
     boolean isIdExists(String id);
 
     boolean isEmailExists(String email);
