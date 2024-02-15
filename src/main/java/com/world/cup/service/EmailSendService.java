@@ -24,8 +24,8 @@ public class EmailSendService {
         MailDTO dto = new MailDTO();
         dto.setAddress(userDTO.getEmail());
         dto.setTitle("[마이픽] "+userDTO.getId()+"님의 임시비밀번호 안내 이메일 입니다.");
-        dto.setMessage("안녕하세요. 마이픽에서 보내는 임시비밀번호 안내 관련 메일 입니다." + "[ " + userDTO.getId() + " ]" + "님의 임시 비밀번호는 "
-                + str + " 입니다.");
+        dto.setMessage("안녕하세요. 마이픽에서 보내는 임시비밀번호 안내 관련 메일 입니다.\n\n" + " " + userDTO.getId() + " " + "님의 임시 비밀번호는 "
+                + str +" 입니다.\n\n 로그인 후에 비밀번호를 변경해주세요.");
         updatePassword(str,userDTO);
         return dto;
     }

@@ -5,7 +5,6 @@ import com.world.cup.dto.PageResultDTO;
 import com.world.cup.dto.WorldcupDTO;
 import com.world.cup.entity.Choice;
 import com.world.cup.entity.Worldcup;
-import com.world.cup.repository.WorldcupListRepository;
 import com.world.cup.repository.WorldcupRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -69,6 +68,42 @@ public class WorldcupServiceImpl implements WorldcupService{
             worldcup.changeTitle(worldcupDTO.getTitle());
         }
         worldcupRepository.save(worldcup);
+    }
+
+    @Override
+    public PageResultDTO<WorldcupDTO, Object[]> getPublicWorldcupList(PageRequestDTO pageRequestDTO) {
+        Function<Object[], WorldcupDTO> fn = ((en) -> entityToDto((Worldcup)en[0], (String) en[1],(String) en[2],
+                (Byte) en[3],(Byte) en[4],(String) en[5],(String) en[6],(String) en[7],(String) en[8],
+                (String) en[9],(String) en[10]));
+        Sort sort = null;
+        sort = Sort.by("regDate").descending();
+        Page<Object[]> result = worldcupRepository.getPublicWorldcupList
+                (pageRequestDTO.getType(),
+                        pageRequestDTO.getKeyword(),
+                        pageRequestDTO.getPageable(sort));
+
+        return new PageResultDTO<>(result,fn);
+    }
+
+    @Override
+    public PageResultDTO<WorldcupDTO, Object[]> getPrivateWorldcupList(PageRequestDTO pageRequestDTO) {
+        Function<Object[], WorldcupDTO> fn = ((en) -> entityToDto((Worldcup)en[0], (String) en[1],(String) en[2],
+                (Byte) en[3],(Byte) en[4],(String) en[5],(String) en[6],(String) en[7],(String) en[8],
+                (String) en[9],(String) en[10]));
+        Sort sort = null;
+        sort = Sort.by("regDate").descending();
+        Page<Object[]> result = worldcupRepository.getPrivateWorldcupList
+                (pageRequestDTO.getType(),
+                        pageRequestDTO.getKeyword(),
+                        pageRequestDTO.getPageable(sort));
+
+        return new PageResultDTO<>(result,fn);
+    }
+
+    @Override
+    public void updateDisclousre(int worldcupNum) {
+        worldcupRepository.updateDisclosureByWorldcupNum(worldcupNum);
+
     }
 
 

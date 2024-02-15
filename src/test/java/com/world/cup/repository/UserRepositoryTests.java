@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.util.List;
+
 @SpringBootTest
 public class UserRepositoryTests {
     @Autowired
@@ -14,8 +16,8 @@ public class UserRepositoryTests {
     @Test
     public void insertUser(){
         User user = User.builder()
-                .id("testuser1")
-                .email("testuser1@gmail.com")
+                .id("testuser10")
+                .email("testuser10@gmail.com")
                 .password("1234")
                 .userRole("user")
                 .build();

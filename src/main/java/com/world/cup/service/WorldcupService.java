@@ -21,6 +21,13 @@ public interface WorldcupService {
 
     void modifyWorldcup(WorldcupDTO worldcupDTO);
 
+    PageResultDTO<WorldcupDTO, Object[]> getPublicWorldcupList(PageRequestDTO pageRequestDTO);
+
+    PageResultDTO<WorldcupDTO, Object[]> getPrivateWorldcupList(PageRequestDTO pageRequestDTO);
+
+    void updateDisclousre(int worldcupNum);
+
+
     default Worldcup dtoToEntity(WorldcupDTO worldcupDTO){
         User user = User.builder()
                 .id(worldcupDTO.getId())
@@ -68,4 +75,5 @@ public interface WorldcupService {
         return worldcupDTO;
 
     }
+
 }

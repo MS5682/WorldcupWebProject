@@ -1,14 +1,26 @@
 package com.world.cup.service;
 
+import com.world.cup.dto.PageRequestDTO;
+import com.world.cup.dto.PageResultDTO;
 import com.world.cup.dto.UserDTO;
 import com.world.cup.entity.User;
+import com.world.cup.entity.Worldcup;
 import com.world.cup.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +55,37 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public boolean findPassword(String id,String password) {
+        Optional<User> result = userRepository.findById(id);
+
+        if(result.isPresent()){
+            String pw = result.get().getPassword();
+            System.out.println("DB pass:"+pw);
+            if (pw.equals(password)){
+                System.out.println("input current pass:"+password);
+                return true;
+            }else {
+                System.out.println("incorrect password");
+                return false;
+            }
+        }else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean editPassword(String id,String newPassword) {
+        Optional<User> result = userRepository.findById(id);
+        if(result.isPresent()){
+            User user = result.get();
+            user.setPassword(newPassword);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public boolean isIdExists(String id) {
         return userRepository.existsById(id);
     }
@@ -52,6 +95,39 @@ public class UserServiceImpl implements UserService{
         return userRepository.existsByEmail(email);
     }
 
+
+
+
+    @Override
+    public PageResultDTO<UserDTO, Object[]> getMemberList(PageRequestDTO requestDTO) {
+        Sort sort = null;
+        sort = Sort.by("regDate").descending();
+        Page<Object[]> result = userRepository.getMemberListPage
+                (requestDTO.getType(),
+                        requestDTO.getKeyword(),
+                        requestDTO.getPageable(sort));
+
+        Function<Object[], UserDTO> fn = (arr -> entityToDto((User)arr[0],(Worldcup)arr[1]));
+
+        return new PageResultDTO<>(result, fn);
+
+    }
+
+    @Override
+    public UserDTO getUser(String id) {
+        User result = userRepository.getUserById(id);
+
+
+        return entityToDto(result);
+    }
+
+    @Transactional
+    @Override
+    public void DeleteMember(String id) {
+        userRepository.deleteById(id);
+        //user 테이블의 id를 외래키로 가지고 있는 걸 전부 삭제해야함
+    }
+    
     @Override
     public boolean userCheck(UserDTO userDTO) {
         Optional<User> result = userRepository.findByIdAndEmail(userDTO.getId(), userDTO.getEmail());
@@ -62,6 +138,7 @@ public class UserServiceImpl implements UserService{
         } else {
             return false;
         }
+
     }
 
 

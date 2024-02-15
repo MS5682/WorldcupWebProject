@@ -1,9 +1,11 @@
 package com.world.cup.controller;
 
 import com.world.cup.dto.MailDTO;
+import com.world.cup.dto.PageRequestDTO;
 import com.world.cup.dto.UserDTO;
 import com.world.cup.service.EmailSendService;
 import com.world.cup.service.UserService;
+import com.world.cup.service.WorldcupService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -110,7 +112,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public String logout(HttpSession session){
         session.invalidate();
         return "redirect:/worldcup/login";
@@ -132,6 +134,44 @@ public class UserController {
         model.addAttribute("msg", msg);
 
         return "findid/findid";
+    }
+    @PostMapping("/editpw")
+    public String editpw(@RequestParam String pw, @RequestParam String npw
+            , RedirectAttributes redirectAttributes, Model model, HttpSession session){
+        String msg;
+        int status;
+        String id = (String) session.getAttribute("userId");
+        System.out.println(id);
+        System.out.println("input pw: "+pw);
+        System.out.println("input npw: "+npw);
+
+        if (userService.findPassword(id,pw)){
+            if (userService.editPassword(id,npw)){
+                msg = "비밀번호가 변경되었습니다.";
+                status=1;
+                redirectAttributes.addFlashAttribute("msg",msg);
+                redirectAttributes.addFlashAttribute("status",status);
+                return "redirect:/worldcup/editpw";
+            }
+            else {
+                msg = "비밀번호가 변경에 실패했습니다.";
+                status=3;
+                redirectAttributes.addFlashAttribute("msg",msg);
+                redirectAttributes.addFlashAttribute("status",status);
+                return "redirect:/worldcup/editpw";
+            }
+        }
+        else {
+            msg = "현재 비밀번호가 일치하지 않습니다.";
+            status=2;
+            redirectAttributes.addFlashAttribute("msg",msg);
+            redirectAttributes.addFlashAttribute("status",status);
+            return "redirect:/worldcup/editpw";
+        }
+
+
+
+
     }
 
     @PostMapping("/findpw")
