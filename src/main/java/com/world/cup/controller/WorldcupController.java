@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +50,6 @@ public class WorldcupController {
     public String list(PageRequestDTO pageRequestDTO, Model model){
         pageRequestDTO.setUserId("admin");
         model.addAttribute("result", worldcupService.getWorldcupList(pageRequestDTO));
-        log.info(worldcupService.getWorldcupList(pageRequestDTO));
         return "/user/my_worldcup.html";
     }
 
@@ -83,7 +83,6 @@ public class WorldcupController {
 
     @PostMapping("/choice/upload")
     public ResponseEntity<Boolean> upload(ChoiceDTO choiceDTO) throws IOException {
-        log.info(choiceDTO);
         if(choiceDTO.getImage() != null){
             this.uploadDir = env.getProperty("user.dir") +File.separator + "src" +
                     File.separator + "main" + File.separator + "resources" +
@@ -95,8 +94,6 @@ public class WorldcupController {
             }
             String originalName = file.getOriginalFilename();
             String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
-
-            log.info("fileName : " + fileName);
 
             String folderPath = makeFolder();
 
@@ -140,6 +137,7 @@ public class WorldcupController {
     }
 
     @PostMapping("/choice/removeFile")
+    @Transactional
     public ResponseEntity<Boolean> removeFile(String fileName){
 
         String srcFileName = null;
@@ -191,29 +189,23 @@ public class WorldcupController {
 
     @DeleteMapping("/choice/delete")
     public ResponseEntity<Boolean> choiceDelete(ChoiceDTO choiceDTO){
-        log.info(choiceDTO);
         choiceService.deleteChoice(choiceDTO);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
+    @Transactional
     public ResponseEntity<Boolean> delete(WorldcupDTO worldcupDTO) {
         worldcupDTO = choiceService.getChoiceToWorldcup(worldcupDTO);
-
+        log.info(worldcupDTO);
         for (ChoiceDTO choiceDTO : worldcupDTO.getChoice()) {
             if (choiceDTO.getUuid() != null) {
                 String fileName = choiceDTO.getImageURL();
-                ResponseEntity<Boolean> removeFileResponse = removeFile(fileName);
-                if (removeFileResponse.getBody()) {
-                    choiceService.deleteChoice(choiceDTO);
-                } else {
-                    return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            } else {
-                choiceService.deleteChoice(choiceDTO);
+                removeFile(fileName);
             }
+            choiceService.deleteChoice(choiceDTO);
         }
-
+        worldcupService.deleteWorldcup(worldcupDTO);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }
