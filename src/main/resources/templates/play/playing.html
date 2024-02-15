@@ -16,16 +16,21 @@
 <!--                        <path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5c0 .538-.012 1.05-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255L6.5 13.11v-2.173c-.955-.234-2.043-1.146-2.833-3.012a3 3 0 1 1-1.132-5.89A33.076 33.076 0 0 1 2.5.5zm.099 2.54a2 2 0 0 0 .72 3.935c-.333-1.05-.588-2.346-.72-3.935zm10.083 3.935a2 2 0 0 0 .72-3.935c-.133 1.59-.388 2.885-.72 3.935zM3.504 1c.007.517.026 1.006.056 1.469.13 2.028.457 3.546.87 4.667C5.294 9.48 6.484 10 7 10a.5.5 0 0 1 .5.5v2.61a1 1 0 0 1-.757.97l-1.426.356a.5.5 0 0 0-.179.085L4.5 15h7l-.638-.479a.501.501 0 0 0-.18-.085l-1.425-.356a1 1 0 0 1-.757-.97V10.5A.5.5 0 0 1 9 10c.516 0 1.706-.52 2.57-2.864.413-1.12.74-2.64.87-4.667.03-.463.049-.952.056-1.469H3.504z"/>-->
 <!--                    </svg>-->
 
-                    <h1 class="modal-title fs-5 modal-dialog-centered" id="staticBackdropLabel">무슨 이상형 월드컵</h1>
+                    <h1 class="modal-title fs-5 modal-dialog-centered" id="staticBackdropLabel" th:text="${title.title}"></h1>
                 </div>
                 <div class="modal-body">
+                    총 <span th:text="${count}"></span>개의 후보가 있습니다.
+
                     <select class="form-select totalRound" aria-label="Default select example" style="margin-bottom: 5px">
-                        <option selected>몇강</option>
-                        <option value="1">2강</option>
-                        <option value="2">4강</option>
-                        <option value="3">8강</option>
-                        <option value="4">16강</option>
-                        <option value="5">32강</option>
+                        <option selected value="0">몇강</option>
+                        <option th:if="${count} >= 2" value="1">2강</option>
+                        <option th:if="${count} >= 4" value="2">4강</option>
+                        <option th:if="${count} >= 8" value="3">8강</option>
+                        <option th:if="${count} >= 16" value="4">16강</option>
+                        <option th:if="${count} >= 32" value="5">32강</option>
+                        <option th:if="${count} >= 64" value="6">64강</option>
+                        <option th:if="${count} >= 128" value="7">128강</option>
+                        <!--나중에 수정해야함-->
                     </select>
 
                     <div class="form-check-inline form-switch" style="width: 30%">
@@ -41,14 +46,14 @@
                     </select>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary okButton">시작</button>
+                    <button type="submit" class="btn btn-primary okButton" style="visibility: hidden">시작</button>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="text-bg-dark p-3" style="min-height: 100vh">
-        <h1 class="position-absolute start-50 translate-middle worldcup-name">월드컵 이름 들어갈 자리</h1>
+        <h1 class="position-absolute start-50 translate-middle worldcup-name" th:text="${title.title}"></h1>
 
         <ul class="nav justify-content-end">
             <li class="nav-item viewTimer">
@@ -66,19 +71,22 @@
             <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"></div>
         </div>
 
+
         <div>
             <div class="row">
                 <div class="col" style="width: fit-content">
                     <img src="..." class="img-thumbnail oddImg" alt="..." style="min-width: 100vh; min-height: 80vh; margin-top: 10px">
-                    <p class="text-center">내용 들어갈 자리</p>
+                    <p class="text-center leftName"></p>
                 </div>
                 <div class="col" style="width: fit-content">
                     <img src="..." class="img-thumbnail evenImg" alt="..." style="min-width: 100vh; min-height: 80vh; margin-top: 10px">
-                    <p class="text-center">내용 들어갈 자리</p>
+                    <p class="text-center rightName"></p>
                 </div>
             </div>
         </div>
     </div>
+
+    <input type="hidden" name="candi" id="candi" th:value="${candi}">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -92,6 +100,14 @@
                 $('.limitTime').css("visibility", "visible");
             } else {
                 $('.limitTime').css("visibility", "hidden");
+            }
+        })
+
+        $('.totalRound').on('click', function () {
+            if ($('.totalRound').val() == 0) {
+                $('.okButton').css("visibility", "hidden")
+            } else {
+                $('.okButton').css("visibility", "visible")
             }
         })
 
@@ -130,11 +146,23 @@
         var nextRound;
         var progress = 0;
 
+        allCandiList = $('#candi').val();
+
+        var candi = JSON.parse(allCandiList);
+
+        console.log(candi[0].name)
+
+        leftCandiName = document.querySelector('.leftName')
+        rightCandiName = document.querySelector('.rightName')
+
+        var candiOrder = 0;
+
         $('.okButton').on('click', function () {
             var name = document.querySelector('.worldcup-name');
             for (i = 0; i < $('.totalRound').val(); i++) {
                 totalRound = totalRound * 2;
             }
+
             name.innerText += ' ' + totalRound + '강';
             currentRound = totalRound;
             nextRound = totalRound/2;
@@ -150,6 +178,11 @@
                 console.log('타이머에 적용 될 숫자 : ' + time);
             }
             $('.modal').modal('hide');
+
+            leftCandiName.innerText = candi[candiOrder].name
+            rightCandiName.innerText = candi[candiOrder + 1].name
+
+            candiOrder += 2;
         })
 
         function returnClick() {
@@ -157,7 +190,15 @@
             $('.evenImg').css("pointer-events", "auto")
         }
 
+        function changeCandi() {
+            leftCandiName.innerText = candi[candiOrder].name
+            rightCandiName.innerText = candi[candiOrder + 1].name
+
+            candiOrder += 2;
+        }
+
         $('.oddImg').on('click', function () {
+
             clearInterval(timerID);
 
             $('.oddImg').animate({minWidth: '1600px'}, 2000)
@@ -177,12 +218,16 @@
             checkRound();
 
             setTimeout(returnClick, 2000);
+            setTimeout(changeCandi, 2000);
 
             timer(time);
         })
 
         $('.evenImg').on('click', function () {
+
             clearInterval(timerID);
+
+            var offset = $('.oddImg').offset();
 
             $('.evenImg').animate({minWidth: '1600px'}, 2000)
             $('.oddImg').animate({minWidth: '0px'}, 2000)
@@ -201,6 +246,7 @@
             checkRound();
 
             setTimeout(returnClick, 2000);
+            setTimeout(changeCandi, 2000);
 
             timer(time);
         })
