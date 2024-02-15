@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.function.Function;
 
@@ -106,6 +107,12 @@ public class WorldcupServiceImpl implements WorldcupService{
     public void updateDisclousre(int worldcupNum) {
         worldcupRepository.updateDisclosureByWorldcupNum(worldcupNum);
 
+    }
+
+    @Override
+    @Transactional
+    public void deleteWorldcup(WorldcupDTO worldcupDTO) {
+        worldcupRepository.deleteById(worldcupDTO.getWorldcupNum());
     }
 
 

@@ -20,6 +20,7 @@ public class ChoiceServiceImpl implements ChoiceService {
     private final ChoiceRepository choiceRepository;
 
     @Override
+    @Transactional
     public WorldcupDTO getChoiceToWorldcup(WorldcupDTO worldcupDTO) {
         int worldcupNum = worldcupDTO.getWorldcupNum();
         List<Choice> choices = choiceRepository.getChoiceByWorldcupNum(worldcupNum);
@@ -75,6 +76,7 @@ public class ChoiceServiceImpl implements ChoiceService {
     }
 
     @Override
+    @Transactional
     public void deleteChoice(ChoiceDTO choiceDTO) {
         choiceRepository.deleteById(choiceDTO.getChoiceNum());
     }
