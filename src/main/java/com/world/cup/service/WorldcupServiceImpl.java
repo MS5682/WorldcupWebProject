@@ -3,6 +3,7 @@ package com.world.cup.service;
 import com.world.cup.dto.PageRequestDTO;
 import com.world.cup.dto.PageResultDTO;
 import com.world.cup.dto.WorldcupDTO;
+import com.world.cup.entity.Choice;
 import com.world.cup.entity.Worldcup;
 import com.world.cup.repository.WorldcupRepository;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +60,17 @@ public class WorldcupServiceImpl implements WorldcupService{
     }
 
     @Override
+    public void modifyWorldcup(WorldcupDTO worldcupDTO) {
+        Worldcup worldcup = worldcupRepository.getOne(worldcupDTO.getWorldcupNum());
+        if(worldcup != null){
+            worldcup.changeDescription(worldcupDTO.getDescription());
+            worldcup.changeDisclosure(worldcupDTO.getDisclosure());
+            worldcup.changeTitle(worldcupDTO.getTitle());
+        }
+        worldcupRepository.save(worldcup);
+    }
+
+    @Override
     public PageResultDTO<WorldcupDTO, Object[]> getPublicWorldcupList(PageRequestDTO pageRequestDTO) {
         Function<Object[], WorldcupDTO> fn = ((en) -> entityToDto((Worldcup)en[0], (String) en[1],(String) en[2],
                 (Byte) en[3],(Byte) en[4],(String) en[5],(String) en[6],(String) en[7],(String) en[8],
@@ -93,5 +105,6 @@ public class WorldcupServiceImpl implements WorldcupService{
         worldcupRepository.updateDisclosureByWorldcupNum(worldcupNum);
 
     }
+
 
 }

@@ -4,6 +4,7 @@ import com.world.cup.dto.ChoiceDTO;
 import com.world.cup.dto.PageRequestDTO;
 import com.world.cup.dto.PageResultDTO;
 import com.world.cup.dto.WorldcupDTO;
+import com.world.cup.entity.User;
 import com.world.cup.entity.Worldcup;
 
 import java.util.ArrayList;
@@ -18,18 +19,25 @@ public interface WorldcupService {
 
     WorldcupDTO getWorldcup(WorldcupDTO worldcupDTO);
 
+    void modifyWorldcup(WorldcupDTO worldcupDTO);
+
     PageResultDTO<WorldcupDTO, Object[]> getPublicWorldcupList(PageRequestDTO pageRequestDTO);
 
     PageResultDTO<WorldcupDTO, Object[]> getPrivateWorldcupList(PageRequestDTO pageRequestDTO);
 
     void updateDisclousre(int worldcupNum);
 
+
     default Worldcup dtoToEntity(WorldcupDTO worldcupDTO){
+        User user = User.builder()
+                .id(worldcupDTO.getId())
+                .build();
         Worldcup worldcup = Worldcup.builder()
                 .worldcupNum(worldcupDTO.getWorldcupNum())
                 .title(worldcupDTO.getTitle())
                 .description(worldcupDTO.getDescription())
                 .disclosure(worldcupDTO.getDisclosure())
+                .user(user)
                 .build();
         return worldcup;
     }

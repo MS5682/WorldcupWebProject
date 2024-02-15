@@ -7,6 +7,7 @@ import com.world.cup.repository.ChoiceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,4 +38,46 @@ public class ChoiceServiceImpl implements ChoiceService {
         Choice choice = dtoToEntity(choiceDTO);
         choiceRepository.save(choice);
     }
+
+    @Override
+    @Transactional
+    public void modifyChoiceName(ChoiceDTO choiceDTO) {
+        Choice choice = choiceRepository.getOne(choiceDTO.getChoiceNum());
+        if(choice != null){
+            choice.changeName(choiceDTO.getName());
+        }
+        choiceRepository.save(choice);
+    }
+
+    @Override
+    @Transactional
+    public void modifyChoiceImg(ChoiceDTO choiceDTO) {
+        Choice choice = choiceRepository.getOne(choiceDTO.getChoiceNum());
+        if(choice != null){
+            choice.changeImgName(choiceDTO.getImgName());
+            choice.changePath(choiceDTO.getPath());
+            choice.changeUuid(choiceDTO.getUuid());
+        }
+        choiceRepository.save(choice);
+    }
+
+    @Override
+    @Transactional
+    public void modifyChoiceVideo(ChoiceDTO choiceDTO) {
+        Choice choice = choiceRepository.getOne(choiceDTO.getChoiceNum());
+        if(choice != null){
+            choice.changePath(choiceDTO.getPath());
+            choice.changeImgName(choiceDTO.getImgName());
+        }
+        log.info(choiceDTO);
+        log.info(choice);
+        choiceRepository.save(choice);
+    }
+
+    @Override
+    public void deleteChoice(ChoiceDTO choiceDTO) {
+        choiceRepository.deleteById(choiceDTO.getChoiceNum());
+    }
+
+
 }

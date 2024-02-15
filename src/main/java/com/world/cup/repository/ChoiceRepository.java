@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ChoiceRepository extends JpaRepository<Choice, Long> {
+public interface ChoiceRepository extends JpaRepository<Choice, Integer> {
     @Query("select c from Choice c where c.worldcup.worldcupNum = :worldcupNum")
     List<Choice> getChoiceByWorldcupNum(@Param("worldcupNum") int worldcupNum);
 

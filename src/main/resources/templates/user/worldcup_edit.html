@@ -26,19 +26,19 @@
         <div><h2>이상형 월드컵 수정 및 선택지 추가</h2></div>
       </div>
 
-      <form th:action="@{/update}" th:object="${result}" method="post">
+      <form th:object="${result}" id="updateForm">
         <input type="hidden" th:field="*{worldcupNum}">
         <table class="register">
           <tr>
             <th class="register-th">제목</th>
             <td class="register-td">
-              <input class="border-none-input" placeholder="제목을 입력하세요" th:value="*{title}">
+              <input class="border-none-input" name="title" placeholder="제목을 입력하세요" th:value="*{title}">
             </td>
           </tr>
           <tr>
             <th class="register-th">설명</th>
             <td class="register-td">
-              <input class="border-none-input" placeholder="설명을 입력하세요" th:value="*{description}">
+              <input class="border-none-input" name="description" placeholder="설명을 입력하세요" th:value="*{description}">
             </td>
           </tr>
           <tr>
@@ -55,7 +55,7 @@
           <tr>
             <th class="register-th">수정하기</th>
             <td class="register-td">
-              <button type="submit" class="btn btn-sm btn-outline-secondary">수정하기</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" id="submitBtn">수정하기</button>
             </td>
           </tr>
         </table>
@@ -83,9 +83,10 @@
               <tr th:each="choice, choiceStat : ${result.choice}">
                   <td class="choice-td" th:text="${choiceStat.count}"></td>
                   <td class="choice-td">
-                    <form>
+                    <form class="nameEdit">
+                      <input type="hidden" name="choiceNum" th:value="${choice.choiceNum}">
                       <input name="name" class="form-control name" th:value="${choice.name}">
-                      <button type="submit" class="btn btn-sm btn-outline-secondary">수정하기</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary" onclick="submitNameEdit()">수정하기</button>
                     </form>
                   </td>
                   <td class="choice-td image-preview-td">
@@ -93,14 +94,26 @@
                     <img th:if="${choice.type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${choice.imgName} + '/0.jpg'}" style="max-width: 200px; max-height: 200px;">
                   </td>
                   <td class="choice-td">
-                    <form>
-                      <input type="file" name="image" class="image-upload-field" th:if="${choice.type == 1}">
-                      <input type="text" name="link" class="form-control link" th:if="${choice.type == 0}" th:value="${choice.path}">
-                      <button type="submit" class="btn btn-sm btn-outline-secondary">수정하기</button>
+                    <form th:if="${choice.type == 0}" class="videoEdit">
+                      <input type="hidden" name="choiceNum" th:value="${choice.choiceNum}">
+                      <input th:if="${choice.type == 0}" type="text" name="path" class="form-control link" th:value="${choice.path}">
+                      <div class="invalid-feedback"></div>
+                      <button type="button" class="btn btn-sm btn-outline-secondary"  onclick="submitVideoEdit()">수정하기</button>
+                    </form>
+                    <form th:if="${choice.type == 1}" class="imgEdit">
+                      <input type="hidden" name="choiceNum" th:value="${choice.choiceNum}">
+                      <input th:if="${choice.type == 1}" type="file" name="image" class="image-upload-field img">
+                      <input th:if="${choice.type == 1}" type="hidden" class="image-upload-field imgURL" th:value="${choice.getImageURL()}">
+                      <button type="button" class="btn btn-sm btn-outline-secondary"  onclick="submitImgEdit()">수정하기</button>
                     </form>
                   </td>
                   <td class="choice-td">
-                    <button class="btn btn-sm btn-outline-secondary">삭제하기</button>
+                    <form>
+                      <input type="hidden" name="choiceNum" th:value="${choice.choiceNum}">
+                      <input th:if="${choice.type == 1}" type="hidden" class="image-upload-field imgURL" th:value="${choice.getImageURL()}">
+                      <button type="button" class="btn btn-sm btn-outline-secondary" onclick="deleteChoice()">삭제하기</button>
+                    </form>
+
                   </td>
               </tr>
 
@@ -213,7 +226,6 @@
         alert('이미지 추가에 실패했습니다.');
       }
     });
-
   }
 
   function submitVideoForm() {
@@ -246,6 +258,143 @@
           alert('유효한 YouTube 영상 링크를 입력하세요.');
       }
   }
+  function submitNameEdit() {
+     var button = event.target;
+    var form = button.closest('form');
+    var formData = new FormData(form);
+    $.ajax({
+      url: '/worldcup/choice/upload',
+      type: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(response) {
+        console.log(response);
+        location.reload();
+      },
+      error: function(xhr, status, error) {
+        console.error(error);
+        alert('이름 변경에 실패했습니다.');
+      }
+    });
+  }
+  function submitImgEdit() {
+     var button = event.target;
+    var form = button.closest('form');
+    var formData = new FormData(form);
+
+     var imageURL = form.querySelector('.imgURL').value;
+
+    $.ajax({
+        url: '/worldcup/choice/removeFile',
+        type: 'POST',
+        data: { fileName: imageURL }, // 이미지 파일명을 전송
+        success: function(response) {
+            console.log('이미지 삭제 요청 성공:', response);
+            // 이후 이미지 업로드 요청 등 추가 작업 수행
+        },
+        error: function(xhr, status, error) {
+            console.error('이미지 삭제 요청 실패:', error);
+            // 이후 이미지 업로드 요청 등 추가 작업 수행
+        }
+    });
+    $.ajax({
+      url: '/worldcup/choice/upload',
+      type: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(response) {
+        console.log(response);
+        location.reload();
+      },
+      error: function(xhr, status, error) {
+        console.error(error);
+        alert('이미지 추가에 실패했습니다.');
+      }
+    });
+  }
+
+  function deleteChoice() {
+    var button = event.target;
+    var form = button.closest('form');
+    var formData = new FormData(form);
+
+    var imageURLElement = form.querySelector('.imgURL');
+    if (imageURLElement) {
+        var imageURL = imageURLElement.value;
+        console.log(imageURL);
+        $.ajax({
+            url: '/worldcup/choice/removeFile',
+            type: 'POST',
+            data: { fileName: imageURL }, // 이미지 파일명을 전송
+            success: function(response) {
+                console.log('이미지 삭제 요청 성공:', response);
+                // 이후 이미지 업로드 요청 등 추가 작업 수행
+            },
+            error: function(xhr, status, error) {
+                console.error('이미지 삭제 요청 실패:', error);
+                // 이후 이미지 업로드 요청 등 추가 작업 수행
+            }
+        });
+    } else {
+        console.error('.imgURL을 찾을 수 없습니다.');
+        // 적절한 예외 처리를 수행
+    }
+
+    $.ajax({
+        url: '/worldcup/choice/delete',
+        type: 'DELETE',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            console.log(response);
+            location.reload();
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+            alert('삭제에 실패했습니다.');
+        }
+    });
+}
+
+  function submitVideoEdit() {
+     var button = event.target;
+    var form = button.closest('form');
+    var input = form.querySelector('.link');
+    var newVideoLink = input.value;
+      console.log(newVideoLink);
+
+      if (newVideoLink.startsWith("https://www.youtube.com/watch?v=")) {
+          var videoId = extractYouTubeVideoId(newVideoLink);
+          var choiceNum = form.querySelector('[name="choiceNum"]').value;
+          var path = form.querySelector('[name="path"]').value;
+
+          var formData = new FormData();
+          formData.append('imgName', videoId);
+          formData.append('choiceNum', choiceNum);
+          formData.append('path', path);
+
+          $.ajax({
+              url: '/worldcup/choice/upload',
+              type: 'POST',
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function (response) {
+                  console.log(response);
+                  location.reload();
+              },
+              error: function (xhr, status, error) {
+                  console.error(error);
+                  alert('영상 링크 추가에 실패했습니다.');
+              }
+          });
+      } else {
+          alert('유효한 YouTube 영상 링크를 입력하세요.');
+      }
+  }
 
   // YouTube 링크에서 비디오 ID를 추출하는 함수
   function extractYouTubeVideoId(url) {
@@ -258,6 +407,30 @@
   }
 
 
+    document.getElementById('submitBtn').addEventListener('click', function () {
+    // Form 요소 가져오기
+    var form = document.getElementById('updateForm');
+    // FormData 생성
+    var formData = new FormData(form);
+
+    // Ajax 요청 보내기
+    $.ajax({
+        url: '/worldcup/edit', // 수정할 경로로 변경해야 합니다.
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            // 성공 시 페이지 새로고침
+            location.reload();
+        },
+        error: function(xhr, status, error) {
+            // 실패 시 오류 처리
+            console.error(error);
+            alert('수정에 실패했습니다.');
+        }
+    });
+});
 
 
   function previewImage() {
@@ -287,7 +460,13 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
   $(document).ready(function () {
-     $('#videoLink').on('input', function() {
+    $('input').keydown(function(event) {
+        if (event.keyCode === 13) { // Enter 키의 keyCode는 13입니다.
+            event.preventDefault(); // 기본 동작 취소 (폼 제출 방지)
+        }
+    });
+
+     $('#videoLink, .link').on('input', function() {
         var inputValue = $(this).val();
         var youtubePrefix = "https://www.youtube.com/watch?v=";
 

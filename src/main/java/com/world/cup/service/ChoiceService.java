@@ -11,6 +11,14 @@ public interface ChoiceService {
 
     void addChoice(ChoiceDTO choiceDTO);
 
+    void modifyChoiceName(ChoiceDTO choiceDTO);
+
+    void modifyChoiceImg(ChoiceDTO choiceDTO);
+
+    void modifyChoiceVideo(ChoiceDTO choiceDTO);
+
+    void deleteChoice(ChoiceDTO choiceDTO);
+
     default Choice dtoToEntity(ChoiceDTO choiceDTO){
         Worldcup worldcup = Worldcup.builder()
                 .worldcupNum(choiceDTO.getWorldcupNum())

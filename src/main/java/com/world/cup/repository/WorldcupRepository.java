@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface WorldcupRepository extends JpaRepository<Worldcup, Long>, WorldcupListRepository {
+public interface WorldcupRepository extends JpaRepository<Worldcup, Integer>, WorldcupListRepository {
     @Query("select w from Worldcup w where w.worldcupNum = :worldcupNum")
     Object getWorldcupByWorldcupNum(@Param("worldcupNum") int worldcupNum);
 

@@ -38,4 +38,18 @@ public class Worldcup{
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    public void changeTitle(String title){
+        this.title = title;
+    }
+    public void changeDescription(String description){
+        this.description = description;
+    }
+    public void changeDisclosure(Byte disclosure){
+        this.disclosure = disclosure;
+    }
+    public void changeViewCnt(int viewCnt){
+        this.viewCnt = viewCnt;
+    }
+
 }
