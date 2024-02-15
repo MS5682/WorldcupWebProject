@@ -17,6 +17,7 @@ public class MainController {
     @GetMapping("")
     public String main(PageRequestDTO pageRequestDTO, Model model){
         log.info("main page");
+        pageRequestDTO.setDisclosure((byte) 1);
         model.addAttribute("result", worldcupService.getWorldcupList(pageRequestDTO));
         log.info(worldcupService.getWorldcupList(pageRequestDTO));
         return "/main/main.html";

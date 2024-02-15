@@ -22,7 +22,7 @@ public class WorldcupListRepositoryImpl extends QuerydslRepositorySupport implem
     public WorldcupListRepositoryImpl() {super(Worldcup.class);}
 
     @Override
-    public Page<Object[]> getWorldcupList(String type, String keyword, Pageable pageable, String userId) {
+    public Page<Object[]> getWorldcupList(String type, String keyword, Pageable pageable, String userId, Byte disclosure) {
         QWorldcup worldcup = QWorldcup.worldcup;
         QChoice choice1 = new QChoice("choice1");
         QChoice choice2 = new QChoice("choice2");
@@ -55,8 +55,15 @@ public class WorldcupListRepositoryImpl extends QuerydslRepositorySupport implem
         if(userId != null){
             booleanBuilder.and(worldcup.user.id.eq(userId));
         }
-        BooleanExpression disclosureCondition = worldcup.disclosure.eq((byte) 1);
-        booleanBuilder.and(disclosureCondition);
+        if(disclosure == null){
+        }
+        else if(disclosure == 1) {
+            BooleanExpression disclosureCondition = worldcup.disclosure.eq((byte) 1);
+            booleanBuilder.and(disclosureCondition);
+        }else if(disclosure == 0){
+            BooleanExpression disclosureCondition = worldcup.disclosure.eq((byte) 0);
+            booleanBuilder.and(disclosureCondition);
+        }
         tuple.where(booleanBuilder);
 
         // 정렬 추가

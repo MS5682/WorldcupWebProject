@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface WorldcupListRepository {
-    Page<Object[]> getWorldcupList(String type, String keyword, Pageable pageable, String userId);
+    Page<Object[]> getWorldcupList(String type, String keyword, Pageable pageable, String userId, Byte disclosure);
 
     Page<Object[]> getPublicWorldcupList(String type, String keyword, Pageable pageable);
 

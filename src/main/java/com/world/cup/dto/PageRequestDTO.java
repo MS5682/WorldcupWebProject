@@ -18,6 +18,7 @@ public class PageRequestDTO {
     private String keyword;
     private int order;
     private String userId;
+    private Byte disclosure;
 
     public PageRequestDTO(){
         this.page = 1;
