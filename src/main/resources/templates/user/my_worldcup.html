@@ -29,7 +29,7 @@
       <div class="mb-5"><h2>이상형 월드컵      </h2></div>
       <div class="top">
         <div>
-          <form action="" method="get" id="searchForm">
+          <form action="/worldcup/list" method="get" id="searchForm">
             <input type="hidden" name="page" value="1">
             <div class="input-group"  style="width:500px;">
               <div class="input-group-prepend">
@@ -111,20 +111,20 @@
       <div class="text-center">
         <ul class="pagination h-100 justify-content-center align-items-center">
           <li class="page-item" th:if="${result.prev}">
-            <a class="page-link" th:href="@{/(page=${result.start - 1},
+            <a class="page-link" th:href="@{/worldcup/list(page=${result.start - 1},
                                                 type=${pageRequestDTO.type},
                                                 keyword=${pageRequestDTO.keyword}
                 )}" tabindex="-1">Prev</a>
           </li>
           <li th:class=" ' page-item ' + ${result.page == page?'active':''}"
               th:each="page: ${result.pageList}" >
-            <a class="page-link" th:href="@{/(page=${page},
+            <a class="page-link" th:href="@{/worldcup/list(page=${page},
                                                 type=${pageRequestDTO.type},
                                                 keyword=${pageRequestDTO.keyword}
                 )}">[[${page}]]</a>
           </li>
           <li class="page-item" th:if="${result.next}">
-            <a class="page-link" th:href="@{/(page=${result.end + 1},
+            <a class="page-link" th:href="@{/worldcup/list(page=${result.end + 1},
                                                 type=${pageRequestDTO.type},
                                                 keyword=${pageRequestDTO.keyword}
                 )}">Next</a>
