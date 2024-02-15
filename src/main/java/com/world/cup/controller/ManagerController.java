@@ -1,7 +1,9 @@
 package com.world.cup.controller;
 
 import com.world.cup.dto.PageRequestDTO;
+import com.world.cup.dto.ReportDTO;
 import com.world.cup.dto.UserDTO;
+import com.world.cup.service.ReportService;
 import com.world.cup.service.UserService;
 import com.world.cup.service.WorldcupService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,8 @@ public class ManagerController {
     private final UserService userService;
 
     private final WorldcupService worldcupService;
+
+    private final ReportService reportService;
 
     @GetMapping("/manager")
     public String manager(){
@@ -55,8 +59,16 @@ public class ManagerController {
 
 
     @GetMapping("/manager/manager_report")
-    public String manager_report(){
+    public String manager_reportList(){
         return "/manager/manager_report.html";
+    }
+
+    @PostMapping("/manager/manager_report")
+    public String manager_report(ReportDTO reportDTO){
+        log.info(reportDTO);
+        reportService.report(reportDTO);
+
+        return "redirect:/";
     }
 
     @GetMapping("/manager/manager_reportContent")

@@ -22,6 +22,7 @@
 <body>
 
 <th:block th:include="main/header :: header"></th:block>
+<input type="hidden" id="userId" name="userId" th:value="${session.userId}">
 <main>
 
   <div class="album py-5 bg-body-tertiary">
@@ -66,11 +67,12 @@
       </div>
 
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-5 mb-5">
-
         <th:block th:each="worldcupDTO : ${result.dtoList}">
           <div class="col">
             <div class="card shadow-sm">
               <div class="worldcup-name" th:text="${worldcupDTO.title}"></div>
+
+              <input type="hidden" class="worldcupNum" th:value="${worldcupDTO.worldcupNum}">
 
               <div class="inner-row row row-cols-1 row-cols-sm-2 row-cols-md-2 g-1">
                 <th:block th:each="choiceDTO : ${worldcupDTO.choice}">
@@ -96,8 +98,8 @@
                   <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-outline-secondary">시작하기</button>
                     <button type="button" class="btn btn-sm btn-outline-secondary">결과보기</button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary" th:text="신고하기"
-                            data-bs-toggle="modal" data-bs-target="#reportModal"></button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary ReportBtn" th:text="신고하기"
+                             data-bs-target="#reportModal" ></button>
                   </div>
                 </div>
               </div>
@@ -129,7 +131,10 @@
         </ul>
       </div>
 </div>
+
+
   <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+    <input type="hidden" id="reportWorldCupNum" name="reportWorldCupNum">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -139,9 +144,10 @@
         <div class="modal-body">
           <div>
             <h6 id="reportWorldCupTitle"></h6>
+            <h6 id="reporterId"></h6>
             <div class="mb-3">
-              <label for="reportReason" class="form-label"><small>신고사유</small></label>
-              <textarea class="form-control" id="reportReason" rows="4"></textarea>
+              <label for="reportContent" class="form-label"><small>신고사유</small></label>
+              <textarea class="form-control" id="reportContent" rows="4"></textarea>
             </div>
           </div>
           <div class="modal-footer">
@@ -160,6 +166,7 @@
 <script>
   $(document).ready(function() {
     var searchForm = $("#searchForm");
+    var userId = $('#userId').val();
 
     $(".btn-search").click(function(e){
       searchForm.submit();
@@ -169,23 +176,43 @@
       searchForm.empty().submit();
     });
 
-    $('.card-body .btn-outline-secondary:contains("신고하기")').click(function() {
-      var worldCupTitle = $(this).closest('.card').find('.worldcup-name').text();
-      $('#reportWorldCupTitle').text(worldCupTitle);
-      $('#reportModal').modal('show');
+    $('.ReportBtn').click(function() {
+      console.log("1번",userId);
+      if (!userId || userId.trim() === "") { // 만약 로그인한 사용자가 없다면
+            alert("로그인이 필요합니다."); // 알림 창을 표시
+            return;
+      }else{
+        console.log("2번",userId);
+        var worldCupTitle = $(this).closest('.card').find('.worldcup-name').text();
+        var reporterId = userId;
+        var worldcupNum = $(this).closest('.card').find('.worldcupNum').val();
+
+        console.log(worldcupNum);
+        $('#reportWorldCupNum').val(worldcupNum);
+        $('#reportWorldCupTitle').text("월드컵 제목: "+worldCupTitle);
+        $('#reporterId').text("신고자 id: "+reporterId);
+        $('#reportModal').modal('show');
+      }
     });
 
     $('#reportModal .btn-primary').click(function() {
+      var worldcupNum = $('#reportWorldCupNum').val();
       var worldCupTitle = $('#reportWorldCupTitle').text();
-      var reportReason = $('#reportReason').val();
-      console.log(worldCupTitle)
-      // Make an AJAX (POST) request to send data to the server
+      var reportContent = $('#reportContent').val();
+      var reporterId = $('#reporterId').text();
+      console.log(worldcupNum);
+      console.log(worldCupTitle);
+      console.log(reportContent);
+      console.log(reporterId);
+
       $.ajax({
         type: 'POST',
-        url: '/submit-report', // Replace with your server endpoint
+        url: 'manager/manager_report',
         data: {
-          worldCupTitle: worldCupTitle,
-          reportReason: reportReason
+          worldcupNum :worldcupNum,
+          worldcupTitle: worldCupTitle,
+          reportContent: reportContent,
+          reporter : reporterId
         },
         success: function(response) {
           // Handle success response (if needed)

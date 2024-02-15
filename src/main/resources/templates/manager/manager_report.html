@@ -1,28 +1,33 @@
 <div class="mb-4">
     <div class="d-flex align-items-center mb-4">
         <div class="bg-secondary rounded-circle h-12 w-12"></div>
-        <span class="font-weight-bold" style="font-size: 24px;">회원 정보 관리</span>
+        <span class="font-weight-bold" style="font-size: 24px;">신고 목록</span>
     </div>
     <hr>
     <div>
-        <table id="board-table" class="table table-bordered text-center">
+        <table id="board-table" class="table table-bordered text-center align-item-center">
             <thead>
             <tr>
                 <th>번호</th>
                 <th>월드컵 이름</th>
                 <th>신고한 사람</th>
-                <th>신고 날짜</th>
+                <th>신고한 날짜</th>
                 <th>신고 확인</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1번</td>
-                <td>이상형 월드컵</td>
-                <td>김찬희</td>
-                <td>20230207</td>
-                <td><div id="manager_reportContent">확인</div></td>
-            </tr>
+            <tr th:each="dto : ${result.dtoList}" >
+                <td>
+                    [[${dto.id}]]
+                </td>
+                <td>[[${dto.email}]]</td>
+                <td>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
+                <td>월드컵 수</td>
+                <td>
+                    <div>
+                        <button class="btn btn-dark manager_member" >확인</button>
+                    </div>
+                </td>
             </tbody>
         </table>
         <div class="mb-4">
@@ -31,16 +36,91 @@
             </div>
         </div>
     </div>
+    <ul class="pagination h-100 justify-content-center align-items-center">
+
+        <li class="page-item.prev " th:if="${result.prev}">
+            <a class="page-link"
+               th:onclick="'loadPage(\'' + @{/manager/manager_memberList(page=${result.start -1},type=${pageRequestDTO.type},
+         keyword=${pageRequestDTO.keyword})} + '\', \'main-content\'); return false;'">이전</a>
+        </li>
+
+        <li th:class=" 'page-item.current ' + ${result.page == page?'active':''} " th:each="page: ${result.pageList}">
+            <a class="page-link"
+               th:onclick="'loadPage(\'' + @{/manager/manager_memberList(page=${page},type=${pageRequestDTO.type},
+         keyword=${pageRequestDTO.keyword})} + '\', \'main-content\'); return false;'">
+                [[${page}]]
+            </a>
+        </li>
+
+        <li class="page-item.next" th:if="${result.next}">
+            <a class="page-link"
+               th:onclick="'loadPage(\'' + @{/manager/manager_memberList(page=${result.end + 1},type=${pageRequestDTO.type},
+         keyword=${pageRequestDTO.keyword})} + '\', \'main-content\'); return false;'">다음</a>
+        </li>
+
+    </ul>
 </div>
-<script>
+<div class="mt-4 justify-content-center">
+    <form action="" method="get" id="searchForm">
+        <input type="hidden" name="page" value="1">
+        <div class="input-group"  style="width:500px;">
+            <div class="input-group-prepend">
+                <select class="custom-select form-control" name="type" >
+                    <option th:selected="${pageRequestDTO.type == null}">------</option>
+                    <option th:selected="${pageRequestDTO.type == 'i'}" value="i">아이디</option>
+                    <option th:selected="${pageRequestDTO.type == 'm'}" value="e">이메일</option>
+                </select>
+            </div>
+            <input class="form-control" name="keyword" placeholder="키워드를 입력하세요" >
+            <div>
+                <button class="btn btn-success btn-search" type="button">검색하기</button>
+                <button class="btn btn-danger btn-clear" type="button">새로고침</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script th:inline="javascript">
     $(function() {
         $('#manager_Home').click(function(e) {
             e.preventDefault();
             window.location.href = '/manager';
         });
-        $('#manager_reportContent').click(function(e) {
+
+        $('.manager_member').click(function(e) {
             e.preventDefault();
-            loadPage('/manager/manager_reportContent','main');
+            var reportId = $(this).parents('tr').find('td:first-child').text().trim();
+            var currentPage = [[${result.page}]]; // 현재 페이지 번호를 Thymeleaf 템플릿 엔진으로부터 가져옴
+            loadPage('/manager/manager_reportContent?reportId=' + reportId + '&page=' + currentPage,'main-content');
+        });
+
+        //검색 버튼을 눌렀을때 검색 실행
+        $(".btn-search").click(function(e) {
+          e.preventDefault();
+          var type = $("select[name='type']").val();
+          var keyword = $("input[name='keyword']").val();
+          var currentPage = [[${result.page}]]; // 현재 페이지 번호를 Thymeleaf 템플릿 엔진으로부터 가져옴
+          loadPage('/manager/manager_memberList?page=' + currentPage + '&type=' + type + '&keyword=' + keyword, 'main-content');
+        });
+
+        // Enter 키를 눌렀을 때 검색 실행
+        $("input[name='keyword']").keypress(function(e) {
+          // 엔터 키의 keyCode는 13
+          if (e.which == 13) {
+            // 검색 실행 코드를 여기에 추가
+            var type = $("select[name='type']").val();
+            var keyword = $("input[name='keyword']").val();
+            var currentPage = [[${result.page}]]; // 현재 페이지 번호를 Thymeleaf 템플릿 엔진으로부터 가져옴
+            loadPage('/manager/manager_memberList?page=' + currentPage + '&type=' + type + '&keyword=' + keyword, 'main-content');
+          }
+        });
+
+        //새로고침을 눌렀을때
+        $(".btn-clear").click(function(e) {
+          e.preventDefault();
+          $("input[name='keyword']").val('');
+          var currentPage = [[${result.page}]]; // 현재 페이지 번호를 Thymeleaf 템플릿 엔진으로부터 가져옴
+          loadPage('/manager/manager_memberList?page=' + currentPage, 'main-content');
         });
     });
 </script>
