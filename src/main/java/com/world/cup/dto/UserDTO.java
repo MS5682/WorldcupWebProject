@@ -29,5 +29,5 @@ public class UserDTO {
 
     private String userRole;
     private LocalDateTime regDate;
-    private String worldCupTitle;
+    private Long worldcupCount;
 }

@@ -33,6 +33,7 @@ public class ManagerController {
     public void manager_memberList(PageRequestDTO pageRequestDTO, Model model){
 
         model.addAttribute("result", userService.getMemberList(pageRequestDTO));
+
     }
 
     @GetMapping("/manager/manager_member")
