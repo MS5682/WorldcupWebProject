@@ -1,281 +1,180 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<head><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.115.4">
-    <title>나의 이상형 월드컵</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.115.4">
+  <title>이상형 월드컵</title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/album/">
-
-    
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
-
-<link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <link th:href="@{/css/styles.css}" rel="stylesheet">
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/album/">
 
 
-    
-  </head>
-  <body>
 
-  <th:block th:include="main/header :: header"></th:block>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
 
+  <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+
+<th:block th:include="main/header :: header"></th:block>
 <main>
 
   <div class="album py-5 bg-body-tertiary">
     <div class="container">
-
+      <div class="mb-5"><h2>이상형 월드컵      </h2></div>
       <div class="top">
-        <div><h2>나의 이상형 월드컵</h2></div>
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="제목을 입력하세요">
-          <button class="btn btn-success" type="submit">검색하기</button>
-        </div>        
         <div>
-          <button type="button" class="btn btn-outline-secondary">인기순</button>
-          <button type="button" class="btn btn-outline-secondary">최신순</button>
+          <form action="" method="get" id="searchForm">
+            <input type="hidden" name="page" value="1">
+            <div class="input-group"  style="width:500px;">
+              <div class="input-group-prepend">
+                <select class="custom-select form-control" name="type" >
+                  <option th:selected="${pageRequestDTO.type == null}">------</option>
+                  <option th:selected="${pageRequestDTO.type == 't'}" value="t">제목</option>
+                  <option th:selected="${pageRequestDTO.type == 'm'}" value="m">선택지</option>
+                  <option th:selected="${pageRequestDTO.type == 'tm'}" value="tm">제목+선택지</option>
+                </select>
+              </div>
+              <input class="form-control" name="keyword" placeholder="키워드를 입력하세요" >
+              <div>
+                <button class="btn btn-success btn-search" type="button">검색하기</button>
+                <button class="btn btn-danger btn-clear" type="button">새로고침</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div>
+          <a type="button" class="btn btn-info" th:href="@{/
+            (page=${result.page},
+            type=${pageRequestDTO.type},
+            keyword=${pageRequestDTO.keyword},
+            order=2)}"
+          >인기순</a>
+          <a type="button" class="btn btn-primary" th:href="@{/
+            (page=${result.page},
+            type=${pageRequestDTO.type},
+            keyword=${pageRequestDTO.keyword},
+            order=1)}"
+          >최신순</a>
+
         </div>
       </div>
 
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-5 mb-5">
-        
-        <div class="col">
-          <div class="card shadow-sm">
-            <div class="worldcup-name">이상형 월드컵 제목</div>
-            <div class="inner-row row row-cols-1 row-cols-sm-2 row-cols-md-2 g-1">
-              <div class="inner-row-item col">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="choice-name">선택지1</div>
+
+        <th:block th:each="worldcupDTO : ${result.dtoList}">
+          <div class="col">
+            <div class="card shadow-sm">
+              <div class="worldcup-name" th:text="${worldcupDTO.title}"></div>
+
+              <div class="inner-row row row-cols-1 row-cols-sm-2 row-cols-md-2 g-1">
+                <th:block th:each="choiceDTO : ${worldcupDTO.choice}">
+                  <div class="inner-row-item col">
+                    <img th:if="${choiceDTO.type == 1}" th:src="@{/worldcup/choice/display(fileName=${choiceDTO.getImageURL()})}" style="width: 100%; height: 200px;">
+                    <img th:if="${choiceDTO.type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${choiceDTO.imgName} + '/0.jpg'}" style="width: 100%; height: 200px;">
+                    <svg th:if="${choiceDTO.imgName == null}" class="bd-placeholder-img card-img-top" width="100%" height="200px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: No Image" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">No Image</text></svg>
+                    <div class="choice-name" th:if="${choiceDTO.name != null}" th:text="${choiceDTO.name}"></div>
+                    <div class="choice-name" th:if="${choiceDTO.name == null}" th:text="'선택지 없음'"></div>
+                  </div>
+                </th:block>
               </div>
-              <div class="inner-row-item col">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="choice-name">선택지2</div>
-              </div>
-            </div>
-            <div class="card-body">
-              <p class="card-text">이상형 월드컵 설명 작성영역입니다.</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <small class="text-body-secondary">수정일 2000.00.00</small>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">상세보기</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary deleteBtn">삭제하기</button>
+
+              <div class="card-body">
+                <!-- Description and other content for each worldcupDTO -->
+                <p class="card-text" th:text="${worldcupDTO.description}"></p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <small class="text-body-secondary" th:if="${worldcupDTO.modDate.equals(worldcupDTO.regDate)}"
+                         th:text="'등록일 ' + ${worldcupDTO.regDate}"></small>
+                  <small class="text-body-secondary" th:unless="${worldcupDTO.modDate.equals(worldcupDTO.regDate)}"
+                         th:text="'수정일 ' + ${worldcupDTO.modDate}"></small>
+
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary">상세보기</button>
+                    <form>
+                      <input type="hidden" name="worldcupNum" th:value="${worldcupDTO.worldcupNum}">
+                      <button type="button" class="btn btn-sm btn-outline-secondary deleteBtn"  onclick="deleteWorldcup()">삭제하기</button>
+                    </form>
+
+                  </div>
+
                 </div>
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="col">
-          <div class="card shadow-sm">
-            <div class="worldcup-name">이상형 월드컵 제목</div>
-            <div class="inner-row row row-cols-1 row-cols-sm-2 row-cols-md-2 g-1">
-              <div class="inner-row-item col">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="choice-name">선택지1</div>
-              </div>
-              <div class="inner-row-item col">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="choice-name">선택지2</div>
-              </div>
-            </div>
-            <div class="card-body">
-              <p class="card-text">이상형 월드컵 설명 작성영역입니다.</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <small class="text-body-secondary">수정일 2000.00.00</small>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">상세보기</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary deleteBtn">삭제하기</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card shadow-sm">
-            <div class="worldcup-name">이상형 월드컵 제목</div>
-            <div class="inner-row row row-cols-1 row-cols-sm-2 row-cols-md-2 g-1">
-              <div class="inner-row-item col">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="choice-name">선택지1</div>
-              </div>
-              <div class="inner-row-item col">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="choice-name">선택지2</div>
-              </div>
-            </div>
-            <div class="card-body">
-              <p class="card-text">이상형 월드컵 설명 작성영역입니다.</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <small class="text-body-secondary">수정일 2000.00.00</small>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">상세보기</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary deleteBtn">삭제하기</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card shadow-sm">
-            <div class="worldcup-name">이상형 월드컵 제목</div>
-            <div class="inner-row row row-cols-1 row-cols-sm-2 row-cols-md-2 g-1">
-              <div class="inner-row-item col">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="choice-name">선택지1</div>
-              </div>
-              <div class="inner-row-item col">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="choice-name">선택지2</div>
-              </div>
-            </div>
-            <div class="card-body">
-              <p class="card-text">이상형 월드컵 설명 작성영역입니다.</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <small class="text-body-secondary">수정일 2000.00.00</small>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">상세보기</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary deleteBtn">삭제하기</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card shadow-sm">
-            <div class="worldcup-name">이상형 월드컵 제목</div>
-            <div class="inner-row row row-cols-1 row-cols-sm-2 row-cols-md-2 g-1">
-              <div class="inner-row-item col">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="choice-name">선택지1</div>
-              </div>
-              <div class="inner-row-item col">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="choice-name">선택지2</div>
-              </div>
-            </div>
-            <div class="card-body">
-              <p class="card-text">이상형 월드컵 설명 작성영역입니다.</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <small class="text-body-secondary">수정일 2000.00.00</small>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">상세보기</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary deleteBtn">삭제하기</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card shadow-sm">
-            <div class="worldcup-name">이상형 월드컵 제목</div>
-            <div class="inner-row row row-cols-1 row-cols-sm-2 row-cols-md-2 g-1">
-              <div class="inner-row-item col">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="choice-name">선택지1</div>
-              </div>
-              <div class="inner-row-item col">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="choice-name">선택지2</div>
-              </div>
-            </div>
-            <div class="card-body">
-              <p class="card-text">이상형 월드컵 설명 작성영역입니다.</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <small class="text-body-secondary">수정일 2000.00.00</small>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">상세보기</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary deleteBtn">삭제하기</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        
-      
-        
+        </th:block>
       </div>
       <div class="text-center">
-        <ul class="pagination d-inline-flex">
-            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">4</a></li>
-            <li class="page-item"><a class="page-link" href="#">5</a></li>
-            <li class="page-item"><a class="page-link" href="#">6</a></li>
-            <li class="page-item"><a class="page-link" href="#">7</a></li>
-            <li class="page-item"><a class="page-link" href="#">8</a></li>
-            <li class="page-item"><a class="page-link" href="#">9</a></li>
-            <li class="page-item"><a class="page-link" href="#">10</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        <ul class="pagination h-100 justify-content-center align-items-center">
+          <li class="page-item" th:if="${result.prev}">
+            <a class="page-link" th:href="@{/(page=${result.start - 1},
+                                                type=${pageRequestDTO.type},
+                                                keyword=${pageRequestDTO.keyword}
+                )}" tabindex="-1">Prev</a>
+          </li>
+          <li th:class=" ' page-item ' + ${result.page == page?'active':''}"
+              th:each="page: ${result.pageList}" >
+            <a class="page-link" th:href="@{/(page=${page},
+                                                type=${pageRequestDTO.type},
+                                                keyword=${pageRequestDTO.keyword}
+                )}">[[${page}]]</a>
+          </li>
+          <li class="page-item" th:if="${result.next}">
+            <a class="page-link" th:href="@{/(page=${result.end + 1},
+                                                type=${pageRequestDTO.type},
+                                                keyword=${pageRequestDTO.keyword}
+                )}">Next</a>
+          </li>
         </ul>
-    </div>
+      </div>
     </div>
   </div>
-  <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteModalLabel">삭제 확인</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>정말로 삭제하시겠습니까?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                <button type="button" class="btn btn-danger" onclick="deleteWorldCup()">삭제</button>
-            </div>
-        </div>
-    </div>
-</div>
 </main>
 
 <th:block th:include="main/footer :: footer"></th:block>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
-    // 삭제하기 버튼 클릭 시 모달 띄우기
-    $('.deleteBtn').on('click', function () {
-        var worldCupTitle = $(this).closest('.card').find('.worldcup-name').text();
-        $('#confirmDeleteModal').data('worldCupTitle', worldCupTitle).modal('show');
+  function deleteWorldcup() {
+      var button = event.target;
+      var form = button.closest('form');
+      var formData = new FormData(form);
+
+      $.ajax({
+        url: '/worldcup/delete',
+        type: 'DELETE',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            console.log(response);
+            location.reload();
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+            alert('삭제에 실패했습니다.');
+        }
+      });
+
+  $(document).ready(function() {
+    var searchForm = $("#searchForm");
+
+    $(".btn-search").click(function(e){
+      searchForm.submit();
     });
 
-    // 삭제 모달에서 확인 버튼 클릭 시 실행되는 함수
-    function deleteWorldCup() {
-        var worldCupTitle = $('#confirmDeleteModal').data('worldCupTitle');
-        console.log(worldCupTitle);
-        // 여기에 삭제를 처리하는 AJAX (POST) 요청 코드 추가
-        $.ajax({
-            type: 'POST',
-            url: '/delete-worldcup', // Replace with your server endpoint
-            data: { worldCupTitle: worldCupTitle },
-            success: function (response) {
-                // 예시: 삭제한 후 페이지 리로드
-                location.reload();
+    $(".btn-clear").click(function(e){
+      searchForm.empty().submit();
+    });
 
-                // 모달 닫기
-                $('#confirmDeleteModal').modal('hide');
-            },
-            error: function (error) {
-                console.error('Error during deletion:', error);
-                // 여기에 오류 처리 코드 추가
-            }
-        });
+
     }
 </script>
 
-    </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
 </html>

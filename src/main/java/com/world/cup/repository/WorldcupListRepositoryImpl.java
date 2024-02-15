@@ -4,6 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import com.world.cup.entity.QChoice;
@@ -21,7 +22,7 @@ public class WorldcupListRepositoryImpl extends QuerydslRepositorySupport implem
     public WorldcupListRepositoryImpl() {super(Worldcup.class);}
 
     @Override
-    public Page<Object[]> getWorldcupList(String type, String keyword, Pageable pageable) {
+    public Page<Object[]> getWorldcupList(String type, String keyword, Pageable pageable, String userId) {
         QWorldcup worldcup = QWorldcup.worldcup;
         QChoice choice1 = new QChoice("choice1");
         QChoice choice2 = new QChoice("choice2");
@@ -51,7 +52,11 @@ public class WorldcupListRepositoryImpl extends QuerydslRepositorySupport implem
             }
             booleanBuilder.and(coditionBuilder);
         }
-
+        if(userId != null){
+            booleanBuilder.and(worldcup.user.id.eq(userId));
+        }
+        BooleanExpression disclosureCondition = worldcup.disclosure.eq((byte) 1);
+        booleanBuilder.and(disclosureCondition);
         tuple.where(booleanBuilder);
 
         // 정렬 추가
