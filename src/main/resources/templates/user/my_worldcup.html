@@ -49,13 +49,25 @@
           </form>
         </div>
         <div>
-          <a type="button" class="btn btn-info" th:href="@{/
+          <a type="button" class="btn btn-secondary" th:href="@{/worldcup/list
+            (page=${result.page},
+            type=${pageRequestDTO.type},
+            keyword=${pageRequestDTO.keyword},
+            disclosure=1)}"
+          >공개</a>
+          <a type="button" class="btn btn-dark" th:href="@{/worldcup/list
+            (page=${result.page},
+            type=${pageRequestDTO.type},
+            keyword=${pageRequestDTO.keyword},
+            disclosure=0)}"
+          >비공개</a>
+          <a type="button" class="btn btn-info" th:href="@{/worldcup/list
             (page=${result.page},
             type=${pageRequestDTO.type},
             keyword=${pageRequestDTO.keyword},
             order=2)}"
           >인기순</a>
-          <a type="button" class="btn btn-primary" th:href="@{/
+          <a type="button" class="btn btn-primary" th:href="@{/worldcup/list
             (page=${result.page},
             type=${pageRequestDTO.type},
             keyword=${pageRequestDTO.keyword},
@@ -151,7 +163,7 @@
     });
 
 
-    }
+    });
 </script>
 <script>
   function deleteWorldcup() {
