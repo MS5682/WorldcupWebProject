@@ -1,6 +1,7 @@
 package com.world.cup.controller;
 
 import com.world.cup.dto.ChoiceDTO;
+import com.world.cup.dto.PageRequestDTO;
 import com.world.cup.dto.WorldcupDTO;
 import com.world.cup.service.ChoiceService;
 import com.world.cup.service.WorldcupService;
@@ -45,7 +46,10 @@ public class WorldcupController {
     private String uploadDir;
 
     @GetMapping("/list")
-    public String list(){
+    public String list(PageRequestDTO pageRequestDTO, Model model){
+        pageRequestDTO.setUserId("admin");
+        model.addAttribute("result", worldcupService.getWorldcupList(pageRequestDTO));
+        log.info(worldcupService.getWorldcupList(pageRequestDTO));
         return "/user/my_worldcup.html";
     }
 
@@ -189,6 +193,27 @@ public class WorldcupController {
     public ResponseEntity<Boolean> choiceDelete(ChoiceDTO choiceDTO){
         log.info(choiceDTO);
         choiceService.deleteChoice(choiceDTO);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Boolean> delete(WorldcupDTO worldcupDTO) {
+        worldcupDTO = choiceService.getChoiceToWorldcup(worldcupDTO);
+
+        for (ChoiceDTO choiceDTO : worldcupDTO.getChoice()) {
+            if (choiceDTO.getUuid() != null) {
+                String fileName = choiceDTO.getImageURL();
+                ResponseEntity<Boolean> removeFileResponse = removeFile(fileName);
+                if (removeFileResponse.getBody()) {
+                    choiceService.deleteChoice(choiceDTO);
+                } else {
+                    return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            } else {
+                choiceService.deleteChoice(choiceDTO);
+            }
+        }
+
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

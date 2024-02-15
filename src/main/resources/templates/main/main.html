@@ -75,7 +75,9 @@
               <div class="inner-row row row-cols-1 row-cols-sm-2 row-cols-md-2 g-1">
                 <th:block th:each="choiceDTO : ${worldcupDTO.choice}">
                   <div class="inner-row-item col">
-                    <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: No Image" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">No Image</text></svg>
+                    <img th:if="${choiceDTO.type == 1}" th:src="@{/worldcup/choice/display(fileName=${choiceDTO.getImageURL()})}" style="width: 100%; height: 200px;">
+                    <img th:if="${choiceDTO.type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${choiceDTO.imgName} + '/0.jpg'}" style="width: 100%; height: 200px;">
+                    <svg th:if="${choiceDTO.imgName == null}" class="bd-placeholder-img card-img-top" width="100%" height="200px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: No Image" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">No Image</text></svg>
                     <div class="choice-name" th:if="${choiceDTO.name != null}" th:text="${choiceDTO.name}"></div>
                     <div class="choice-name" th:if="${choiceDTO.name == null}" th:text="'선택지 없음'"></div>
                   </div>
@@ -149,6 +151,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
 </main>
 

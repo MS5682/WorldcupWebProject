@@ -39,7 +39,8 @@ public class WorldcupServiceImpl implements WorldcupService{
         Page<Object[]> result = worldcupRepository.getWorldcupList
                         (pageRequestDTO.getType(),
                         pageRequestDTO.getKeyword(),
-                        pageRequestDTO.getPageable(sort));
+                        pageRequestDTO.getPageable(sort),
+                                pageRequestDTO.getUserId());
 
         return new PageResultDTO<>(result,fn);
     }
