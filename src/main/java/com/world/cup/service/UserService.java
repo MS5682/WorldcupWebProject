@@ -54,18 +54,15 @@ public interface UserService {
         return userDTO;
     }
 
-    default UserDTO entityToDto(User user,Worldcup worldcup){
-        String title = "";
-        if (worldcup != null) {
-            title = worldcup.getTitle();
-        }
+    default UserDTO entityToDto(User user,Long worldCupCount){
+
         UserDTO userDTO = UserDTO.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .regDate(user.getRegDate())
                 .userRole(user.getUserRole())
-                .worldCupTitle(title)
+                .worldcupCount(worldCupCount)
                 .build();
 
         return userDTO;

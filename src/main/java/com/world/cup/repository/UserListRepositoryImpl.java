@@ -29,9 +29,10 @@ public class UserListRepositoryImpl extends QuerydslRepositorySupport implements
         QUser user = QUser.user;
         QWorldcup worldcup = QWorldcup.worldcup;
 
-        JPQLQuery<User> jpqlQuery = from(user);
-        jpqlQuery.leftJoin(worldcup).on(user.eq(worldcup.user));
-        JPQLQuery<Tuple> tuple = jpqlQuery.select(user,worldcup.title);
+        JPQLQuery<Tuple> tuple = from(user)
+                .leftJoin(worldcup).on(user.eq(worldcup.user))
+                .select(user, worldcup.count())
+                .groupBy(user.id, user.email, user.password, user.regDate, user.userRole);
 
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();

@@ -26,13 +26,13 @@
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-5 mb-5">
 
-            <th:block th:each="worldcupDTO : ${result.dtoList}">
+            <div th:each="worldcupDTO : ${result.dtoList}">
                 <div class="col">
                     <div class="card shadow-sm">
                         <div class="worldcup-name" th:text="${worldcupDTO.title}"></div>
 
                         <div class="inner-row row row-cols-1 row-cols-sm-2 row-cols-md-2 g-1">
-                            <th:block th:each="choiceDTO : ${worldcupDTO.choice}">
+                            <div th:each="choiceDTO : ${worldcupDTO.choice}">
                                 <div class="inner-row-item col">
                                     <svg class="bd-placeholder-img card-img-top" width="100%" height="170"
                                          xmlns="http://www.w3.org/2000/svg" role="img"
@@ -45,7 +45,7 @@
                                          th:text="${choiceDTO.name}"></div>
                                     <div class="choice-name" th:if="${choiceDTO.name == null}" th:text="'선택지 없음'"></div>
                                 </div>
-                            </th:block>
+                            </div>
                         </div>
 
                         <div class="card-body">
@@ -60,37 +60,37 @@
                         </div>
                     </div>
                 </div>
-            </th:block>
-        </div>
-        <div class="mb-4">
-            <div>
-                <button class="btn btn-dark" id="manager_Home">홈으로</button>
             </div>
+            <div class="mb-4">
+                <div>
+                    <button class="btn btn-dark" id="manager_Home">홈으로</button>
+                </div>
+            </div>
+            <ul class="pagination h-100 justify-content-center align-items-center">
+
+                <li class="page-item.prev " th:if="${result.prev}">
+                    <a class="page-link"
+                       th:onclick="'loadPage(\'' + @{/manager/manager_private(page=${result.start -1},type=${pageRequestDTO.type},
+                                        keyword=${pageRequestDTO.keyword})} + '\', \'main\'); return false;'">이전</a>
+                </li>
+
+                <li th:class=" 'page-item.current ' + ${result.page == page?'active':''} "
+                    th:each="page: ${result.pageList}">
+                    <a class="page-link"
+                       th:onclick="'loadPage(\'' + @{/manager/manager_private(page=${page},type=${pageRequestDTO.type},
+                                        keyword=${pageRequestDTO.keyword})} + '\', \'main\'); return false;'">
+                        [[${page}]]
+                    </a>
+                </li>
+
+                <li class="page-item.next" th:if="${result.next}">
+                    <a class="page-link"
+                       th:onclick="'loadPage(\'' + @{/manager/manager_private(page=${result.end + 1},type=${pageRequestDTO.type},
+                                        keyword=${pageRequestDTO.keyword})} + '\', \'main\'); return false;'">다음</a>
+                </li>
+
+            </ul>
         </div>
-        <ul class="pagination h-100 justify-content-center align-items-center">
-
-            <li class="page-item.prev " th:if="${result.prev}">
-                <a class="page-link"
-                   th:onclick="'loadPage(\'' + @{/manager/manager_private(page=${result.start -1},type=${pageRequestDTO.type},
-                                    keyword=${pageRequestDTO.keyword})} + '\', \'main\'); return false;'">이전</a>
-            </li>
-
-            <li th:class=" 'page-item.current ' + ${result.page == page?'active':''} "
-                th:each="page: ${result.pageList}">
-                <a class="page-link"
-                   th:onclick="'loadPage(\'' + @{/manager/manager_private(page=${page},type=${pageRequestDTO.type},
-                                    keyword=${pageRequestDTO.keyword})} + '\', \'main\'); return false;'">
-                    [[${page}]]
-                </a>
-            </li>
-
-            <li class="page-item.next" th:if="${result.next}">
-                <a class="page-link"
-                   th:onclick="'loadPage(\'' + @{/manager/manager_private(page=${result.end + 1},type=${pageRequestDTO.type},
-                                    keyword=${pageRequestDTO.keyword})} + '\', \'main\'); return false;'">다음</a>
-            </li>
-
-        </ul>
     </div>
 <script>
         $(function() {
