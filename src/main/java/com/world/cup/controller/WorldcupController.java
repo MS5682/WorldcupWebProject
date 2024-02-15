@@ -56,9 +56,16 @@ public class WorldcupController {
 
     @PostMapping("/register")
     public String postRegister(WorldcupDTO worldcupDTO, RedirectAttributes redirectAttributes){
+        worldcupDTO.setId("admin");
         int worldcupNum = worldcupService.register(worldcupDTO);
         redirectAttributes.addAttribute("worldcupNum",worldcupNum);
         return "redirect:/worldcup/edit";
+    }
+
+    @PostMapping("/edit")
+    public ResponseEntity<Boolean> edit(WorldcupDTO worldcupDTO) {
+        worldcupService.modifyWorldcup(worldcupDTO);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
     @GetMapping("/edit")
@@ -72,7 +79,8 @@ public class WorldcupController {
 
     @PostMapping("/choice/upload")
     public ResponseEntity<Boolean> upload(ChoiceDTO choiceDTO) throws IOException {
-        if(choiceDTO.getType() == 1){
+        log.info(choiceDTO);
+        if(choiceDTO.getImage() != null){
             this.uploadDir = env.getProperty("user.dir") +File.separator + "src" +
                     File.separator + "main" + File.separator + "resources" +
                     File.separator + "uploads" + File.separator;
@@ -98,8 +106,16 @@ public class WorldcupController {
             choiceDTO.setUuid(uuid);
             choiceDTO.setPath(folderPath);
         }
-        log.info(choiceDTO);
-        choiceService.addChoice(choiceDTO);
+
+        if(choiceDTO.getChoiceNum() == 0)
+            choiceService.addChoice(choiceDTO);
+        else if(choiceDTO.getName() != null)
+            choiceService.modifyChoiceName(choiceDTO);
+        else if(choiceDTO.getUuid() == null)
+            choiceService.modifyChoiceVideo(choiceDTO);
+        else
+            choiceService.modifyChoiceImg(choiceDTO);
+
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
@@ -167,5 +183,12 @@ public class WorldcupController {
     @GetMapping("/warning")
     public String warning(){
         return "/user/worldcup_register_warning.html";
+    }
+
+    @DeleteMapping("/choice/delete")
+    public ResponseEntity<Boolean> choiceDelete(ChoiceDTO choiceDTO){
+        log.info(choiceDTO);
+        choiceService.deleteChoice(choiceDTO);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

@@ -3,6 +3,7 @@ package com.world.cup.service;
 import com.world.cup.dto.PageRequestDTO;
 import com.world.cup.dto.PageResultDTO;
 import com.world.cup.dto.WorldcupDTO;
+import com.world.cup.entity.Choice;
 import com.world.cup.entity.Worldcup;
 import com.world.cup.repository.WorldcupListRepository;
 import com.world.cup.repository.WorldcupRepository;
@@ -57,6 +58,17 @@ public class WorldcupServiceImpl implements WorldcupService{
     public WorldcupDTO getWorldcup(WorldcupDTO worldcupDTO) {
         Object result = worldcupRepository.getWorldcupByWorldcupNum(worldcupDTO.getWorldcupNum());
         return entityToDto((Worldcup)result);
+    }
+
+    @Override
+    public void modifyWorldcup(WorldcupDTO worldcupDTO) {
+        Worldcup worldcup = worldcupRepository.getOne(worldcupDTO.getWorldcupNum());
+        if(worldcup != null){
+            worldcup.changeDescription(worldcupDTO.getDescription());
+            worldcup.changeDisclosure(worldcupDTO.getDisclosure());
+            worldcup.changeTitle(worldcupDTO.getTitle());
+        }
+        worldcupRepository.save(worldcup);
     }
 
 
