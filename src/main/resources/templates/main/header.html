@@ -3,16 +3,17 @@
     <div class="navbar navbar-dark bg-dark shadow-sm">
         <div class="container">
             <div>
-                <a href="#" class="navbar-brand">
-                    <strong>배너</strong>
+                <a href="/" class="navbar-brand">
+                    <strong>Choose Your Best</strong>
                 </a>
-                <a href="#">이상형 월드컵</a>
+                <a class="link-light" href="/">이상형 월드컵</a>
             </div>
 
             <div>
-                <a th:if="${session.userId==null}" th:href="@{/worldcup/login}">로그인</a>
-                <a th:if="${session.userId!=null}" th:href="@{/worldcup/editpw}">비밀번호 변경</a>
-                <a th:if="${session.userId!=null}" th:href="@{/worldcup/logout}">로그아웃</a>
+                <a class="link-light" th:if="${session.userId==null}" th:href="@{/worldcup/login}">로그인</a>
+                <a class="link-light" th:if="${session.userId!=null}" th:href="@{/worldcup/list}">내 이상형 월드컵</a>
+                <a class="link-light" th:if="${session.userId!=null}" th:href="@{/worldcup/editpw}">비밀번호 변경</a>
+                <a class="link-light" th:if="${session.userId!=null}" th:href="@{/worldcup/logout}">로그아웃</a>
             </div>
         </div>
     </div>
