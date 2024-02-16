@@ -37,6 +37,7 @@ public interface UserService {
 
     default User dtoToEntity(UserDTO userDTO){
         User user = User.builder().id(userDTO.getId()).email(userDTO.getEmail()).password(userDTO.getPassword())
+                .userRole(userDTO.getUserRole())
                 .build();
 
         return user;
