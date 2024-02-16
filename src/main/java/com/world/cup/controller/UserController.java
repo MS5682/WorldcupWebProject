@@ -102,11 +102,15 @@ public class UserController {
     @PostMapping("/login")
     public String login(UserDTO userDTO, HttpSession session, RedirectAttributes redirectAttributes){
         boolean loginSuccess = userService.login(userDTO);
+        UserDTO userRoleDTO = userService.getUser(userDTO.getId());
         if(loginSuccess) {
             session.setAttribute("userId", userDTO.getId());
-            UserDTO userRoleDTO = userService.getUser(userDTO.getId());
             session.setAttribute("userRole",userRoleDTO.getUserRole());
-            return "redirect:/";
+            if(userRoleDTO.getUserRole().equals("admin")){
+                return "redirect:/manager";
+            }else {
+                return "redirect:/";
+            }
         }
         else {
             redirectAttributes.addFlashAttribute("msg", "아이디 또는 비밀번호를 잘못 입력하셨습니다.");

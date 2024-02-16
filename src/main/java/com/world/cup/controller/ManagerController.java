@@ -7,6 +7,8 @@ import com.world.cup.dto.UserDTO;
 import com.world.cup.service.ReportService;
 import com.world.cup.service.UserService;
 import com.world.cup.service.WorldcupService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +30,14 @@ public class ManagerController {
     private final ReportService reportService;
 
     @GetMapping("")
-    public String manager(){
-        return "/manager/manager_main.html";
+    public String manager(HttpSession session, HttpServletRequest request){
+        String userRole = (String)session.getAttribute("userRole");
+        if(userRole!=null&&userRole.equals("admin")){
+            return "/manager/manager_main.html";
+        }else{
+            return "/login/login.html";
+        }
+
     }
 
     @GetMapping("/manager_memberList")
