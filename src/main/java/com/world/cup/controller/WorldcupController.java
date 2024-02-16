@@ -2,6 +2,7 @@ package com.world.cup.controller;
 
 import com.world.cup.dto.ChoiceDTO;
 import com.world.cup.dto.PageRequestDTO;
+import com.world.cup.dto.PageResultDTO;
 import com.world.cup.dto.WorldcupDTO;
 import com.world.cup.service.ChoiceService;
 import com.world.cup.service.WorldcupService;
@@ -47,7 +48,7 @@ public class WorldcupController {
     private String uploadDir;
 
     @GetMapping("/list")
-    public String list(PageRequestDTO pageRequestDTO, Model model){
+    public String list(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model){
         pageRequestDTO.setUserId("admin");
         model.addAttribute("result", worldcupService.getWorldcupList(pageRequestDTO));
         return "/user/my_worldcup.html";
@@ -73,11 +74,15 @@ public class WorldcupController {
     }
 
     @GetMapping("/edit")
-    public String edit(WorldcupDTO worldcupDTO, Model model){
+    public String edit(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model){
         log.info("get edit page");
+        WorldcupDTO worldcupDTO = WorldcupDTO.builder().worldcupNum(pageRequestDTO.getWorldcupNum()).build();
         worldcupDTO = worldcupService.getWorldcup(worldcupDTO);
-        worldcupDTO = choiceService.getChoiceToWorldcup(worldcupDTO);
-        model.addAttribute("result", worldcupDTO);
+        PageResultDTO pageResultDTO = choiceService.getChoicePage(pageRequestDTO);
+        worldcupDTO.setChoice(pageResultDTO.getDtoList());
+        log.info(pageResultDTO.getStart());
+        model.addAttribute("worldcup", worldcupDTO);
+        model.addAttribute("choices", pageResultDTO);
         return "/user/worldcup_edit.html";
     }
 

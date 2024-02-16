@@ -1,6 +1,8 @@
 package com.world.cup.service;
 
 import com.world.cup.dto.ChoiceDTO;
+import com.world.cup.dto.PageRequestDTO;
+import com.world.cup.dto.PageResultDTO;
 import com.world.cup.dto.WorldcupDTO;
 import com.world.cup.entity.Choice;
 import com.world.cup.entity.Worldcup;
@@ -8,6 +10,7 @@ import com.world.cup.entity.Worldcup;
 
 public interface ChoiceService {
     WorldcupDTO getChoiceToWorldcup(WorldcupDTO worldcupDTO);
+    PageResultDTO<ChoiceDTO, Object[]> getChoicePage(PageRequestDTO pageRequestDTO);
 
     void addChoice(ChoiceDTO choiceDTO);
 

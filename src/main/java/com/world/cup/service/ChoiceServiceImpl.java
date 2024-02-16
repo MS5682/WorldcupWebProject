@@ -1,15 +1,22 @@
 package com.world.cup.service;
 
 import com.world.cup.dto.ChoiceDTO;
+import com.world.cup.dto.PageRequestDTO;
+import com.world.cup.dto.PageResultDTO;
 import com.world.cup.dto.WorldcupDTO;
 import com.world.cup.entity.Choice;
 import com.world.cup.repository.ChoiceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +39,21 @@ public class ChoiceServiceImpl implements ChoiceService {
         worldcupDTO.setChoice(choiceDTOs);
 
         return worldcupDTO;
+    }
+
+    @Override
+    public PageResultDTO<ChoiceDTO, Object[]> getChoicePage(PageRequestDTO pageRequestDTO) {
+        Function<Object[], ChoiceDTO> fn = ((en) -> entityToDto((Choice)en[0]));
+        pageRequestDTO.setSize(5);
+        Pageable pageable = pageRequestDTO.getPageable(Sort.by("choiceNum").descending());
+        Page<Object[]> result = choiceRepository.getChoiceList(pageRequestDTO.getType(),
+                pageRequestDTO.getKeyword(),
+                pageRequestDTO.getWorldcupNum(),
+                pageable);
+
+
+
+        return new PageResultDTO<>(result,fn);
     }
 
     @Override

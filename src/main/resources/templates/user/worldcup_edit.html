@@ -26,7 +26,7 @@
         <div><h2>이상형 월드컵 수정 및 선택지 추가</h2></div>
       </div>
 
-      <form th:object="${result}" id="updateForm">
+      <form th:object="${worldcup}" id="updateForm">
         <input type="hidden" th:field="*{worldcupNum}">
         <table class="register">
           <tr>
@@ -45,10 +45,10 @@
             <th class="register-th">공개 여부</th>
             <td class="register-td">
               <label style="margin-left:5px;">
-                <input type="radio" name="disclosure" value="1" th:checked="${result.disclosure == 1}">공개
+                <input type="radio" name="disclosure" value="1" th:checked="${worldcup.disclosure == 1}">공개
               </label>
               <label>
-                <input type="radio" name="disclosure" value="0" th:checked="${result.disclosure == 0}">비공개
+                <input type="radio" name="disclosure" value="0" th:checked="${worldcup.disclosure == 0}">비공개
               </label>
             </td>
           </tr>
@@ -67,7 +67,6 @@
           <th class="register-choice-th">선택지</th>
           <td class="register-choice-td">
             
-            
             <table class="choice">
               <tr>
                 <th class="choice-th col-1">순서</th>
@@ -80,8 +79,8 @@
 
 
 
-              <tr th:each="choice, choiceStat : ${result.choice}">
-                  <td class="choice-td" th:text="${choiceStat.count}"></td>
+              <tr th:each="choice, choiceStat : ${choices.dtoList}">
+                  <td class="choice-td" th:text="${choiceStat.count + (choices.page-1) * 5}"></td>
                   <td class="choice-td">
                     <form class="nameEdit">
                       <input type="hidden" name="choiceNum" th:value="${choice.choiceNum}">
@@ -116,7 +115,60 @@
 
                   </td>
               </tr>
-
+              <tr>
+                <td colspan="3">
+                  <div>
+                    <form action="" method="get" id="searchForm">
+                      <input type="hidden" name="page" value="1">
+                      <input type="hidden" id="worldcupNum" name="worldcupNum" th:value="${worldcup.worldcupNum}">
+                      <div class="input-group"  style="width:500px;">
+                        <div class="input-group-prepend">
+                          <select class="custom-select form-control" name="type" >
+                            <option th:selected="${pageRequestDTO.type == null}">------</option>
+                            <option th:selected="${pageRequestDTO.type == 'n'}" value="n">선택지 이름</option>
+                          </select>
+                        </div>
+                        <input class="form-control" name="keyword" placeholder="키워드를 입력하세요" >
+                        <div>
+                          <button class="btn btn-success btn-search" type="button">검색하기</button>
+                          <button class="btn btn-danger btn-clear" type="button">새로고침</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <div class="text-center">
+                    <ul class="pagination h-100 justify-content-center align-items-center">
+                      <li class="page-item" th:if="${choices.prev}">
+                        <a class="page-link" th:href="@{/worldcup/edit(
+                                                worldcupNum=${worldcup.worldcupNum},
+                                                page=${choices.start - 1},
+                                                type=${pageRequestDTO.type},
+                                                keyword=${pageRequestDTO.keyword}
+                )}" tabindex="-1">Prev</a>
+                      </li>
+                      <li th:class=" ' page-item ' + ${choices.page == page?'active':''}"
+                          th:each="page: ${choices.pageList}" >
+                        <a class="page-link" th:href="@{/worldcup/edit(
+                                                worldcupNum=${worldcup.worldcupNum},
+                                                page=${page},
+                                                type=${pageRequestDTO.type},
+                                                keyword=${pageRequestDTO.keyword}
+                )}">[[${page}]]</a>
+                      </li>
+                      <li class="page-item" th:if="${choices.next}">
+                        <a class="page-link" th:href="@{/worldcup/edit(
+                                                worldcupNum=${worldcup.worldcupNum},
+                                                page=${choices.end + 1},
+                                                type=${pageRequestDTO.type},
+                                                keyword=${pageRequestDTO.keyword}
+                )}">Next</a>
+                      </li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
               <tr>
                 <td colspan="6" class="add-button text-end">
                   <button type="button" class="btn btn-sm btn-outline-secondary" id="addVideoBtn">영상추가하기</button>
@@ -147,7 +199,7 @@
       <div class="modal-body">
         <form id="imageForm">
           <input type="hidden" name="type" value="1">
-          <input type="hidden" name="worldcupNum" th:value="${result.worldcupNum}">
+          <input type="hidden" name="worldcupNum" th:value="${worldcup.worldcupNum}">
           <label for="imageTitle" class="form-label">이름</label>
           <input type="text" class="form-control" id="imageTitle" name="name" required>
           
@@ -178,7 +230,7 @@
       <div class="modal-body">
         <form id="videoForm">
           <input type="hidden" name="type" value="0">
-          <input type="hidden" name="worldcupNum" th:value="${result.worldcupNum}">
+          <input type="hidden" name="worldcupNum" th:value="${worldcup.worldcupNum}">
           <label for="videoTitle" class="form-label">제목</label>
           <input type="text" class="form-control" id="videoTitle" name="name" required>
           
@@ -460,6 +512,20 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
   $(document).ready(function () {
+    var searchForm = $("#searchForm");
+
+    $(".btn-search").click(function(e){
+      searchForm.submit();
+    });
+
+    $(".btn-clear").click(function(e){
+      var worldcupNumValue = searchForm.find('#worldcupNum').val();
+      searchForm.empty();
+      searchForm.append('<input type="hidden" name="worldcupNum" id="worldcupNum" value="' + worldcupNumValue + '"/>');
+      searchForm.submit();
+
+    });
+
     $('input').keydown(function(event) {
         if (event.keyCode === 13) { // Enter 키의 keyCode는 13입니다.
             event.preventDefault(); // 기본 동작 취소 (폼 제출 방지)

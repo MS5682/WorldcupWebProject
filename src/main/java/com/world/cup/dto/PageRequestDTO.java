@@ -19,6 +19,7 @@ public class PageRequestDTO {
     private int order;
     private String userId;
     private Byte disclosure;
+    private int worldcupNum;
 
     public PageRequestDTO(){
         this.page = 1;
