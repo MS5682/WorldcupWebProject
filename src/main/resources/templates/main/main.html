@@ -195,10 +195,6 @@
       });
     });
 
-    $('.card-body .btn-outline-secondary:contains("신고하기")').click(function() {
-      var worldCupTitle = $(this).closest('.card').find('.worldcup-name').text();
-      $('#reportWorldCupTitle').text(worldCupTitle);
-      $('#reportModal').modal('show');
     $('.ReportBtn').click(function() {
       console.log("1번",userId);
       if (!userId || userId.trim() === "") { // 만약 로그인한 사용자가 없다면
