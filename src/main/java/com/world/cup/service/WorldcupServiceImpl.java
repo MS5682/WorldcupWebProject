@@ -115,5 +115,14 @@ public class WorldcupServiceImpl implements WorldcupService{
         worldcupRepository.deleteById(worldcupDTO.getWorldcupNum());
     }
 
+    @Override
+    public void updateViewCnt(WorldcupDTO worldcupDTO) {
+        Worldcup worldcup = worldcupRepository.getOne(worldcupDTO.getWorldcupNum());
+        if(worldcup != null){
+            worldcup.changeViewCnt(worldcup.getViewCnt() + 1);
+        }
+        worldcupRepository.save(worldcup);
+    }
+
 
 }

@@ -96,7 +96,8 @@
                          th:text="'수정일 ' + ${worldcupDTO.modDate}"></small>
 
                   <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">시작하기</button>
+                    <input type="hidden" class="worldcupNum" th:value="${worldcupDTO.worldcupNum}">
+                    <button type="button" class="btn btn-sm btn-outline-secondary startBtn">시작하기</button>
                     <button type="button" class="btn btn-sm btn-outline-secondary">결과보기</button>
                     <button type="button" class="btn btn-sm btn-outline-secondary ReportBtn" th:text="신고하기"
                              data-bs-target="#reportModal" ></button>
@@ -176,6 +177,28 @@
       searchForm.empty().submit();
     });
 
+    
+    $('.startBtn').click(function() {
+      var worldcupNum = $(this).closest('.card').find('.worldcupNum').val();
+
+      $.ajax({
+        type: 'POST',
+        url: '/worldcup/view?worldcupNum=' + worldcupNum,
+        success: function(response) {
+          console.log('View count updated successfully.');
+
+          <!--      window.location.href = '/worldcup/play?worldcupNum=' + worldcupNum; //수정필요 -->
+        },
+        error: function(error) {
+          console.error('Error updating view count:', error);
+        }
+      });
+    });
+
+    $('.card-body .btn-outline-secondary:contains("신고하기")').click(function() {
+      var worldCupTitle = $(this).closest('.card').find('.worldcup-name').text();
+      $('#reportWorldCupTitle').text(worldCupTitle);
+      $('#reportModal').modal('show');
     $('.ReportBtn').click(function() {
       console.log("1번",userId);
       if (!userId || userId.trim() === "") { // 만약 로그인한 사용자가 없다면

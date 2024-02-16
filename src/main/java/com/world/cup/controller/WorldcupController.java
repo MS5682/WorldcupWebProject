@@ -213,4 +213,10 @@ public class WorldcupController {
         worldcupService.deleteWorldcup(worldcupDTO);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
+
+    @PostMapping("/view")
+    public ResponseEntity<Boolean> view(WorldcupDTO worldcupDTO) {
+        worldcupService.updateViewCnt(worldcupDTO);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
 }
