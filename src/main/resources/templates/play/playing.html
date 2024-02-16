@@ -75,11 +75,11 @@
         <div>
             <div class="row">
                 <div class="col" style="width: fit-content">
-                    <img src="..." class="img-thumbnail oddImg" alt="..." style="min-width: 100vh; min-height: 80vh; margin-top: 10px">
+                    <img src="" class="img-thumbnail oddImg" style="min-width: 100vh; min-height: 80vh; margin-top: 10px">
                     <p class="text-center leftName"></p>
                 </div>
                 <div class="col" style="width: fit-content">
-                    <img src="..." class="img-thumbnail evenImg" alt="..." style="min-width: 100vh; min-height: 80vh; margin-top: 10px">
+                    <img src="" class="img-thumbnail evenImg" style="min-width: 100vh; min-height: 80vh; margin-top: 10px">
                     <p class="text-center rightName"></p>
                 </div>
             </div>
@@ -133,6 +133,10 @@
             }, 1000)
         }
 
+        function shuffle(array) {
+            array.sort(() => Math.random() - 0.5)
+        }
+
         function randomClick(num) {
             if (num == 1) {
                 $('.oddImg').click();
@@ -146,14 +150,21 @@
         var nextRound;
         var progress = 0;
 
-        allCandiList = $('#candi').val();
+        var allCandiList = $('#candi').val();
+        var outCandiList = [];
 
         var candi = JSON.parse(allCandiList);
 
         console.log(candi[0].name)
 
+        shuffle(candi)
+
+        console.log(candi)
+
         leftCandiName = document.querySelector('.leftName')
         rightCandiName = document.querySelector('.rightName')
+        leftImg = document.querySelector('.oddImg')
+        rightImg = document.querySelector('.evenImg')
 
         var candiOrder = 0;
 
@@ -162,6 +173,9 @@
             for (i = 0; i < $('.totalRound').val(); i++) {
                 totalRound = totalRound * 2;
             }
+
+            candi.length = totalRound;
+            console.log(candi)
 
             name.innerText += ' ' + totalRound + '강';
             currentRound = totalRound;
@@ -182,7 +196,20 @@
             leftCandiName.innerText = candi[candiOrder].name
             rightCandiName.innerText = candi[candiOrder + 1].name
 
-            candiOrder += 2;
+            leftImg.src = '../../uploads/' + candi[candiOrder].path + '/' + candi[candiOrder].uuid + candi[candiOrder].imgName
+            rightImg.src = '../../uploads/' + candi[candiOrder + 1].path + '/' + candi[candiOrder + 1].uuid + candi[candiOrder + 1].imgName
+
+            for (var i = 0; i < candi.length; i++) {
+                candi[i].winCount = 0;
+                candi[i].totalCount = 0;
+            }
+
+            candi[candiOrder].totalCount += 1;
+            candi[candiOrder + 1].totalCount += 1;
+
+            console.log(candi)
+
+            candiOrder += 1;
         })
 
         function returnClick() {
@@ -194,14 +221,24 @@
             leftCandiName.innerText = candi[candiOrder].name
             rightCandiName.innerText = candi[candiOrder + 1].name
 
-            candiOrder += 2;
+            candi[candiOrder].totalCount += 1;
+            candi[candiOrder + 1].totalCount += 1;
+
+            candiOrder += 1;
         }
 
         $('.oddImg').on('click', function () {
+            candi[candiOrder - 1].winCount += 1;
+            outCandiList.push(candi[candiOrder]);
+            candi.splice(candiOrder, 1)
+
+            console.log('배열 이동 확인')
+            console.log(candi)
+            console.log(outCandiList)
 
             clearInterval(timerID);
 
-            $('.oddImg').animate({minWidth: '1600px'}, 2000)
+            $('.oddImg').animate({minWidth: '1500px'}, 2000)
             $('.evenImg').animate({minWidth: '0px'}, 2000)
             $('.oddImg').animate({minWidth: '100vh'})
             $('.evenImg').animate({minWidth: '100vh'})
@@ -224,12 +261,13 @@
         })
 
         $('.evenImg').on('click', function () {
+            candi[candiOrder].winCount += 1;
+            outCandiList.push(candi[candiOrder - 1]);
+            candi.splice(candiOrder - 1, 1)
 
             clearInterval(timerID);
 
-            var offset = $('.oddImg').offset();
-
-            $('.evenImg').animate({minWidth: '1600px'}, 2000)
+            $('.evenImg').animate({minWidth: '1500px'}, 2000)
             $('.oddImg').animate({minWidth: '0px'}, 2000)
             $('.evenImg').animate({minWidth: '100vh'})
             $('.oddImg').animate({minWidth: '100vh'})
@@ -271,10 +309,14 @@
                     progressbar.innerText = ' ' + '결승';
                 }
 
+                candiOrder = 0;
+
                 currentRound = nextRound;
                 nextRound = currentRound / 2;
 
                 console.log('마지막 nextRound 체크 : ' + nextRound)
+
+                defeatarr = []
             }
 
             if (nextRound == 0.5) {

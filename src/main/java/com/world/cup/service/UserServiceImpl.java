@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService{
                         requestDTO.getKeyword(),
                         requestDTO.getPageable(sort));
 
-        Function<Object[], UserDTO> fn = (arr -> entityToDto((User)arr[0],(Worldcup)arr[1]));
+        Function<Object[], UserDTO> fn = (arr -> entityToDto((User)arr[0],(Long)arr[1]));
 
         return new PageResultDTO<>(result, fn);
 
