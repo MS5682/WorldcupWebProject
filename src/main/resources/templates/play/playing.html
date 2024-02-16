@@ -75,11 +75,12 @@
         <div>
             <div class="row">
                 <div class="col" style="width: fit-content">
-                    <img src="" class="img-thumbnail oddImg" style="min-width: 100vh; min-height: 80vh; margin-top: 10px">
+                    <img src="" class="img-thumbnail oddImg" style="min-width: 100%; min-height: 80vh; margin-top: 10px">
+                    <!--th:src="${candi[0].path} + '/' + ${candi[0].uuid} + ${candi[0].imgName}"-->
                     <p class="text-center leftName"></p>
                 </div>
                 <div class="col" style="width: fit-content">
-                    <img src="" class="img-thumbnail evenImg" style="min-width: 100vh; min-height: 80vh; margin-top: 10px">
+                    <img src="" class="img-thumbnail evenImg" style="min-width:100%; min-height: 80vh; margin-top: 10px">
                     <p class="text-center rightName"></p>
                 </div>
             </div>
@@ -196,8 +197,8 @@
             leftCandiName.innerText = candi[candiOrder].name
             rightCandiName.innerText = candi[candiOrder + 1].name
 
-            leftImg.src = '../../uploads/' + candi[candiOrder].path + '/' + candi[candiOrder].uuid + candi[candiOrder].imgName
-            rightImg.src = '../../uploads/' + candi[candiOrder + 1].path + '/' + candi[candiOrder + 1].uuid + candi[candiOrder + 1].imgName
+            leftImg.src = '../../uploads/' + candi[candiOrder].path + '/' + candi[candiOrder].uuid + '_' + candi[candiOrder].imgName
+            rightImg.src = '../../uploads/' + candi[candiOrder + 1].path + '/' + candi[candiOrder + 1].uuid + '_' + candi[candiOrder + 1].imgName
 
             for (var i = 0; i < candi.length; i++) {
                 candi[i].winCount = 0;
@@ -221,6 +222,9 @@
             leftCandiName.innerText = candi[candiOrder].name
             rightCandiName.innerText = candi[candiOrder + 1].name
 
+            leftImg.src = '/uploads/' + candi[candiOrder].path + '/' + candi[candiOrder].uuid + '_' + candi[candiOrder].imgName
+            rightImg.src = '/uploads/' + candi[candiOrder + 1].path + '/' + candi[candiOrder + 1].uuid + '_' + candi[candiOrder + 1].imgName
+
             candi[candiOrder].totalCount += 1;
             candi[candiOrder + 1].totalCount += 1;
 
@@ -238,10 +242,10 @@
 
             clearInterval(timerID);
 
-            $('.oddImg').animate({minWidth: '1500px'}, 2000)
-            $('.evenImg').animate({minWidth: '0px'}, 2000)
-            $('.oddImg').animate({minWidth: '100vh'})
-            $('.evenImg').animate({minWidth: '100vh'})
+            // $('.oddImg').animate({minWidth: '1500px'}, 2000)
+            // $('.evenImg').animate({minWidth: '0px'}, 2000)
+            // $('.oddImg').animate({minWidth: '100%'})
+            // $('.evenImg').animate({minWidth: '100%'})
 
             $('.oddImg').css("pointer-events", "none")
             $('.evenImg').css("pointer-events", "none")
@@ -267,10 +271,10 @@
 
             clearInterval(timerID);
 
-            $('.evenImg').animate({minWidth: '1500px'}, 2000)
-            $('.oddImg').animate({minWidth: '0px'}, 2000)
-            $('.evenImg').animate({minWidth: '100vh'})
-            $('.oddImg').animate({minWidth: '100vh'})
+            // $('.evenImg').animate({minWidth: '1500px'}, 2000)
+            // $('.oddImg').animate({minWidth: '0px'}, 2000)
+            // $('.evenImg').animate({width: '100%'})
+            // $('.oddImg').animate({width: '100%'})
 
             $('.oddImg').css("pointer-events", "none")
             $('.evenImg').css("pointer-events", "none")
