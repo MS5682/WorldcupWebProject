@@ -6,7 +6,9 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.JPQLQueryFactory;
 import com.world.cup.entity.QChoice;
 import com.world.cup.entity.QWorldcup;
 import com.world.cup.entity.Worldcup;
@@ -28,8 +30,14 @@ public class WorldcupListRepositoryImpl extends QuerydslRepositorySupport implem
         QChoice choice2 = new QChoice("choice2");
 
         JPQLQuery<Worldcup> jpqlQuery = from(worldcup);
-        jpqlQuery.leftJoin(choice1).on(worldcup.eq(choice1.worldcup));
-        jpqlQuery.leftJoin(choice2).on(worldcup.eq(choice2.worldcup).and(choice1.choiceNum.gt(choice2.choiceNum)));
+        jpqlQuery.leftJoin(choice1).on(worldcup.eq(choice1.worldcup).and(
+                choice1.choiceNum.eq(
+                        JPAExpressions.select(choice1.choiceNum.min())
+                                .from(choice1)
+                                .where(choice1.worldcup.worldcupNum.eq(worldcup.worldcupNum))
+                )
+        ));
+        jpqlQuery.leftJoin(choice2).on(worldcup.eq(choice2.worldcup).and(choice1.choiceNum.lt(choice2.choiceNum)));
         JPQLQuery<Tuple> tuple = jpqlQuery.select(worldcup, choice1.name, choice2.name,
                 choice1.type, choice2.type, choice1.uuid, choice2.uuid,
                 choice1.imgName, choice2.imgName, choice1.path, choice2.path);
