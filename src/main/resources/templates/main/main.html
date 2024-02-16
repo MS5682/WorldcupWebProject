@@ -160,10 +160,33 @@
     </div>
   </div>
   </div>
+
+  <div class="modal fade" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="warningModalLabel">로그인 필요</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p th:text="${message}"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </main>
 
 <th:block th:include="main/footer :: footer"></th:block>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script th:if="${message}">
+  $(document).ready(function() {
+      $('#warningModal').modal('show');
+  });
+</script>
 <script>
   $(document).ready(function() {
     var searchForm = $("#searchForm");

@@ -52,6 +52,7 @@ public interface WorldcupService {
                 .modDate(worldcup.getModDate())
                 .regDate(worldcup.getRegDate())
                 .title(worldcup.getTitle())
+                .id(worldcup.getUser().getId())
                 .build();
         return worldcupDTO;
     }

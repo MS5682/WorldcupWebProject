@@ -95,10 +95,18 @@ public class WorldcupController {
     }
 
     @GetMapping("/edit")
-    public String edit(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model){
+    public String edit(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model,
+                       HttpSession session, RedirectAttributes redirectAttributes){
         log.info("get edit page");
         WorldcupDTO worldcupDTO = WorldcupDTO.builder().worldcupNum(pageRequestDTO.getWorldcupNum()).build();
         worldcupDTO = worldcupService.getWorldcup(worldcupDTO);
+        log.info(worldcupDTO);
+        String userId = (String) session.getAttribute("userId");
+
+        if (userId == null || userId.isEmpty() || !(worldcupDTO.getId().equals(userId))) {
+            redirectAttributes.addFlashAttribute("message", "수정할 권한이 없습니다.");
+            return "redirect:/";
+        }
         PageResultDTO pageResultDTO = choiceService.getChoicePage(pageRequestDTO);
         worldcupDTO.setChoice(pageResultDTO.getDtoList());
         log.info(pageResultDTO.getStart());
@@ -209,8 +217,15 @@ public class WorldcupController {
     }
 
     @GetMapping("/warning")
-    public String warning(){
+    public String warning( HttpSession session, RedirectAttributes redirectAttributes){
+        String userId = (String) session.getAttribute("userId");
+
+        if (userId == null || userId.isEmpty()) {
+            redirectAttributes.addFlashAttribute("message", "로그인 후 이용해주세요.");
+            return "redirect:/";
+        }
         return "/user/worldcup_register_warning.html";
+
     }
 
     @DeleteMapping("/choice/delete")
