@@ -1,31 +1,31 @@
 <div class="mb-4">
     <div class="d-flex align-items-center mb-4">
         <div class="bg-secondary rounded-circle h-12 w-12"></div>
-        <span class="font-weight-bold" style="font-size: 24px;">신고 목록</span>
+        <span class="font-weight-bold" style="font-size: 24px;">회원 정보 관리</span>
     </div>
     <hr>
     <div>
         <table id="board-table" class="table table-bordered text-center align-item-center">
             <thead>
             <tr>
-                <th>번호</th>
-                <th>월드컵 이름</th>
+                <th>신고 번호</th>
+                <th>신고 날짜</th>
                 <th>신고한 사람</th>
-                <th>신고한 날짜</th>
-                <th>신고 확인</th>
+                <th>신고당한 월드컵 제목</th>
+                <th>신고 상세</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="dto : ${result.dtoList}" >
                 <td>
-                    [[${dto.id}]]
+                    [[${dto.reportId}]]
                 </td>
-                <td>[[${dto.email}]]</td>
                 <td>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
-                <td>월드컵 수</td>
+                <td>[[${dto.reporter}]]</td>
+                <td>[[${dto.worldcupTitle}]]</td>
                 <td>
                     <div>
-                        <button class="btn btn-dark manager_member" >확인</button>
+                        <button class="btn btn-dark manager_reportContent" >확인</button>
                     </div>
                 </td>
             </tbody>
@@ -40,13 +40,13 @@
 
         <li class="page-item.prev " th:if="${result.prev}">
             <a class="page-link"
-               th:onclick="'loadPage(\'' + @{/manager/manager_memberList(page=${result.start -1},type=${pageRequestDTO.type},
+               th:onclick="'loadPage(\'' + @{/manager/manager_report(page=${result.start -1},type=${pageRequestDTO.type},
          keyword=${pageRequestDTO.keyword})} + '\', \'main-content\'); return false;'">이전</a>
         </li>
 
         <li th:class=" 'page-item.current ' + ${result.page == page?'active':''} " th:each="page: ${result.pageList}">
             <a class="page-link"
-               th:onclick="'loadPage(\'' + @{/manager/manager_memberList(page=${page},type=${pageRequestDTO.type},
+               th:onclick="'loadPage(\'' + @{/manager/manager_report(page=${page},type=${pageRequestDTO.type},
          keyword=${pageRequestDTO.keyword})} + '\', \'main-content\'); return false;'">
                 [[${page}]]
             </a>
@@ -54,27 +54,27 @@
 
         <li class="page-item.next" th:if="${result.next}">
             <a class="page-link"
-               th:onclick="'loadPage(\'' + @{/manager/manager_memberList(page=${result.end + 1},type=${pageRequestDTO.type},
+               th:onclick="'loadPage(\'' + @{/manager/manager_report(page=${result.end + 1},type=${pageRequestDTO.type},
          keyword=${pageRequestDTO.keyword})} + '\', \'main-content\'); return false;'">다음</a>
         </li>
 
     </ul>
 </div>
-<div class="mt-4 justify-content-center">
+<div class="mt-4 d-flex justify-content-center">
     <form action="" method="get" id="searchForm">
         <input type="hidden" name="page" value="1">
         <div class="input-group"  style="width:500px;">
             <div class="input-group-prepend">
                 <select class="custom-select form-control" name="type" >
                     <option th:selected="${pageRequestDTO.type == null}">------</option>
-                    <option th:selected="${pageRequestDTO.type == 'i'}" value="i">아이디</option>
-                    <option th:selected="${pageRequestDTO.type == 'm'}" value="e">이메일</option>
+                    <option th:selected="${pageRequestDTO.type == 't'}" value="t">월드컵제목</option>
+                    <option th:selected="${pageRequestDTO.type == 'i'}" value="i">신고자아이디</option>
                 </select>
             </div>
-            <input class="form-control" name="keyword" placeholder="키워드를 입력하세요" >
+            <input class="form-control" name="keyword" placeholder="키워드를 입력하세요" style="margin:0px 10px">
             <div>
-                <button class="btn btn-success btn-search" type="button">검색하기</button>
-                <button class="btn btn-danger btn-clear" type="button">새로고침</button>
+                <button class="btn btn-dark btn-search" type="button">검색하기</button>
+                <button class="btn btn-primary btn-clear" type="button">새로고침</button>
             </div>
         </div>
     </form>
@@ -87,10 +87,11 @@
             window.location.href = '/manager';
         });
 
-        $('.manager_member').click(function(e) {
+        $('.manager_reportContent').click(function(e) {
             e.preventDefault();
             var reportId = $(this).parents('tr').find('td:first-child').text().trim();
             var currentPage = [[${result.page}]]; // 현재 페이지 번호를 Thymeleaf 템플릿 엔진으로부터 가져옴
+
             loadPage('/manager/manager_reportContent?reportId=' + reportId + '&page=' + currentPage,'main-content');
         });
 
@@ -100,7 +101,12 @@
           var type = $("select[name='type']").val();
           var keyword = $("input[name='keyword']").val();
           var currentPage = [[${result.page}]]; // 현재 페이지 번호를 Thymeleaf 템플릿 엔진으로부터 가져옴
-          loadPage('/manager/manager_memberList?page=' + currentPage + '&type=' + type + '&keyword=' + keyword, 'main-content');
+
+          if(!keyword.trim()){
+            alert("검색어를 입력해주세요");
+          }
+
+          loadPage('/manager/manager_report?page=' + currentPage + '&type=' + type + '&keyword=' + keyword, 'main-content');
         });
 
         // Enter 키를 눌렀을 때 검색 실행
@@ -111,7 +117,7 @@
             var type = $("select[name='type']").val();
             var keyword = $("input[name='keyword']").val();
             var currentPage = [[${result.page}]]; // 현재 페이지 번호를 Thymeleaf 템플릿 엔진으로부터 가져옴
-            loadPage('/manager/manager_memberList?page=' + currentPage + '&type=' + type + '&keyword=' + keyword, 'main-content');
+            loadPage('/manager/manager_report?page=' + currentPage + '&type=' + type + '&keyword=' + keyword, 'main-content');
           }
         });
 
@@ -120,7 +126,7 @@
           e.preventDefault();
           $("input[name='keyword']").val('');
           var currentPage = [[${result.page}]]; // 현재 페이지 번호를 Thymeleaf 템플릿 엔진으로부터 가져옴
-          loadPage('/manager/manager_memberList?page=' + currentPage, 'main-content');
+          loadPage('/manager/manager_report?page=' + currentPage, 'main-content');
         });
     });
 </script>

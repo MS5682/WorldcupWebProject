@@ -5,23 +5,35 @@
                 <div class="p-2 rounded">
                     <div class="border rounded d-flex align-items-center mb-4">
                         <div class="bg-secondary rounded-circle h-12 w-12"></div>
-                        <span class=" text-center flex-fill" style="font-size: 24px; background-color:black; color:white;">신고 제목</span>
+                        <span class=" text-center flex-fill" style="font-size: 24px; background-color:black; color:white;">[[${dto.worldcupTitle}]]</span>
                     </div>
                     <div class="p-2 row">
-                        <div class="col-sm-4 text-center border rounded">신고 날짜 : 20240207</div>
+                        <div class="col-sm-4 text-center border rounded">
+                            신고 날짜 : [[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</div>
                         <div class="col-sm "></div>
                         <div class="col-sm "></div>
-                        <div class="col-sm-4 text-center border rounded">신고 대상 : 김찬희</div>
+                        <div class="col-sm-4 text-center border rounded">신고자 : [[${dto.reporter}]]</div>
                     </div>
                 </div>
             </div>
             <div class="border rounded" style="min-height: 400px; min-width: 600px; position: relative;">
-                신고 내용
+                [[${dto.reportContent}]]
             </div>
-            <div class="float-end mt-4">
-                <button class="btn btn-dark" id="goBack">
-                    신고 내역 돌아가기
-                </button>
+            <div class="row mt-4">
+                <div class="btn-group">
+                    <div class="col text-start">
+                        <button class="btn btn-dark" id="deleteBtn"
+                                th:data-worldcupNum="${dto.worldcupNum}"
+                                th:data-worldcupTitle="${dto.worldcupTitle}">
+                            삭제하기
+                        </button>
+                    </div>
+                    <div class="col text-end">
+                        <button class="btn btn-dark" id="goBack">
+                            신고 내역 돌아가기
+                        </button>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
@@ -35,7 +47,33 @@
           url='/manager?parameter='+parameter;
           window.location.href=url;
         });
+
+        $("#deleteBtn").click(function(e){
+            e.preventDefault();
+            var worldcupNum = $(this).attr('data-worldcupNum');
+            var worldcupTitle = $(this).attr('data-worldcupTitle');
+            console.log(worldcupNum);
+
+            $.ajax({
+                type: 'DELETE',
+                url: '/worldcup/delete',
+                data: {worldcupNum : worldcupNum},
+                success: function(response) {
+                    if(confirm("삭제 하시겠습니까?")){
+                        alert("신고당한"+worldcupTitle+' 월드컵이 삭제되었습니다');
+                        loadPage('/manager/manager_report','main-content');
+                    }else{
+
+                    }
+                },
+                error: function() {
+                    // 비공개 실패한 경우 처리
+                    alert('삭제 처리 중 오류가 발생했습니다.');
+                }
+            });
+          });
     });
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
