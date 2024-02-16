@@ -60,7 +60,7 @@
 
   </ul>
 </div>
-<div class="mt-4 justify-content-center">
+<div class="mt-4 d-flex justify-content-center">
   <form action="" method="get" id="searchForm">
     <input type="hidden" name="page" value="1">
     <div class="input-group"  style="width:500px;">
@@ -71,10 +71,10 @@
           <option th:selected="${pageRequestDTO.type == 'm'}" value="e">이메일</option>
         </select>
       </div>
-      <input class="form-control" name="keyword" placeholder="키워드를 입력하세요" >
+      <input class="form-control" name="keyword" placeholder="키워드를 입력하세요" style="margin:0px 10px">
       <div>
-        <button class="btn btn-success btn-search" type="button">검색하기</button>
-        <button class="btn btn-danger btn-clear" type="button">새로고침</button>
+        <button class="btn btn-dark btn-search" type="button">검색하기</button>
+        <button class="btn btn-primary btn-clear" type="button">새로고침</button>
       </div>
     </div>
   </form>
@@ -100,6 +100,11 @@
         var type = $("select[name='type']").val();
         var keyword = $("input[name='keyword']").val();
         var currentPage = [[${result.page}]]; // 현재 페이지 번호를 Thymeleaf 템플릿 엔진으로부터 가져옴
+
+        if(!keyword.trim()){
+            alert("검색어를 입력해주세요");
+          }
+
         loadPage('/manager/manager_memberList?page=' + currentPage + '&type=' + type + '&keyword=' + keyword, 'main-content');
       });
 
