@@ -29,6 +29,7 @@ public interface WorldcupService {
 
     void deleteWorldcup(WorldcupDTO worldcupDTO);
 
+    void updateViewCnt(WorldcupDTO worldcupDTO);
 
     default Worldcup dtoToEntity(WorldcupDTO worldcupDTO){
         User user = User.builder()
