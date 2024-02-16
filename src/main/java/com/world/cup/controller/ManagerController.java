@@ -52,6 +52,7 @@ public class ManagerController {
 //
 //        return("redirect:/manager/manager_memberList");
 //    }
+    //Restful 방식으로 변경
     @DeleteMapping("/{id}/manager_memberDelete")
     public ResponseEntity<Void> memberDelete(@PathVariable String id){
         userService.DeleteMember(id);
@@ -65,6 +66,7 @@ public class ManagerController {
 //
 //        return("redirect:/manager/manager_memberList");
 //    }
+    //Restful 방식으로 변경
     @PutMapping("/{worldcupNum}/disclosureUpdate")
     public ResponseEntity<Void> updateWorldcupDisclosure(@PathVariable int worldcupNum) {
         worldcupService.updateDisclousre(worldcupNum);
