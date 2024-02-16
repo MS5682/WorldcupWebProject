@@ -6,6 +6,7 @@ import com.world.cup.dto.PageResultDTO;
 import com.world.cup.dto.WorldcupDTO;
 import com.world.cup.service.ChoiceService;
 import com.world.cup.service.WorldcupService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,20 +49,40 @@ public class WorldcupController {
     private String uploadDir;
 
     @GetMapping("/list")
-    public String list(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model){
-        pageRequestDTO.setUserId("admin");
+    public String list(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, HttpSession session,
+                       Model model, RedirectAttributes redirectAttributes){
+        String userId = (String) session.getAttribute("userId");
+
+        if (userId == null || userId.isEmpty()) {
+            redirectAttributes.addFlashAttribute("message", "로그인 후 이용해주세요.");
+            return "redirect:/";
+        }
+
+        pageRequestDTO.setUserId(userId);
         model.addAttribute("result", worldcupService.getWorldcupList(pageRequestDTO));
         return "/user/my_worldcup.html";
     }
 
     @GetMapping("/register")
-    public String getRegister(){
+    public String getRegister(HttpSession session, RedirectAttributes redirectAttributes){
+        String userId = (String) session.getAttribute("userId");
+
+        if (userId == null || userId.isEmpty()) {
+            redirectAttributes.addFlashAttribute("message", "로그인 후 이용해주세요.");
+            return "redirect:/";
+        }
         return "/user/worldcup_register.html";
     }
 
     @PostMapping("/register")
-    public String postRegister(WorldcupDTO worldcupDTO, RedirectAttributes redirectAttributes){
-        worldcupDTO.setId("admin");
+    public String postRegister(WorldcupDTO worldcupDTO,HttpSession session, RedirectAttributes redirectAttributes){
+        String userId = (String) session.getAttribute("userId");
+
+        if (userId == null || userId.isEmpty()) {
+            redirectAttributes.addFlashAttribute("message", "로그인 후 이용해주세요.");
+            return "redirect:/";
+        }
+        worldcupDTO.setId(userId);
         int worldcupNum = worldcupService.register(worldcupDTO);
         redirectAttributes.addAttribute("worldcupNum",worldcupNum);
         return "redirect:/worldcup/edit";
