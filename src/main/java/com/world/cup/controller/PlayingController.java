@@ -32,7 +32,7 @@ public class PlayingController {
     }
 
     @GetMapping("/playResult")
-    public void playResult() {
-
+    public void playResult(int worldCupID, Model model) {
+        model.addAttribute("title", playingService.worldCupTitle(worldCupID));
     }
 }
