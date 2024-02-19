@@ -11,4 +11,7 @@ public interface ChoiceRepository extends JpaRepository<Choice, Integer>, Choice
     @Query("select c from Choice c where c.worldcup.worldcupNum = :worldcupNum")
     List<Choice> getChoiceByWorldcupNum(@Param("worldcupNum") int worldcupNum);
 
+    @Query(value = "SELECT SUM(c.first) FROM Choice c WHERE c.worldcup.worldcupNum = :worldcupNum")
+    Integer sumFirstByWorldcupWorldcupNum(@Param("worldcupNum") int worldcupNum);
+
 }

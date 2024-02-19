@@ -2,18 +2,33 @@ package com.world.cup.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.world.cup.dto.ChoiceDTO;
+import com.world.cup.dto.PageRequestDTO;
+import com.world.cup.dto.PageResultDTO;
+import com.world.cup.dto.WorldcupDTO;
+import com.world.cup.service.ChoiceService;
 import com.world.cup.service.PlayingService;
+import com.world.cup.service.WorldcupService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
+@Log4j2
 @RequestMapping("/play")
 @RequiredArgsConstructor
 public class PlayingController {
     private final PlayingService playingService;
+    private final WorldcupService worldcupService;
+    private final ChoiceService choiceService;
 
     @GetMapping("/playing")
     public String playing(int worldCupID, Model model) {
@@ -31,8 +46,24 @@ public class PlayingController {
         return "/play/playing";
     }
 
+//    @GetMapping("/playResult")
+//    public void playResult(int worldCupID, Model model) {
+//        model.addAttribute("title", playingService.worldCupTitle(worldCupID));
+//    }
+
     @GetMapping("/playResult")
-    public void playResult(int worldCupID, Model model) {
-        model.addAttribute("title", playingService.worldCupTitle(worldCupID));
+    public void playResult(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model){
+        WorldcupDTO worldcupDTO = WorldcupDTO.builder().worldcupNum(pageRequestDTO.getWorldcupNum()).build();
+        worldcupDTO = worldcupService.getWorldcup(worldcupDTO);
+        Integer sumFirst = choiceService.sumFirst(worldcupDTO);
+        PageResultDTO choiceRank = choiceService.getChoiceRank(pageRequestDTO);
+        pageRequestDTO.setOrder(1);
+        PageResultDTO pageResultDTO = choiceService.getChoicePage(pageRequestDTO);
+        worldcupDTO.setChoice(pageResultDTO.getDtoList());
+
+        model.addAttribute("worldcup", worldcupDTO);
+        model.addAttribute("sumFirst", sumFirst);
+        model.addAttribute("rank", choiceRank);
+        model.addAttribute("choices", pageResultDTO);
     }
 }
