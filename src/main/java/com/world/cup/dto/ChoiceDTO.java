@@ -22,6 +22,8 @@ public class ChoiceDTO {
     private String imgName;
     private Integer first;
     private MultipartFile image;
+    private int win;
+    private int lose;
 
     public String getImageURL(){
         try {

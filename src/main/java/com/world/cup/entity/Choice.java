@@ -23,6 +23,9 @@ public class Choice {
     private String uuid;
     private String imgName;
 
+    private int win;
+    private int lose;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Worldcup worldcup;
 

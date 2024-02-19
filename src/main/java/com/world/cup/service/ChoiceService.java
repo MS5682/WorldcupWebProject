@@ -30,6 +30,8 @@ public interface ChoiceService {
                 .name(choiceDTO.getName())
                 .choiceNum(choiceDTO.getChoiceNum())
                 .first(choiceDTO.getChoiceNum())
+                .win(choiceDTO.getWin())
+                .lose(choiceDTO.getLose())
                 .path(choiceDTO.getPath())
                 .uuid(choiceDTO.getUuid())
                 .imgName(choiceDTO.getImgName())
@@ -48,6 +50,8 @@ public interface ChoiceService {
                 .uuid(choice.getUuid())
                 .name(choice.getName())
                 .type(choice.getType())
+                .win(choice.getWin())
+                .lose(choice.getLose())
                 .choiceNum(choice.getChoiceNum())
                 .worldcupNum(choice.getWorldcup().getWorldcupNum())
                 .build();
