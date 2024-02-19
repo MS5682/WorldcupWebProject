@@ -11,8 +11,9 @@
 
             <div>
                 <a class="link-light" th:if="${session.userId==null}" th:href="@{/worldcup/login}">로그인</a>
-                <a class="link-light" th:if="${session.userId!=null}" th:href="@{/worldcup/list}">내 이상형 월드컵</a>
-                <a class="link-light" th:if="${session.userId!=null}" th:href="@{/worldcup/editpw}">비밀번호 변경</a>
+                <a class="" style="color:yellow; margin-right:5px;" th:if="${session.userId!=null}" th:href="@{/worldcup/register}">월드컵 등록</a>
+                <a class="" style="color:rgb(102,255,102); margin-right:5px; " th:if="${session.userId!=null}" th:href="@{/worldcup/list}">내 월드컵</a>
+                <a class="" style="color:rgb(255,102,102); margin-right:5px; " th:if="${session.userId!=null}" th:href="@{/worldcup/editpw}">비밀번호 변경</a>
                 <a class="link-light" th:if="${session.userId!=null}" th:href="@{/worldcup/logout}">로그아웃</a>
             </div>
         </div>
