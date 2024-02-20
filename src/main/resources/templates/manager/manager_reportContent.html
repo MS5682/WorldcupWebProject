@@ -22,10 +22,9 @@
             <div class="row mt-4">
                 <div class="btn-group">
                     <div class="col text-start">
-                        <button class="btn btn-dark" id="deleteBtn"
-                                th:data-worldcupNum="${dto.worldcupNum}"
-                                th:data-worldcupTitle="${dto.worldcupTitle}">
-                            삭제하기
+                        <button class="btn btn-dark" id="checkWorldcup"
+                                th:data-worldcupNum="${dto.worldcupNum}">
+                            신고 월드컵 확인하기
                         </button>
                     </div>
                     <div class="col text-end">
@@ -46,6 +45,12 @@
           e.preventDefault();
           url='/manager?parameter='+parameter;
           window.location.href=url;
+        });
+
+        $('#checkWorldcup').click(function(e) {
+          e.preventDefault();
+          var worldcupNum = $(this).attr('data-worldcupNum');
+          window.location.href='/manager/manager_checkWorldcup?worldcupNum='+worldcupNum;
         });
 
         $("#deleteBtn").click(function(e){
