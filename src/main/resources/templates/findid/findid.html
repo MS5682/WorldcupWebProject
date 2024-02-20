@@ -39,7 +39,7 @@
 							</div>
 								<button id="findBtn" th:if="!${msg}" type="submit" class="btn btn-primary rounded submit w-100">아이디 찾기</button>
 							<a th:href="@{/worldcup/login}" th:if="${success}" id="loginBtn"><button type="button" class="btn btn-primary rounded w-100">로그인 화면으로</button></a>
-							<a th:href="@{/worldcup/findid}" style="font-size:10px;" th:if="${msg}=='아이디를 찾을 수 없습니다.'" id="reFindIdBtn"><button type="button" class="btn btn-primary rounded w-100">아이디 다시 찾기</button></a>
+							<a th:href="@{/worldcup/findid}" style="font-size:5px;" th:if="${msg == '아이디를 찾을 수 없습니다.' or msg=='구글아이디로 가입된 계정입니다.'}" id="reFindIdBtn"><button type="button" class="btn btn-primary rounded w-100">아이디 다시 찾기</button></a>
 
 	         			 </form>
 	       		 	</div>

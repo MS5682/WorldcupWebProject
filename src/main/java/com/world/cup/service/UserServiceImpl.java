@@ -55,11 +55,16 @@ public class UserServiceImpl implements UserService{
     @Override
     public String findId(String email) {
         Optional<User> result = userRepository.findByEmail(email);
-        if(result.isPresent()){
-            return result.get().getId();
-        }else {
-            return null;
+        if(result.get().getPassword().equals("google")){
+            return "구글아이디로 가입된 계정";
+        }else{
+            if(result.isPresent()){
+                return result.get().getId();
+            }else {
+                return null;
+            }
         }
+
 
     }
 
