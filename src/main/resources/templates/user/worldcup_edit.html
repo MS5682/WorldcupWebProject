@@ -32,13 +32,13 @@
           <tr>
             <th class="register-th">제목</th>
             <td class="register-td">
-              <input class="border-none-input" name="title" placeholder="제목을 입력하세요" th:value="*{title}">
+              <input class="border-none-input title" name="title" placeholder="제목을 입력하세요" th:value="*{title}">
             </td>
           </tr>
           <tr>
             <th class="register-th">설명</th>
             <td class="register-td">
-              <input class="border-none-input" name="description" placeholder="설명을 입력하세요" th:value="*{description}">
+              <input class="border-none-input description" name="description" placeholder="설명을 입력하세요" th:value="*{description}">
             </td>
           </tr>
           <tr>
@@ -467,9 +467,13 @@
     // FormData 생성
     var formData = new FormData(form);
 
+    if (!formData.has("disclosure")) {
+      formData.append("disclosure", 0);
+  }
+
     // Ajax 요청 보내기
     $.ajax({
-        url: '/worldcup/edit', // 수정할 경로로 변경해야 합니다.
+        url: '/worldcup/edit',
         type: 'POST',
         data: formData,
         processData: false,
@@ -516,13 +520,16 @@
   $(document).ready(function () {
     var searchForm = $("#searchForm");
     var choiceCount =  parseInt($(".choiceCnt").val());
+    var description = $(".description").val();
+    var title = $(".title").val();
     var disclosure = parseInt($(".disclosure:checked").val());
     var worldcupNum = $("#worldcupNum").val();
     if (choiceCount < 4 && disclosure == 1 ){
           var formData = new FormData();
           formData.append("disclosure", 0);
           formData.append("worldcupNum", worldcupNum);
-
+          formData.append("description", description);
+          formData.append("title", title);
          $.ajax({
           url: '/worldcup/edit',
           type: 'POST',
