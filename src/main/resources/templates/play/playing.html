@@ -203,7 +203,7 @@
             console.log(candi[candiOrder + 1].path.charAt(0))
 
             if (candi[candiOrder].path.charAt(0) == 2) {
-                leftImg.src = '../../uploads/' + candi[candiOrder].path + '/' + candi[candiOrder].uuid + '_' + candi[candiOrder].imgName
+                leftImg.src = '/worldcup/choice/display?fileName=' + candi[candiOrder].path + '/' + candi[candiOrder].uuid + '_' + candi[candiOrder].imgName
             } else if (candi[candiOrder].path.charAt(0) == 'h') {
                 console.log('h 확인용')
                 $('.left').html(
@@ -216,7 +216,7 @@
             }
 
             if (candi[candiOrder + 1].path.charAt(0) == 2) {
-                rightImg.src = '../../uploads/' + candi[candiOrder + 1].path + '/' + candi[candiOrder + 1].uuid + '_' + candi[candiOrder + 1].imgName
+                rightImg.src = '/worldcup/choice/display?fileName=' + candi[candiOrder + 1].path + '/' + candi[candiOrder + 1].uuid + '_' + candi[candiOrder + 1].imgName
             } else if (candi[candiOrder + 1].path.charAt(0) == 'h') {
                 console.log('h 확인용')
                 $('.right').html(
