@@ -20,6 +20,7 @@ public class WorldcupDTO {
     private String title;
     private String description;
     private Byte disclosure;
+    private int viewCnt;
     private LocalDate regDate;
     private LocalDate modDate;
     @Builder.Default

@@ -42,50 +42,50 @@
 
     var parameter = getParameterByName("parameter");
 	if (parameter === "backReportList") {
-        loadPage('/manager/manager_report','main-content');
+        loadPage('manager/manager_report','main-content');
     }else if(parameter === "backMemberList"){
-        loadPage('/manager/manager_memberList','main-content');
+        loadPage('manager/manager_memberList','main-content');
     }
 
     $(function() {
         $('#manager_memberList').click(function(e) {
             e.preventDefault(); // 링크 클릭 동작 취소
-            loadPage('/manager/manager_memberList','main-content');
+            loadPage('manager/manager_memberList','main-content');
         });
 
         $('#manager_memberListMenu').click(function(e) {
             e.preventDefault(); // 링크 클릭 동작 취소
-            loadPage('/manager/manager_memberList','main-content');
+            loadPage('manager/manager_memberList','main-content');
         });
 
         <!--신고 목록-->
         $('#manager_reportList').click(function(e) {
             e.preventDefault(); // 링크 클릭 동작 취소
-            loadPage('/manager/manager_report','main-content');
+            loadPage('manager/manager_report','main-content');
         });
 
         <!--메뉴(신고 목록)-->
         $('#manager_reportListMenu').click(function(e) {
-            loadPage('/manager/manager_report','main-content')
+            loadPage('manager/manager_report','main-content')
             e.preventDefault(); // 링크 클릭 동작 취소
         });
 
         <!--월드컵 목록-->
         $('#manager_worldcupList').click(function(e) {
             e.preventDefault(); // 링크 클릭 동작 취소
-            loadPage('/manager/manager_worldcup','main');
+            loadPage('manager/manager_worldcup','main');
         });
 
         <!--메뉴(월드컵 목록)-->
         $('#manager_worldcupListMenu').click(function(e) {
             e.preventDefault(); // 링크 클릭 동작 취소
-            loadPage('/manager/manager_worldcup','main');
+            loadPage('manager/manager_worldcup','main');
         });
 
         <!--비공개된 월드컵 목록-->
         $('#manager_privateworldcupMenu').click(function(e) {
             e.preventDefault(); // 링크 클릭 동작 취소
-            loadPage('/manager/manager_private','main');
+            loadPage('manager/manager_private','main');
         });
     });
 </script>

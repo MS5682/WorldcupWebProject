@@ -41,7 +41,20 @@ public class ChoiceServiceImpl implements ChoiceService {
 
         return worldcupDTO;
     }
+    @Override
+    public WorldcupDTO getTopTen(WorldcupDTO worldcupDTO) {
+        int worldcupNum = worldcupDTO.getWorldcupNum();
+        Pageable pageable = PageRequest.of(0, 10);
+        List<Choice> choices = choiceRepository.getChoiceByWorldcupNum(worldcupNum, pageable);
 
+        List<ChoiceDTO> choiceDTOs = choices.stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
+
+        worldcupDTO.setChoice(choiceDTOs);
+
+        return worldcupDTO;
+    }
     @Override
     public WorldcupDTO getChoiceRank(WorldcupDTO worldcupDTO) {
         int worldcupNum = worldcupDTO.getWorldcupNum();

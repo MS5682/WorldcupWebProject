@@ -111,13 +111,18 @@ public class WorldcupListRepositoryImpl extends QuerydslRepositorySupport implem
 
         // JPQL 쿼리 생성
         JPQLQuery<Worldcup> jpqlQuery = from(worldcup);
-        jpqlQuery.leftJoin(choice1).on(worldcup.eq(choice1.worldcup));
-        jpqlQuery.leftJoin(choice2).on(worldcup.eq(choice2.worldcup).and(choice1.choiceNum.gt(choice2.choiceNum)));
-        JPQLQuery<Tuple> tuple = jpqlQuery.select(
-                worldcup, choice1.name, choice2.name,
+        jpqlQuery.leftJoin(choice1).on(worldcup.eq(choice1.worldcup).and(
+                choice1.choiceNum.eq(
+                        JPAExpressions.select(choice1.choiceNum.min())
+                                .from(choice1)
+                                .where(choice1.worldcup.worldcupNum.eq(worldcup.worldcupNum))
+                )
+        ));
+
+        jpqlQuery.leftJoin(choice2).on(worldcup.eq(choice2.worldcup).and(choice1.choiceNum.lt(choice2.choiceNum)));
+        JPQLQuery<Tuple> tuple = jpqlQuery.select(worldcup, choice1.name, choice2.name,
                 choice1.type, choice2.type, choice1.uuid, choice2.uuid,
-                choice1.imgName, choice2.imgName, choice1.path, choice2.path
-        );
+                choice1.imgName, choice2.imgName, choice1.path, choice2.path);
 
         // 조건 생성 및 적용
         BooleanBuilder booleanBuilder = new BooleanBuilder();
@@ -175,13 +180,17 @@ public class WorldcupListRepositoryImpl extends QuerydslRepositorySupport implem
 
         // JPQL 쿼리 생성
         JPQLQuery<Worldcup> jpqlQuery = from(worldcup);
-        jpqlQuery.leftJoin(choice1).on(worldcup.eq(choice1.worldcup));
-        jpqlQuery.leftJoin(choice2).on(worldcup.eq(choice2.worldcup).and(choice1.choiceNum.gt(choice2.choiceNum)));
-        JPQLQuery<Tuple> tuple = jpqlQuery.select(
-                worldcup, choice1.name, choice2.name,
+        jpqlQuery.leftJoin(choice1).on(worldcup.eq(choice1.worldcup).and(
+                choice1.choiceNum.eq(
+                        JPAExpressions.select(choice1.choiceNum.min())
+                                .from(choice1)
+                                .where(choice1.worldcup.worldcupNum.eq(worldcup.worldcupNum))
+                )
+        ));
+        jpqlQuery.leftJoin(choice2).on(worldcup.eq(choice2.worldcup).and(choice1.choiceNum.lt(choice2.choiceNum)));
+        JPQLQuery<Tuple> tuple = jpqlQuery.select(worldcup, choice1.name, choice2.name,
                 choice1.type, choice2.type, choice1.uuid, choice2.uuid,
-                choice1.imgName, choice2.imgName, choice1.path, choice2.path
-        );
+                choice1.imgName, choice2.imgName, choice1.path, choice2.path);
 
         // 조건 생성 및 적용
         BooleanBuilder booleanBuilder = new BooleanBuilder();
