@@ -10,7 +10,7 @@ import com.world.cup.entity.Worldcup;
 
 public interface ChoiceService {
     WorldcupDTO getChoiceToWorldcup(WorldcupDTO worldcupDTO);
-
+    WorldcupDTO getTopTen(WorldcupDTO worldcupDTO);
     WorldcupDTO getChoiceRank(WorldcupDTO worldcupDTO);
     PageResultDTO<ChoiceDTO, Object[]> getChoicePage(PageRequestDTO pageRequestDTO);
 

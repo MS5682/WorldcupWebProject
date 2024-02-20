@@ -17,273 +17,292 @@
         .graph .bar > li span {display: inline-block;width: 100%;height: 100%;max-width: 40px;background: #8ab4f8;}
 
     </style>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous"
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
 </head>
-<body style="background-color: lightgray">
-    <div class="container" style="background-color: white">
-        <!-- Content here -->
-        <p class="text-center fs-1 fw-bold" th:text="${worldcup.title}"></p>
+<th:block th:replace="main/header :: header"></th:block>
 
-        <p class="text-center">월드컵 횟수 : 1</p>
-    </div>
+<body>
+<main>
+    <div class="album py-5 bg-body-tertiary">
+    <div class="container">
+        <table class="worldcup-result">
+            <tr class="worldcup-result-tr">
+                <td class="worldcup-result-td">
+                    <p class="text-center fs-1 fw-bold" th:text="${worldcup.title}"></p>
 
-    <hr>
-
-    <div class="container" style="background-color: white; padding-top: 10px">
-        <p class="text-center fs-1 fw-bold">순위</p>
-        <div class="row">
-            <div class="col d-flex justify-content-center">
-                <div class="card" style="width: 18rem;" th:if="${rank.choice.size() > 0}">
-                    <p class="text-center fs-3">🥇1위</p>
-                    <img class="card-img-top" th:if="${rank.choice[0].type == 1}" th:src="@{/worldcup/choice/display(fileName=${rank.choice[0].getImageURL()})}" style="width: 100%; height: 250px;">
-                    <img class="card-img-top" th:if="${rank.choice[0].type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${rank.choice[0].imgName} + '/0.jpg'}" style="width: 100%; height: 250px;">
-                    <div class="card-body">
-                        <h5 class="card-title text-center" th:text="${rank.choice[0].name}"></h5>
-                        <p class="card-text">
-                            승률:
-                            <span th:text="${#numbers.formatDecimal((rank.choice[0].first * 1.0 / sumFirst * 100), 1,1,'POINT')}"></span>% (
-                            <span th:text="${rank.choice[0].first}"></span> /
-                            <span th:text="${sumFirst}"></span> )
-                        </p>
-                        <p class="card-text">우승 횟수 :
-                            <span th:text="${rank.choice[0].first}"></span>회
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row" style="margin-top: 10px">
-            <div class="col d-flex justify-content-center">
-                <div class="card" style="width: 18rem;" th:if="${rank.choice.size() > 1}">
-                    <p class="text-start fs-3 text-center" >🥈2위</p>
-                    <img class="card-img-top" th:if="${rank.choice[1].type == 1}" th:src="@{/worldcup/choice/display(fileName=${rank.choice[1].getImageURL()})}" style="width: 100%; height: 250px;">
-                    <img class="card-img-top" th:if="${rank.choice[1].type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${rank.choice[1].imgName} + '/0.jpg'}" style="width: 100%; height: 250px;">
-                    <div class="card-body">
-                        <h5 class="card-title text-center" th:text="${rank.choice[1].name}"></h5>
-                        <p class="card-text">
-                            승률:
-                            <span th:text="${#numbers.formatDecimal((rank.choice[1].first * 1.0 / sumFirst * 100), 1,1,'POINT')}"></span>% (
-                            <span th:text="${rank.choice[1].first}"></span> /
-                            <span th:text="${sumFirst}"></span> )
-                        </p>
-                        <p class="card-text">우승 횟수 :
-                            <span th:text="${rank.choice[1].first}"></span>회
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col d-flex justify-content-center">
-                <div class="card" style="width: 18rem;" th:if="${rank.choice.size() > 2}">
-                    <p class="text-start fs-3 text-center">🥉3위</p>
-                    <img class="card-img-top" th:if="${rank.choice[2].type == 1}" th:src="@{/worldcup/choice/display(fileName=${rank.choice[2].getImageURL()})}" style="width: 100%; height: 250px;">
-                    <img class="card-img-top" th:if="${rank.choice[2].type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${rank.choice[2].imgName} + '/0.jpg'}" style="width: 100%; height: 250px;">
-                    <div class="card-body">
-                        <h5 class="card-title text-center" th:text="${rank.choice[2].name}"></h5>
-                        <p class="card-text">
-                            승률:
-                            <span th:text="${#numbers.formatDecimal((rank.choice[2].first * 1.0 / sumFirst * 100), 1,1,'POINT')}"></span>% (
-                            <span th:text="${rank.choice[2].first}"></span> /
-                            <span th:text="${sumFirst}"></span> )
-                        </p>
-                        <p class="card-text">우승 횟수 :
-                            <span th:text="${rank.choice[2].first}"></span>회
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col" style="width: 5%">등수</th>
-                <th scope="col" style="width: 15%">이름</th>
-                <th scope="col" style="width: 20%">이미지</th>
-                <th scope="col" style="width: 30%">승률</th>
-                <th scope="col" style="width: 30%">우승 비율</th>
+                    <p class="text-center">월드컵 횟수 : 1</p>
+                </td>
             </tr>
-            </thead>
-            <tbody>
-            <tr th:each="choice, choiceStat : ${choices.dtoList}">
-                <td class="choice-td" th:text="${choiceStat.count + (choices.page-1) * 5}"></td>
-                <td th:text="${choice.name}"></td>
-                <td class="choice-td image-preview-td">
-                    <img th:if="${choice.type == 1}" th:src="@{/worldcup/choice/display(fileName=${choice.getImageURL()})}" style="max-width: 200px; max-height: 200px;">
-                    <img th:if="${choice.type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${choice.imgName} + '/0.jpg'}" style="max-width: 200px; max-height: 200px;">
-                </td>
-                <td>
-                    <label th:text="${#numbers.formatDecimal(((choice.win + choice.lose) != 0 ? (choice.win * 1.0 / (choice.win + choice.lose) * 100) : 0), 1, 1, 'POINT')} + '%'"></label>
-                    <div class="progress" role="progressbar" aria-label="Info striped example" th:aria-valuenow="${#numbers.formatDecimal(((choice.win + choice.lose) != 0 ? (choice.win * 1.0 / (choice.win + choice.lose) * 100) : 0), 1, 1, 'POINT')}" aria-valuemin="0" aria-valuemax="100">
-                        <div class="progress-bar progress-bar-striped bg-info" th:style="'width: ' + ${#numbers.formatDecimal(((choice.win + choice.lose) != 0 ? (choice.win * 1.0 / (choice.win + choice.lose) * 100) : 0), 1, 1, 'POINT')} + '%'"></div>
-                    </div>
-                </td>
-                <td>
-                    <label th:text="${#numbers.formatDecimal((sumFirst != 0 ? (choice.first * 1.0 / sumFirst * 100) : 0), 1, 1, 'POINT')} + '%'"></label>
-                    <div class="progress" role="progressbar" aria-label="Info striped example" th:aria-valuenow="${#numbers.formatDecimal((sumFirst != 0 ? (choice.first * 1.0 / sumFirst * 100) : 0), 1, 1, 'POINT')}" aria-valuemin="0" aria-valuemax="100">
-                        <div class="progress-bar progress-bar-striped bg-info" th:style="'width: ' + ${#numbers.formatDecimal((sumFirst != 0 ? (choice.first * 1.0 / sumFirst * 100) : 0), 1, 1, 'POINT')} + '%'"></div>
-                    </div>
-                </td>
-
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-                <td colspan="3">
-                    <div>
-                        <form action="/play/playResult" method="get" id="searchForm">
-                            <input type="hidden" name="page" value="1">
-                            <input type="hidden" id="worldcupNum" name="worldcupNum" th:value="${worldcup.worldcupNum}">
-                            <div class="input-group"  style="width:500px;">
-                                <div class="input-group-prepend">
-                                    <select class="custom-select form-control" name="type" >
-                                        <option th:selected="${pageRequestDTO.type == null}">------</option>
-                                        <option th:selected="${pageRequestDTO.type == 'n'}" value="n">선택지 이름</option>
-                                    </select>
-                                </div>
-                                <input class="form-control" name="keyword" placeholder="키워드를 입력하세요" >
-                                <div>
-                                    <button class="btn btn-success btn-search" type="button">검색하기</button>
-                                    <button class="btn btn-danger btn-clear" type="button">새로고침</button>
+            <tr class="worldcup-result-tr">
+                <td class="worldcup-result-td">
+                    <p class="text-center fs-1 fw-bold">순위</p>
+                    <div class="row">
+                        <div class="col d-flex justify-content-center">
+                            <div class="card" style="width: 18rem;" th:if="${rank.choice.size() > 0}">
+                                <p class="text-center fs-3">🥇1위</p>
+                                <img class="card-img-top" th:if="${rank.choice[0].type == 1}" th:src="@{/worldcup/choice/display(fileName=${rank.choice[0].getImageURL()})}" style="width: 100%; height: 250px;">
+                                <img class="card-img-top" th:if="${rank.choice[0].type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${rank.choice[0].imgName} + '/0.jpg'}" style="width: 100%; height: 250px;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-center" th:text="${rank.choice[0].name}"></h5>
+                                    <p>
+                                        승률:
+                                        <span th:text="${#numbers.formatDecimal((rank.choice[0].first * 1.0 / sumFirst * 100), 1,1,'POINT')}"></span>% (
+                                        <span th:text="${rank.choice[0].first}"></span> /
+                                        <span th:text="${sumFirst}"></span> )
+                                    </p>
+                                    <p>우승 횟수 :
+                                        <span th:text="${rank.choice[0].first}"></span>회
+                                    </p>
                                 </div>
                             </div>
-                        </form>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 10px">
+                        <div class="col d-flex justify-content-center">
+                            <div class="card" style="width: 18rem;" th:if="${rank.choice.size() > 1}">
+                                <p class="text-start fs-3 text-center" >🥈2위</p>
+                                <img class="card-img-top" th:if="${rank.choice[1].type == 1}" th:src="@{/worldcup/choice/display(fileName=${rank.choice[1].getImageURL()})}" style="width: 100%; height: 250px;">
+                                <img class="card-img-top" th:if="${rank.choice[1].type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${rank.choice[1].imgName} + '/0.jpg'}" style="width: 100%; height: 250px;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-center" th:text="${rank.choice[1].name}"></h5>
+                                    <p>
+                                        승률:
+                                        <span th:text="${#numbers.formatDecimal((rank.choice[1].first * 1.0 / sumFirst * 100), 1,1,'POINT')}"></span>% (
+                                        <span th:text="${rank.choice[1].first}"></span> /
+                                        <span th:text="${sumFirst}"></span> )
+                                    </p>
+                                    <p>우승 횟수 :
+                                        <span th:text="${rank.choice[1].first}"></span>회
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col d-flex justify-content-center">
+                            <div class="card" style="width: 18rem;" th:if="${rank.choice.size() > 2}">
+                                <p class="text-start fs-3 text-center">🥉3위</p>
+                                <img class="card-img-top" th:if="${rank.choice[2].type == 1}" th:src="@{/worldcup/choice/display(fileName=${rank.choice[2].getImageURL()})}" style="width: 100%; height: 250px;">
+                                <img class="card-img-top" th:if="${rank.choice[2].type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${rank.choice[2].imgName} + '/0.jpg'}" style="width: 100%; height: 250px;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-center" th:text="${rank.choice[2].name}"></h5>
+                                    <p>
+                                        승률:
+                                        <span th:text="${#numbers.formatDecimal((rank.choice[2].first * 1.0 / sumFirst * 100), 1,1,'POINT')}"></span>% (
+                                        <span th:text="${rank.choice[2].first}"></span> /
+                                        <span th:text="${sumFirst}"></span> )
+                                    </p>
+                                    <p>우승 횟수 :
+                                        <span th:text="${rank.choice[2].first}"></span>회
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </td>
-                <td colspan="2">
-                    <div class="text-center">
-                        <ul class="pagination h-100 justify-content-center align-items-center">
-                            <li class="page-item" th:if="${choices.prev}">
-                                <a class="page-link" th:href="@{/play/playResult(
+            </tr>
+            <tr class="worldcup-result-tr">
+                <td class="worldcup-result-td">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col" style="width: 5%">등수</th>
+                            <th scope="col" style="width: 15%">이름</th>
+                            <th scope="col" style="width: 20%">이미지</th>
+                            <th scope="col" style="width: 30%">승률</th>
+                            <th scope="col" style="width: 30%">우승 비율</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="choice, choiceStat : ${choices.dtoList}">
+                            <td class="choice-td" th:text="${choiceStat.count + (choices.page-1) * 5}"></td>
+                            <td class="choice-td" th:text="${choice.name}"></td>
+                            <td class="choice-td image-preview-td">
+                                <img th:if="${choice.type == 1}" th:src="@{/worldcup/choice/display(fileName=${choice.getImageURL()})}" style="max-width: 200px; max-height: 200px;">
+                                <img th:if="${choice.type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${choice.imgName} + '/0.jpg'}" style="max-width: 200px; max-height: 200px;">
+                            </td>
+                            <td class="choice-td">
+                                <label th:text="${#numbers.formatDecimal(((choice.win + choice.lose) != 0 ? (choice.win * 1.0 / (choice.win + choice.lose) * 100) : 0), 1, 1, 'POINT')} + '%'"></label>
+                                <div class="progress" role="progressbar" aria-label="Info striped example" th:aria-valuenow="${#numbers.formatDecimal(((choice.win + choice.lose) != 0 ? (choice.win * 1.0 / (choice.win + choice.lose) * 100) : 0), 1, 1, 'POINT')}" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar progress-bar-striped bg-info" th:style="'width: ' + ${#numbers.formatDecimal(((choice.win + choice.lose) != 0 ? (choice.win * 1.0 / (choice.win + choice.lose) * 100) : 0), 1, 1, 'POINT')} + '%'"></div>
+                                </div>
+                            </td>
+                            <td class="choice-td">
+                                <label th:text="${#numbers.formatDecimal((sumFirst != 0 ? (choice.first * 1.0 / sumFirst * 100) : 0), 1, 1, 'POINT')} + '%'"></label>
+                                <div class="progress" role="progressbar" aria-label="Info striped example" th:aria-valuenow="${#numbers.formatDecimal((sumFirst != 0 ? (choice.first * 1.0 / sumFirst * 100) : 0), 1, 1, 'POINT')}" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar progress-bar-striped bg-info" th:style="'width: ' + ${#numbers.formatDecimal((sumFirst != 0 ? (choice.first * 1.0 / sumFirst * 100) : 0), 1, 1, 'POINT')} + '%'"></div>
+                                </div>
+                            </td>
+
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="3">
+                                <div>
+                                    <form action="/play/playResult" method="get" id="searchForm">
+                                        <input type="hidden" name="page" value="1">
+                                        <input type="hidden" id="worldcupNum" name="worldcupNum" th:value="${worldcup.worldcupNum}">
+                                        <div class="input-group"  style="width:500px;">
+                                            <div class="input-group-prepend">
+                                                <select class="custom-select form-control" name="type" >
+                                                    <option th:selected="${pageRequestDTO.type == null}">------</option>
+                                                    <option th:selected="${pageRequestDTO.type == 'n'}" value="n">선택지 이름</option>
+                                                </select>
+                                            </div>
+                                            <input class="form-control" name="keyword" placeholder="키워드를 입력하세요" >
+                                            <div>
+                                                <button class="btn btn-success btn-search" type="button">검색하기</button>
+                                                <button class="btn btn-danger btn-clear" type="button">새로고침</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </td>
+                            <td colspan="2">
+                                <div class="text-center">
+                                    <ul class="pagination h-100 justify-content-center align-items-center">
+                                        <li class="page-item" th:if="${choices.prev}">
+                                            <a class="page-link" th:href="@{/play/playResult(
                                                 worldcupNum=${worldcup.worldcupNum},
                                                 page=${choices.start - 1},
                                                 type=${pageRequestDTO.type},
                                                 keyword=${pageRequestDTO.keyword}
                 )}" tabindex="-1">Prev</a>
-                            </li>
-                            <li th:class=" ' page-item ' + ${choices.page == page?'active':''}"
-                                th:each="page: ${choices.pageList}" >
-                                <a class="page-link" th:href="@{/play/playResult(
+                                        </li>
+                                        <li th:class=" ' page-item ' + ${choices.page == page?'active':''}"
+                                            th:each="page: ${choices.pageList}" >
+                                            <a class="page-link" th:href="@{/play/playResult(
                                                 worldcupNum=${worldcup.worldcupNum},
                                                 page=${page},
                                                 type=${pageRequestDTO.type},
                                                 keyword=${pageRequestDTO.keyword}
                 )}">[[${page}]]</a>
-                            </li>
-                            <li class="page-item" th:if="${choices.next}">
-                                <a class="page-link" th:href="@{/play/playResult(
+                                        </li>
+                                        <li class="page-item" th:if="${choices.next}">
+                                            <a class="page-link" th:href="@{/play/playResult(
                                                 worldcupNum=${worldcup.worldcupNum},
                                                 page=${choices.end + 1},
                                                 type=${pageRequestDTO.type},
                                                 keyword=${pageRequestDTO.keyword}
                 )}">Next</a>
-                            </li>
-                        </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </td>
+            </tr>
+
+            <tr class="worldcup-result-tr">
+                <td class="worldcup-result-td">
+                    <div class="container d-flex justify-content-center align-items-center" style="background-color: white; height:1000px">
+                        <div class="graph" style="width:800px; height:900px;">
+                            <h3>Top 10 차트</h3>
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="chartSwitch">
+                                <label class="form-check-label" for="chartSwitch">차트 변경</label>
+                            </div>
+                            <canvas id="myChart"></canvas>
+                        </div>
                     </div>
                 </td>
             </tr>
-            </tfoot>
+
+            <tr class="worldcup-result-tr">
+                <td class="worldcup-result-td">
+                    <div class="container" style="background-color: white">
+                        <div class="row">
+                            <div class="col border">
+                                <p class="fs-4">댓글</p>
+
+                                <form class="row row-cols-lg-auto g-3 align-items-center">
+                                    <div class="col-12" style="width: 80%">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="replyInput" placeholder="name@example.com">
+                                            <label for="replyInput">댓글 작성</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12" style="min-width: 20px; min-height: 20px">
+                                        <button type="submit" class="btn btn-primary">작성</button>
+                                    </div>
+                                </form>
+
+                                <!--                댓글 내용 표시 시작-->
+                                <div class="media mb-4">
+                                    <div class="media-body">
+                                        <h6 class="mt-0">닉네임 들어감</h6>
+                                        <p class="fs-6">댓글</p>
+                                    </div>
+                                </div>
+                                <!--                댓글 내용 표시 끝-->
+                                <div class="media mb-4">
+                                    <div class="media-body">
+                                        <h6 class="mt-0">닉네임 들어감</h6>
+                                        <p class="fs-6">댓글</p>
+                                    </div>
+                                </div>
+
+                                <div class="media mb-4">
+                                    <div class="media-body">
+                                        <h6 class="mt-0">닉네임 들어감</h6>
+                                        <p class="fs-6">댓글</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col border">
+                                <p class="fs-4">요청</p>
+
+                                <form class="row row-cols-lg-auto g-3 align-items-center">
+                                    <div class="col-12" style="width: 80%">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="requestInput" placeholder="name@example.com">
+                                            <label for="requestInput">댓글로 후보 요청</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12" style="min-width: 20px; min-height: 20px">
+                                        <button type="submit" class="btn btn-primary">작성</button>
+                                    </div>
+                                </form>
+
+                                <div class="media mb-4">
+                                    <div class="media-body">
+                                        <h6 class="mt-0">닉네임 들어감</h6>
+                                        <p class="fs-6">댓글</p>
+                                    </div>
+                                </div>
+
+                                <div class="media mb-4">
+                                    <div class="media-body">
+                                        <h6 class="mt-0">닉네임 들어감</h6>
+                                        <p class="fs-6">댓글</p>
+                                    </div>
+                                </div>
+
+                                <div class="media mb-4">
+                                    <div class="media-body">
+                                        <h6 class="mt-0">닉네임 들어감</h6>
+                                        <p class="fs-6">댓글</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
         </table>
-    </div>
 
-    <hr>
 
-    <div class="container" style="background-color: white">
-        <div class="form-check form-switch text-center mb-3">
-            <input class="form-check-input" type="checkbox" id="chartSwitch">
-            <label class="form-check-label" for="chartSwitch">차트 변경</label>
-        </div>
 
-        <div class="graph_wrap">
-            <div class="graph">
-                <canvas id="myChart"></canvas>
-            </div>
-        </div>
+
     </div>
 
 
-
-    <hr>
-
-    <div class="container" style="background-color: white">
-        <div class="row">
-            <div class="col border">
-                <p class="fs-4">댓글</p>
-
-                <form class="row row-cols-lg-auto g-3 align-items-center">
-                    <div class="col-12" style="width: 80%">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="replyInput" placeholder="name@example.com">
-                            <label for="replyInput">댓글 작성</label>
-                        </div>
-                    </div>
-
-                    <div class="col-12" style="min-width: 20px; min-height: 20px">
-                        <button type="submit" class="btn btn-primary">작성</button>
-                    </div>
-                </form>
-
-<!--                댓글 내용 표시 시작-->
-                <div class="media mb-4">
-                    <div class="media-body">
-                        <h6 class="mt-0">닉네임 들어감</h6>
-                        <p class="fs-6">댓글</p>
-                    </div>
-                </div>
-<!--                댓글 내용 표시 끝-->
-                <div class="media mb-4">
-                    <div class="media-body">
-                        <h6 class="mt-0">닉네임 들어감</h6>
-                        <p class="fs-6">댓글</p>
-                    </div>
-                </div>
-
-                <div class="media mb-4">
-                    <div class="media-body">
-                        <h6 class="mt-0">닉네임 들어감</h6>
-                        <p class="fs-6">댓글</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col border">
-                <p class="fs-4">요청</p>
-
-                <form class="row row-cols-lg-auto g-3 align-items-center">
-                    <div class="col-12" style="width: 80%">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="requestInput" placeholder="name@example.com">
-                            <label for="requestInput">댓글로 후보 요청</label>
-                        </div>
-                    </div>
-
-                    <div class="col-12" style="min-width: 20px; min-height: 20px">
-                        <button type="submit" class="btn btn-primary">작성</button>
-                    </div>
-                </form>
-
-                <div class="media mb-4">
-                    <div class="media-body">
-                        <h6 class="mt-0">닉네임 들어감</h6>
-                        <p class="fs-6">댓글</p>
-                    </div>
-                </div>
-
-                <div class="media mb-4">
-                    <div class="media-body">
-                        <h6 class="mt-0">닉네임 들어감</h6>
-                        <p class="fs-6">댓글</p>
-                    </div>
-                </div>
-
-                <div class="media mb-4">
-                    <div class="media-body">
-                        <h6 class="mt-0">닉네임 들어감</h6>
-                        <p class="fs-6">댓글</p>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
@@ -307,15 +326,37 @@
                 },
                 datalabels: {
                     formatter: function (value, context) {
-                        return Math.round(value * 1.0 / context.chart.getDatasetMeta(0).total * 100) + "%";
+                        return context.chart.data.labels[context.dataIndex] + ' ' +  Math.round(value * 1.0 / context.chart.getDatasetMeta(0).total * 100) + "%";
                     },
-                    color: '#fff',
+                    color: '#000'
                 },
                 legend: {
                     display : false
                 }
             }
          }
+        var barOptions = {
+         scales: {
+            y: {
+                ticks: {
+                    callback: function(value, index, values) {
+                        return Math.round(value / total * 100) + '%'; // 백분율로 변환하여 표시
+                    }
+                }
+            }
+        },
+            plugins: {
+                datalabels: {
+                    formatter: function (value, context) {
+                        return context.chart.data.labels[context.dataIndex] + ' ' + Math.round(value * 1.0 / context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0) * 100) + '%';
+                    },
+                    color: '#000',
+                },
+                legend: {
+                    display: false
+                }
+            }
+        };
 
         const configDonut = {
           type: 'doughnut',
@@ -366,13 +407,7 @@
                     }
                 ]
             },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            },
+          options: barOptions,
           plugins: [ChartDataLabels]
         };
 
@@ -417,4 +452,7 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 </body>
+</main>
+<th:block th:replace="main/footer :: footer"></th:block>
 </html>
+
