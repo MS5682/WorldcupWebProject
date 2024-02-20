@@ -1,5 +1,6 @@
 package com.world.cup.service;
 
+import com.world.cup.dto.GoogleDTO;
 import com.world.cup.dto.PageRequestDTO;
 import com.world.cup.dto.PageResultDTO;
 import com.world.cup.dto.UserDTO;
@@ -32,6 +33,14 @@ public class UserServiceImpl implements UserService{
     public void signup(UserDTO userDTO) {
         User user = dtoToEntity(userDTO);
         user.setUserRole("user");
+        userRepository.save(user);
+
+
+    }
+
+    @Override
+    public void googleSignup(GoogleDTO googleDTO) {
+        User user = googleDtoToEntity(googleDTO);
         userRepository.save(user);
 
 

@@ -1,5 +1,6 @@
 package com.world.cup.controller;
 
+import com.world.cup.dto.GoogleDTO;
 import com.world.cup.dto.MailDTO;
 import com.world.cup.dto.PageRequestDTO;
 import com.world.cup.dto.UserDTO;
@@ -9,6 +10,7 @@ import com.world.cup.service.WorldcupService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,9 +104,9 @@ public class UserController {
     @PostMapping("/login")
     public String login(UserDTO userDTO, HttpSession session, RedirectAttributes redirectAttributes){
         boolean loginSuccess = userService.login(userDTO);
-        UserDTO userRoleDTO = userService.getUser(userDTO.getId());
         if(loginSuccess) {
             session.setAttribute("userId", userDTO.getId());
+            UserDTO userRoleDTO = userService.getUser(userDTO.getId());
             session.setAttribute("userRole",userRoleDTO.getUserRole());
             if(userRoleDTO.getUserRole().equals("admin")){
                 return "redirect:/manager";
@@ -202,17 +204,28 @@ public class UserController {
 
     @PostMapping("/login/google")
     @ResponseBody
-    @CrossOrigin(origins = "https://accounts.google.com", allowedHeaders = "*", methods = {RequestMethod.POST}, allowCredentials = "true")
-    public ResponseEntity<String> loginWithGoogle(@RequestParam("googleId") String googleId,
-                                                  @RequestParam("googleName") String googleName,
+    @CrossOrigin(origins = "https://localhost:8000", allowedHeaders = "*", methods = {RequestMethod.POST}, allowCredentials = "true")
+    public ResponseEntity<Map<String, String>>  loginWithGoogle(@RequestParam("googleId") String googleId,
+                                                                @RequestParam("googleEmail") String googleEmail,
                                                   HttpSession session, HttpServletResponse response) {
 
         session.setAttribute("googleId", googleId);
-        session.setAttribute("googleName", googleName);
-        response.setHeader("Set-Cookie", "name=value; SameSite=None; Secure");
-        System.out.println(googleId);
-        System.out.println(googleName);
+        session.setAttribute("userId", googleId);
 
-        return ResponseEntity.ok("구글 로그인 성공");
+
+        if(googleId!=null){
+            GoogleDTO googleDTO = new GoogleDTO();
+            googleDTO.setGid(googleId);
+            googleDTO.setEmail(googleEmail);
+            userService.googleSignup(googleDTO);
+        }
+
+
+
+        Map<String, String> responseData = new HashMap<>();
+        responseData.put("redirectUrl", "/");
+
+
+        return ResponseEntity.ok(responseData);
     }
 }

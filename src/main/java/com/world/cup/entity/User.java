@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 public class User {
     @Id
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 40)
     private String id;
 
     @Column(nullable = false, length = 40,unique = true)
