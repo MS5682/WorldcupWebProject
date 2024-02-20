@@ -134,8 +134,12 @@ public class UserController {
         String msg;
         boolean success = false;
         if (id != null) {
-            success=true;
-            msg = "당신의 아이디는 " + id + "입니다.";
+            if (id.equals("구글아이디로 가입된 계정")){
+                msg = "구글아이디로 가입된 계정입니다.";
+            }else {
+                success=true;
+                msg = "당신의 아이디는 " + id + "입니다.";
+            }
         } else {
             msg = "아이디를 찾을 수 없습니다.";
         }
