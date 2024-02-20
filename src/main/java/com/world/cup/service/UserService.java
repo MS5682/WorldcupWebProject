@@ -1,9 +1,6 @@
 package com.world.cup.service;
 
-import com.world.cup.dto.PageRequestDTO;
-import com.world.cup.dto.PageResultDTO;
-import com.world.cup.dto.UserDTO;
-import com.world.cup.dto.WorldcupDTO;
+import com.world.cup.dto.*;
 import com.world.cup.entity.User;
 import com.world.cup.entity.Worldcup;
 
@@ -13,6 +10,8 @@ import java.util.stream.Collectors;
 public interface UserService {
 
     void signup(UserDTO userDTO);
+
+    void googleSignup(GoogleDTO googleDTO);
 
     boolean login(UserDTO userDTO);
 
@@ -39,6 +38,14 @@ public interface UserService {
         User user = User.builder().id(userDTO.getId()).email(userDTO.getEmail()).password(userDTO.getPassword())
                 .userRole(userDTO.getUserRole())
                 .build();
+
+        return user;
+    }
+
+    default User googleDtoToEntity(GoogleDTO googleDTO){
+        User user = User.builder().id(googleDTO.getGid()).email(googleDTO.getEmail()).password("google")
+              .userRole("user")
+              .build();
 
         return user;
     }

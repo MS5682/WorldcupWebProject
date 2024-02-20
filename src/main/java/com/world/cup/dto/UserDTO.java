@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @ToString
 public class UserDTO {
     @NotBlank(message="아이디를 입력해주세요.")
-    @Size(max=20,message="아이디는 20자 이하로 입력해주세요.")
+    @Size(max=40,message="아이디는 20자 이하로 입력해주세요.")
     private String id;
 
     @NotBlank(message = "이메일 주소를 입력해주세요.")
