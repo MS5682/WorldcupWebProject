@@ -98,7 +98,7 @@
                   <div class="btn-group">
                     <input type="hidden" class="worldcupNum" th:value="${worldcupDTO.worldcupNum}">
                     <a th:href="@{/play/playing(worldCupID = ${worldcupDTO.worldcupNum})}"><button type="button" class="btn btn-sm btn-outline-secondary startBtn">시작하기</button></a>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">결과보기</button>
+                    <a th:href="@{/play/playResult(worldcupNum = ${worldcupDTO.worldcupNum})}"><button type="button" class="btn btn-sm btn-outline-secondary">결과보기</button></a>
                     <button type="button" class="btn btn-sm btn-outline-secondary ReportBtn" th:text="신고하기"
                              data-bs-target="#reportModal" ></button>
                   </div>
