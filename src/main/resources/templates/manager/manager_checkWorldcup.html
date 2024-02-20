@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.115.4">
+    <title>신고 월드컵 상세 내용 확인</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/album/">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+<th:block th:replace="main/header :: header"></th:block>
+
+<main>
+
+    <div class="album py-5 bg-body-tertiary">
+        <div class="container">
+
+            <div class="top">
+                <div><h2>신고 월드컵 상세 내용 확인</h2></div>
+            </div>
+            <table class="register">
+                <tr>
+                    <th class="register-th">제목</th>
+                    <td class="register-td">
+                        <input class="border-none-input" name="title" th:value="${worldcup.title}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="register-th">설명</th>
+                    <td class="register-td">
+                        <input class="border-none-input" name="description" th:value="${worldcup.description}" readonly>
+                    </td>
+                </tr>
+            </table>
+            <table class="register-choice">
+
+                <tr>
+                    <th class="register-choice-th">선택지</th>
+                    <td class="register-choice-td">
+
+                        <table class="choice">
+                            <tr>
+                                <th class="choice-th col-1">순서</th>
+                                <th class="choice-th col-3">선택지 이름</th>
+                                <th class="choice-th col-2">이미지 미리보기</th>
+                            </tr>
+
+
+
+
+                            <tr th:each="choice, choiceStat : ${choices.dtoList}">
+                                <td class="choice-td" th:text="${choiceStat.count + (choices.page-1) * 5}"></td>
+                                <td class="choice-td">
+                                    <form class="name">
+                                        <input type="hidden" name="choiceNum" th:value="${choice.choiceNum}">
+                                        <input name="name" class="form-control name" th:value="${choice.name}" readonly>
+                                    </form>
+                                </td>
+                                <td class="choice-td image-preview-td">
+                                    <img th:if="${choice.type == 1}" th:src="@{/worldcup/choice/display(fileName=${choice.getImageURL()})}" style="max-width: 200px; max-height: 200px;">
+                                    <img th:if="${choice.type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${choice.imgName} + '/0.jpg'}" style="max-width: 200px; max-height: 200px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <div>
+                                        <form action="" method="get" id="searchForm">
+                                            <input type="hidden" name="page" value="1">
+                                            <input type="hidden" id="worldcupNum" name="worldcupNum" th:value="${worldcup.worldcupNum}">
+                                            <div class="input-group"  style="width:500px;">
+                                                <div class="input-group-prepend">
+                                                    <select class="custom-select form-control" name="type" >
+                                                        <option th:selected="${pageRequestDTO.type == null}">------</option>
+                                                        <option th:selected="${pageRequestDTO.type == 'n'}" value="n">선택지 이름</option>
+                                                    </select>
+                                                </div>
+                                                <input class="form-control" name="keyword" placeholder="키워드를 입력하세요" >
+                                                <div>
+                                                    <button class="btn btn-success btn-search" type="button">검색하기</button>
+                                                    <button class="btn btn-danger btn-clear" type="button"
+                                                            th:data-worldcupNum="${worldcup.worldcupNum}">새로고침</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td colspan="2">
+                                    <div class="text-center">
+                                        <ul class="pagination h-100 justify-content-center align-items-center">
+                                            <li class="page-item" th:if="${choices.prev}">
+                                                <a class="page-link" th:href="@{/manager/manager_checkWorldcup(
+                                                worldcupNum=${worldcup.worldcupNum},
+                                                page=${choices.start - 1},
+                                                type=${pageRequestDTO.type},
+                                                keyword=${pageRequestDTO.keyword}
+                )}" tabindex="-1">Prev</a>
+                                            </li>
+                                            <li th:class=" ' page-item ' + ${choices.page == page?'active':''}"
+                                                th:each="page: ${choices.pageList}" >
+                                                <a class="page-link" th:href="@{/manager/manager_checkWorldcup(
+                                                worldcupNum=${worldcup.worldcupNum},
+                                                page=${page},
+                                                type=${pageRequestDTO.type},
+                                                keyword=${pageRequestDTO.keyword}
+                )}">[[${page}]]</a>
+                                            </li>
+                                            <li class="page-item" th:if="${choices.next}">
+                                                <a class="page-link" th:href="@{/manager/manager_checkWorldcup(
+                                                worldcupNum=${worldcup.worldcupNum},
+                                                page=${choices.end + 1},
+                                                type=${pageRequestDTO.type},
+                                                keyword=${pageRequestDTO.keyword}
+                )}">Next</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+
+            </table>
+            <div class="row mt-4">
+                <div class="btn-group">
+                    <div class="col text-start">
+                        <button class="btn btn-dark" id="deleteBtn"
+                                th:data-worldcupNum="${worldcup.worldcupNum}"
+                                th:data-worldcupTitle="${worldcup.title}">
+                            삭제하기
+                        </button>
+                    </div>
+                    <div class="col text-end">
+                        <button class="btn btn-dark" id="goBack">
+                            신고 목록 돌아가기
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<th:block th:replace="main/footer :: footer"></th:block>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+   $(document).ready(function () {
+      $(".btn-search").click(function(e) {
+       e.preventDefault();
+       var worldcupNum = $(this).attr('data-worldcupNum');
+       var type = $("select[name='type']").val();
+       var keyword = $("input[name='keyword']").val();
+
+       if(!keyword.trim()){
+           alert("검색어를 입력해주세요");
+         }
+
+       window.location.href='/manager/manager_checkWorldcup?worldcupNum='+worldcupNum+'&page=' + currentPage + '&type=' + type + '&keyword=' + keyword;
+     });
+
+     //새로고침을 눌렀을때
+     $(".btn-clear").click(function(e) {
+       e.preventDefault();
+       var worldcupNum = $(this).attr('data-worldcupNum');
+       $("input[name='keyword']").val('');
+       var currentPage = [[${choices.page}]]; // 현재 페이지 번호를 Thymeleaf 템플릿 엔진으로부터 가져옴
+       window.location.href='/manager/manager_checkWorldcup?worldcupNum='+worldcupNum+'&page='+currentPage;
+     });
+
+     $('#goBack').click(function(e) {
+         e.preventDefault();
+         var parameter="backReportList"
+         url='/manager?parameter='+parameter;
+         window.location.href=url;
+       });
+
+       $("#deleteBtn").click(function(e){
+           e.preventDefault();
+           var worldcupNum = $(this).attr('data-worldcupNum');
+           var worldcupTitle = $(this).attr('data-worldcupTitle');
+           var parameter="backReportList"
+           console.log(worldcupNum);
+
+           $.ajax({
+               type: 'DELETE',
+               url: '/worldcup/delete',
+               data: {worldcupNum : worldcupNum},
+               success: function(response) {
+                   if(confirm("삭제 하시겠습니까?")){
+                       alert("신고당한"+worldcupTitle+' 월드컵이 삭제되었습니다');
+                       url='/manager?parameter='+parameter;
+                       window.location.href=url;
+                   }else{
+
+                   }
+               },
+               error: function() {
+                   // 비공개 실패한 경우 처리
+                   alert('삭제 처리 중 오류가 발생했습니다.');
+               }
+           });
+         });
+   });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

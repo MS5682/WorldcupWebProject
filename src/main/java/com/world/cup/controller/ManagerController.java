@@ -1,9 +1,7 @@
 package com.world.cup.controller;
 
-import com.world.cup.dto.PageRequestDTO;
-import com.world.cup.dto.PageResultDTO;
-import com.world.cup.dto.ReportDTO;
-import com.world.cup.dto.UserDTO;
+import com.world.cup.dto.*;
+import com.world.cup.service.ChoiceService;
 import com.world.cup.service.ReportService;
 import com.world.cup.service.UserService;
 import com.world.cup.service.WorldcupService;
@@ -28,6 +26,8 @@ public class ManagerController {
     private final WorldcupService worldcupService;
 
     private final ReportService reportService;
+
+    private final ChoiceService choiceService;
 
     @GetMapping("")
     public String manager(HttpSession session, HttpServletRequest request){
@@ -101,6 +101,24 @@ public class ManagerController {
         ReportDTO reportDTO = reportService.getReportContent(reportId);
         model.addAttribute("dto",reportDTO);
 
+    }
+
+    @GetMapping("/manager_checkWorldcup")
+    public String edit(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model,
+                       HttpSession session, RedirectAttributes redirectAttributes){
+        log.info("get edit page");
+        WorldcupDTO worldcupDTO = WorldcupDTO.builder().worldcupNum(pageRequestDTO.getWorldcupNum()).build();
+        worldcupDTO = worldcupService.getWorldcup(worldcupDTO);
+        log.info(worldcupDTO);
+        String userId = (String) session.getAttribute("userId");
+
+
+        PageResultDTO pageResultDTO = choiceService.getChoicePage(pageRequestDTO);
+        worldcupDTO.setChoice(pageResultDTO.getDtoList());
+        log.info(pageResultDTO.getStart());
+        model.addAttribute("worldcup", worldcupDTO);
+        model.addAttribute("choices", pageResultDTO);
+        return "/manager/manager_checkWorldcup.html";
     }
 
 
