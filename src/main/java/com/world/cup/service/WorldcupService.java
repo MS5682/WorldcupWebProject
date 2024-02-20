@@ -41,6 +41,7 @@ public interface WorldcupService {
                 .description(worldcupDTO.getDescription())
                 .disclosure(worldcupDTO.getDisclosure())
                 .user(user)
+                .viewCnt(worldcupDTO.getViewCnt())
                 .build();
         return worldcup;
     }
@@ -52,6 +53,7 @@ public interface WorldcupService {
                 .modDate(worldcup.getModDate())
                 .regDate(worldcup.getRegDate())
                 .title(worldcup.getTitle())
+                .viewCnt(worldcup.getViewCnt())
                 .id(worldcup.getUser().getId())
                 .build();
         return worldcupDTO;
