@@ -9,6 +9,7 @@ import com.world.cup.repository.ChoiceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class ChoiceServiceImpl implements ChoiceService {
     @Transactional
     public WorldcupDTO getChoiceToWorldcup(WorldcupDTO worldcupDTO) {
         int worldcupNum = worldcupDTO.getWorldcupNum();
-        List<Choice> choices = choiceRepository.getChoiceByWorldcupNum(worldcupNum);
+        List<Choice> choices = choiceRepository.getChoiceByWorldcupNum(worldcupNum, null);
 
         List<ChoiceDTO> choiceDTOs = choices.stream()
                 .map(this::entityToDto)
@@ -42,16 +43,18 @@ public class ChoiceServiceImpl implements ChoiceService {
     }
 
     @Override
-    public PageResultDTO<ChoiceDTO, Object[]> getChoiceRank(PageRequestDTO pageRequestDTO) {
-        Function<Object[], ChoiceDTO> fn = ((en) -> entityToDto((Choice)en[0]));
-        Sort sort = Sort.by("first").descending();
-        Pageable pageable = pageRequestDTO.getPageable(sort);
-        Page<Object[]> result = choiceRepository.getChoiceList(null,
-                null,
-                pageRequestDTO.getWorldcupNum(),
-                pageable,
-                3);
-        return new PageResultDTO<>(result,fn);
+    public WorldcupDTO getChoiceRank(WorldcupDTO worldcupDTO) {
+        int worldcupNum = worldcupDTO.getWorldcupNum();
+        Pageable pageable = PageRequest.of(0, 3);
+        List<Choice> choices = choiceRepository.getChoiceByWorldcupNum(worldcupNum, pageable);
+
+        List<ChoiceDTO> choiceDTOs = choices.stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
+
+        worldcupDTO.setChoice(choiceDTOs);
+
+        return worldcupDTO;
     }
 
     @Override
