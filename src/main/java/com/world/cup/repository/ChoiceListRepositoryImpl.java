@@ -26,7 +26,7 @@ public class ChoiceListRepositoryImpl extends QuerydslRepositorySupport implemen
 
     public ChoiceListRepositoryImpl() {super(Choice.class);}
     @Override
-    public Page<Object[]> getChoiceList(String type, String keyword, int worldcupNum, Pageable pageable) {
+    public Page<Object[]> getChoiceList(String type, String keyword, int worldcupNum, Pageable pageable, Integer limit) {
         QChoice choice = QChoice.choice;
         JPQLQuery<Choice> jpqlQuery = from(choice);
 
@@ -59,7 +59,11 @@ public class ChoiceListRepositoryImpl extends QuerydslRepositorySupport implemen
         });
 
         jpqlQuery.offset(pageable.getOffset());
-        jpqlQuery.limit(pageable.getPageSize());
+        if (limit != null && limit > 0) {
+            jpqlQuery.limit(limit);
+        } else {
+            jpqlQuery.limit(pageable.getPageSize());
+        }
 
         // 결과 조회
         List<Choice> result = jpqlQuery.where(booleanBuilder).fetch(); // where 조건 추가 및 fetch 호출 수정

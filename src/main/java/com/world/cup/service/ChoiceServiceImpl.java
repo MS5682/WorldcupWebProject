@@ -42,18 +42,44 @@ public class ChoiceServiceImpl implements ChoiceService {
     }
 
     @Override
+    public PageResultDTO<ChoiceDTO, Object[]> getChoiceRank(PageRequestDTO pageRequestDTO) {
+        Function<Object[], ChoiceDTO> fn = ((en) -> entityToDto((Choice)en[0]));
+        Sort sort = Sort.by("first").descending();
+        Pageable pageable = pageRequestDTO.getPageable(sort);
+        Page<Object[]> result = choiceRepository.getChoiceList(null,
+                null,
+                pageRequestDTO.getWorldcupNum(),
+                pageable,
+                3);
+        return new PageResultDTO<>(result,fn);
+    }
+
+    @Override
     public PageResultDTO<ChoiceDTO, Object[]> getChoicePage(PageRequestDTO pageRequestDTO) {
         Function<Object[], ChoiceDTO> fn = ((en) -> entityToDto((Choice)en[0]));
         pageRequestDTO.setSize(5);
-        Pageable pageable = pageRequestDTO.getPageable(Sort.by("choiceNum").descending());
+        Sort sort = null;
+        if (pageRequestDTO.getOrder() == 0) {
+            sort = Sort.by("choiceNum").descending();
+        } else if(pageRequestDTO.getOrder() == 1) {
+            sort = Sort.by("first").descending();
+        }
+        Pageable pageable = pageRequestDTO.getPageable(sort);
         Page<Object[]> result = choiceRepository.getChoiceList(pageRequestDTO.getType(),
                 pageRequestDTO.getKeyword(),
                 pageRequestDTO.getWorldcupNum(),
-                pageable);
+                pageable,
+                null);
 
 
 
         return new PageResultDTO<>(result,fn);
+    }
+
+    @Override
+    public Integer sumFirst(WorldcupDTO worldcupDTO) {
+        return choiceRepository.sumFirstByWorldcupWorldcupNum(worldcupDTO.getWorldcupNum());
+
     }
 
     @Override

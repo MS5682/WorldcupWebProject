@@ -20,6 +20,7 @@ public class PageRequestDTO {
     private String userId;
     private Byte disclosure;
     private int worldcupNum;
+    private Integer limit;
 
     public PageRequestDTO(){
         this.page = 1;

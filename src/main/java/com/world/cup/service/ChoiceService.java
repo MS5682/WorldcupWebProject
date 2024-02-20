@@ -10,7 +10,11 @@ import com.world.cup.entity.Worldcup;
 
 public interface ChoiceService {
     WorldcupDTO getChoiceToWorldcup(WorldcupDTO worldcupDTO);
+
+    PageResultDTO<ChoiceDTO, Object[]> getChoiceRank(PageRequestDTO pageRequestDTO);
     PageResultDTO<ChoiceDTO, Object[]> getChoicePage(PageRequestDTO pageRequestDTO);
+
+    Integer sumFirst(WorldcupDTO worldcupDTO);
 
     void addChoice(ChoiceDTO choiceDTO);
 

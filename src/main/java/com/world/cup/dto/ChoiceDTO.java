@@ -15,12 +15,13 @@ import java.sql.Date;
 public class ChoiceDTO {
     private int worldcupNum;
     private int choiceNum;
+    private int choiceSeq;
     private String name;
     private Byte type;
     private String path;
     private String uuid;
     private String imgName;
-    private Integer first;
+    private int first;
     private MultipartFile image;
     private int win;
     private int lose;
