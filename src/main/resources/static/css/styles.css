@@ -115,6 +115,15 @@
       padding: 5px;
     }
 
+    .worldcup-result,
+    .worldcup-result-tr,
+    .worldcup-result-td
+    {
+    padding-bottom:5px;
+    width:100%;
+    border: 1px solid #ddd;
+    background-color: white;
+    }
     .register-choice-th,
     .register-choice-td {
       border: 1px solid #ddd;

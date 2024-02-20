@@ -63,7 +63,7 @@ public class PlayingController {
         PageResultDTO pageResultDTO = choiceService.getChoicePage(pageRequestDTO);
         worldcupDTO.setChoice(pageResultDTO.getDtoList());
         WorldcupDTO worldcupChart = WorldcupDTO.builder().worldcupNum(worldcupDTO.getWorldcupNum()).build();
-        worldcupChart = choiceService.getChoiceToWorldcup(worldcupChart);
+        worldcupChart = choiceService.getTopTen(worldcupChart);
 
         log.info(worldcupChart.getChoice());
         model.addAttribute("worldcup", worldcupDTO);
