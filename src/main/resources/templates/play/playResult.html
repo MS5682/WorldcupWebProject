@@ -33,20 +33,20 @@
         <p class="text-center fs-1 fw-bold">순위</p>
         <div class="row">
             <div class="col d-flex justify-content-center">
-                <div class="card" style="width: 18rem;" th:if="${rank.dtoList.size() > 0}">
+                <div class="card" style="width: 18rem;" th:if="${rank.choice.size() > 0}">
                     <p class="text-center fs-3">🥇1위</p>
-                    <img class="card-img-top" th:if="${rank.dtoList[0].type == 1}" th:src="@{/worldcup/choice/display(fileName=${rank.dtoList[0].getImageURL()})}" style="width: 100%; height: 250px;">
-                    <img class="card-img-top" th:if="${rank.dtoList[0].type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${rank.dtoList[0].imgName} + '/0.jpg'}" style="width: 100%; height: 250px;">
+                    <img class="card-img-top" th:if="${rank.choice[0].type == 1}" th:src="@{/worldcup/choice/display(fileName=${rank.choice[0].getImageURL()})}" style="width: 100%; height: 250px;">
+                    <img class="card-img-top" th:if="${rank.choice[0].type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${rank.choice[0].imgName} + '/0.jpg'}" style="width: 100%; height: 250px;">
                     <div class="card-body">
-                        <h5 class="card-title text-center" th:text="${rank.dtoList[0].name}"></h5>
+                        <h5 class="card-title text-center" th:text="${rank.choice[0].name}"></h5>
                         <p class="card-text">
                             승률:
-                            <span th:text="${#numbers.formatDecimal((rank.dtoList[0].first * 1.0 / sumFirst * 100), 1,1,'POINT')}"></span>% (
-                            <span th:text="${rank.dtoList[0].first}"></span> /
+                            <span th:text="${#numbers.formatDecimal((rank.choice[0].first * 1.0 / sumFirst * 100), 1,1,'POINT')}"></span>% (
+                            <span th:text="${rank.choice[0].first}"></span> /
                             <span th:text="${sumFirst}"></span> )
                         </p>
                         <p class="card-text">우승 횟수 :
-                            <span th:text="${rank.dtoList[0].first}"></span>회
+                            <span th:text="${rank.choice[0].first}"></span>회
                         </p>
                     </div>
                 </div>
@@ -55,40 +55,40 @@
 
         <div class="row" style="margin-top: 10px">
             <div class="col d-flex justify-content-center">
-                <div class="card" style="width: 18rem;" th:if="${rank.dtoList.size() > 1}">
+                <div class="card" style="width: 18rem;" th:if="${rank.choice.size() > 1}">
                     <p class="text-start fs-3 text-center" >🥈2위</p>
-                    <img class="card-img-top" th:if="${rank.dtoList[1].type == 1}" th:src="@{/worldcup/choice/display(fileName=${rank.dtoList[1].getImageURL()})}" style="width: 100%; height: 250px;">
-                    <img class="card-img-top" th:if="${rank.dtoList[1].type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${rank.dtoList[1].imgName} + '/0.jpg'}" style="width: 100%; height: 250px;">
+                    <img class="card-img-top" th:if="${rank.choice[1].type == 1}" th:src="@{/worldcup/choice/display(fileName=${rank.choice[1].getImageURL()})}" style="width: 100%; height: 250px;">
+                    <img class="card-img-top" th:if="${rank.choice[1].type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${rank.choice[1].imgName} + '/0.jpg'}" style="width: 100%; height: 250px;">
                     <div class="card-body">
-                        <h5 class="card-title text-center" th:text="${rank.dtoList[1].name}"></h5>
+                        <h5 class="card-title text-center" th:text="${rank.choice[1].name}"></h5>
                         <p class="card-text">
                             승률:
-                            <span th:text="${#numbers.formatDecimal((rank.dtoList[1].first * 1.0 / sumFirst * 100), 1,1,'POINT')}"></span>% (
-                            <span th:text="${rank.dtoList[1].first}"></span> /
+                            <span th:text="${#numbers.formatDecimal((rank.choice[1].first * 1.0 / sumFirst * 100), 1,1,'POINT')}"></span>% (
+                            <span th:text="${rank.choice[1].first}"></span> /
                             <span th:text="${sumFirst}"></span> )
                         </p>
                         <p class="card-text">우승 횟수 :
-                            <span th:text="${rank.dtoList[1].first}"></span>회
+                            <span th:text="${rank.choice[1].first}"></span>회
                         </p>
                     </div>
                 </div>
             </div>
 
             <div class="col d-flex justify-content-center">
-                <div class="card" style="width: 18rem;" th:if="${rank.dtoList.size() > 2}">
+                <div class="card" style="width: 18rem;" th:if="${rank.choice.size() > 2}">
                     <p class="text-start fs-3 text-center">🥉3위</p>
-                    <img class="card-img-top" th:if="${rank.dtoList[2].type == 1}" th:src="@{/worldcup/choice/display(fileName=${rank.dtoList[2].getImageURL()})}" style="width: 100%; height: 250px;">
-                    <img class="card-img-top" th:if="${rank.dtoList[2].type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${rank.dtoList[2].imgName} + '/0.jpg'}" style="width: 100%; height: 250px;">
+                    <img class="card-img-top" th:if="${rank.choice[2].type == 1}" th:src="@{/worldcup/choice/display(fileName=${rank.choice[2].getImageURL()})}" style="width: 100%; height: 250px;">
+                    <img class="card-img-top" th:if="${rank.choice[2].type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${rank.choice[2].imgName} + '/0.jpg'}" style="width: 100%; height: 250px;">
                     <div class="card-body">
-                        <h5 class="card-title text-center" th:text="${rank.dtoList[2].name}"></h5>
+                        <h5 class="card-title text-center" th:text="${rank.choice[2].name}"></h5>
                         <p class="card-text">
                             승률:
-                            <span th:text="${#numbers.formatDecimal((rank.dtoList[2].first * 1.0 / sumFirst * 100), 1,1,'POINT')}"></span>% (
-                            <span th:text="${rank.dtoList[2].first}"></span> /
+                            <span th:text="${#numbers.formatDecimal((rank.choice[2].first * 1.0 / sumFirst * 100), 1,1,'POINT')}"></span>% (
+                            <span th:text="${rank.choice[2].first}"></span> /
                             <span th:text="${sumFirst}"></span> )
                         </p>
                         <p class="card-text">우승 횟수 :
-                            <span th:text="${rank.dtoList[2].first}"></span>회
+                            <span th:text="${rank.choice[2].first}"></span>회
                         </p>
                     </div>
                 </div>
@@ -190,51 +190,19 @@
     <hr>
 
     <div class="container" style="background-color: white">
-        <!-- Content here -->
-        <p class="text-start fs-1 fw-bold">그래프</p>
+        <div class="form-check form-switch text-center mb-3">
+            <input class="form-check-input" type="checkbox" id="chartSwitch">
+            <label class="form-check-label" for="chartSwitch">차트 변경</label>
+        </div>
 
         <div class="graph_wrap">
             <div class="graph">
-                <!-- 기준 -->
-                <ul class="y-axis">
-                    <li><span>35</span></li>
-                    <li><span>30</span></li>
-                    <li><span>25</span></li>
-                    <li><span>20</span></li>
-                    <li><span>15</span></li>
-                    <li><span>10</span></li>
-                    <li><span>5</span></li>
-                    <li><span>0</span></li>
-                </ul>
-                <!-- 목록 -->
-                <ul class="x-axis">
-                    <li><span>목록1</span></li>
-                    <li><span>목록2</span></li>
-                    <li><span>목록3</span></li>
-                    <li><span>목록4</span></li>
-                    <li><span>목록5</span></li>
-                    <li><span>목록6</span></li>
-                    <li><span>목록7</span></li>
-                    <li><span>목록8</span></li>
-                    <li><span>목록9</span></li>
-                    <li><span>목록10</span></li>
-                </ul>
-                <!-- 바 그래프 (백분율 만큼 height값) -->
-                <ul class="bar">
-                    <li style="height:100%;"><span></span></li>
-                    <li style="height:90%;"><span></span></li>
-                    <li style="height:80%;"><span></span></li>
-                    <li style="height:70%;"><span></span></li>
-                    <li style="height:60%;"><span></span></li>
-                    <li style="height:50%;"><span></span></li>
-                    <li style="height:40%;"><span></span></li>
-                    <li style="height:30%;"><span></span></li>
-                    <li style="height:20%;"><span></span></li>
-                    <li style="height:10%;"><span></span></li>
-                </ul>
+                <canvas id="myChart"></canvas>
             </div>
         </div>
     </div>
+
+
 
     <hr>
 
@@ -318,6 +286,112 @@
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script th:inline="javascript">
+        var chartData = /*[[${chart}]]*/ '';
+        chartData.sort((a, b) => b.first - a.first);
+        var labels = [];
+        var datas = [];
+        var total = 0;
+        chartData.forEach(function(choice) {
+            labels.push(choice.name);
+            datas.push(choice.first);
+            total += choice.first;
+        });
+
+        var doughnutOptions = {
+            plugins: {
+                tooltips: {
+                    enabled: false
+                },
+                datalabels: {
+                    formatter: function (value, context) {
+                        return Math.round(value * 1.0 / context.chart.getDatasetMeta(0).total * 100) + "%";
+                    },
+                    color: '#fff',
+                },
+                legend: {
+                    display : false
+                }
+            }
+         }
+
+        const configDonut = {
+          type: 'doughnut',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                data: datas,
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.8)',
+                  'rgba(54, 162, 235, 0.8)',
+                  'rgba(255, 206, 86, 0.8)',
+                  'rgba(75, 192, 192, 0.8)',
+                  'rgba(153, 102, 255, 0.8)',
+                  'rgba(255, 159, 64, 0.8)'
+                ]
+              }
+            ]
+          },
+          options: doughnutOptions,
+          plugins: [ChartDataLabels]
+        };
+
+        var barOptions = {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        data: datas,
+                        backgroundColor: [
+                          'rgba(255, 99, 132, 0.8)',
+                          'rgba(54, 162, 235, 0.8)',
+                          'rgba(255, 206, 86, 0.8)',
+                          'rgba(75, 192, 192, 0.8)',
+                          'rgba(153, 102, 255, 0.8)',
+                          'rgba(255, 159, 64, 0.8)'
+                        ],
+                        borderColor: [
+                          'rgba(255, 99, 132, 0.8)',
+                          'rgba(54, 162, 235, 0.8)',
+                          'rgba(255, 206, 86, 0.8)',
+                          'rgba(75, 192, 192, 0.8)',
+                          'rgba(153, 102, 255, 0.8)',
+                          'rgba(255, 159, 64, 0.8)'
+                        ],
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            },
+          plugins: [ChartDataLabels]
+        };
+
+        $('#chartSwitch').change(function () {
+            var isChecked = $(this).is(':checked');
+            if (isChecked) {
+                myChart.destroy();
+                var ctx = document.getElementById('myChart').getContext('2d');
+                myChart = new Chart(ctx, barOptions);
+            } else {
+                myChart.destroy();
+                var ctx = document.getElementById('myChart').getContext('2d');
+                myChart = new Chart(ctx, configDonut);
+            }
+        });
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, configDonut);
+    </script>
     <script>
         $(document).ready(function () {
             var searchForm = $("#searchForm");

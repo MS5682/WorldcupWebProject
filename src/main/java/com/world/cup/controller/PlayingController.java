@@ -6,6 +6,7 @@ import com.world.cup.dto.ChoiceDTO;
 import com.world.cup.dto.PageRequestDTO;
 import com.world.cup.dto.PageResultDTO;
 import com.world.cup.dto.WorldcupDTO;
+import com.world.cup.entity.Choice;
 import com.world.cup.service.ChoiceService;
 import com.world.cup.service.PlayingService;
 import com.world.cup.service.WorldcupService;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @Log4j2
@@ -54,16 +56,20 @@ public class PlayingController {
     @GetMapping("/playResult")
     public void playResult(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model){
         WorldcupDTO worldcupDTO = WorldcupDTO.builder().worldcupNum(pageRequestDTO.getWorldcupNum()).build();
+        WorldcupDTO choiceRank = choiceService.getChoiceRank(worldcupDTO);
         worldcupDTO = worldcupService.getWorldcup(worldcupDTO);
         Integer sumFirst = choiceService.sumFirst(worldcupDTO);
-        PageResultDTO choiceRank = choiceService.getChoiceRank(pageRequestDTO);
         pageRequestDTO.setOrder(1);
         PageResultDTO pageResultDTO = choiceService.getChoicePage(pageRequestDTO);
         worldcupDTO.setChoice(pageResultDTO.getDtoList());
+        WorldcupDTO worldcupChart = WorldcupDTO.builder().worldcupNum(worldcupDTO.getWorldcupNum()).build();
+        worldcupChart = choiceService.getChoiceToWorldcup(worldcupChart);
 
+        log.info(worldcupChart.getChoice());
         model.addAttribute("worldcup", worldcupDTO);
         model.addAttribute("sumFirst", sumFirst);
         model.addAttribute("rank", choiceRank);
+        model.addAttribute("chart",worldcupChart.getChoice());
         model.addAttribute("choices", pageResultDTO);
     }
 }
