@@ -45,11 +45,12 @@
             <th class="register-th">공개 여부</th>
             <td class="register-td">
               <label style="margin-left:5px;">
-                <input type="radio" name="disclosure" value="1" th:checked="${worldcup.disclosure == 1}">공개
+                <input type="radio" class="disclosure" name="disclosure" value="1" th:checked="${worldcup.disclosure == 1}">공개
               </label>
               <label>
-                <input type="radio" name="disclosure" value="0" th:checked="${worldcup.disclosure == 0}">비공개
+                <input type="radio" class="disclosure" name="disclosure" value="0" th:checked="${worldcup.disclosure == 0}">비공개
               </label>
+              <input type="hidden" class="choiceCnt" th:value="${choices.dtoList.size()}">
             </td>
           </tr>
           <tr>
@@ -514,6 +515,36 @@
 <script>
   $(document).ready(function () {
     var searchForm = $("#searchForm");
+    var choiceCount =  parseInt($(".choiceCnt").val());
+    var disclosure = parseInt($(".disclosure:checked").val());
+    var worldcupNum = $("#worldcupNum").val();
+    if (choiceCount < 4 && disclosure == 1 ){
+          var formData = new FormData();
+          formData.append("disclosure", 0);
+          formData.append("worldcupNum", worldcupNum);
+
+         $.ajax({
+          url: '/worldcup/edit',
+          type: 'POST',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+              // 성공 시 페이지 새로고침
+              location.reload();
+          },
+          error: function(xhr, status, error) {
+              // 실패 시 오류 처리
+              console.error(error);
+              alert('수정에 실패했습니다.');
+          }
+      });
+    }
+    if (choiceCount < 4) {
+        $(".disclosure").prop("disabled", true);
+    } else {
+        $(".disclosure").prop("disabled", false);
+    }
 
     $(".btn-search").click(function(e){
       searchForm.submit();
