@@ -202,17 +202,16 @@ public class UserController {
 
     @PostMapping("/login/google")
     @ResponseBody
-    @CrossOrigin(origins = "https://accounts.google.com", allowedHeaders = "*", methods = {RequestMethod.POST}, allowCredentials = "true")
-    public ResponseEntity<String> loginWithGoogle(@RequestParam("googleId") String googleId,
-                                                  @RequestParam("googleName") String googleName,
+    @CrossOrigin(origins = "https://localhost:8000", allowedHeaders = "*", methods = {RequestMethod.POST}, allowCredentials = "true")
+    public ResponseEntity<Map<String, String>>  loginWithGoogle(@RequestParam("googleId") String googleId,
                                                   HttpSession session, HttpServletResponse response) {
 
         session.setAttribute("googleId", googleId);
-        session.setAttribute("googleName", googleName);
-        response.setHeader("Set-Cookie", "name=value; SameSite=None; Secure");
-        System.out.println(googleId);
-        System.out.println(googleName);
 
-        return ResponseEntity.ok("구글 로그인 성공");
+        Map<String, String> responseData = new HashMap<>();
+        responseData.put("redirectUrl", "/");
+        System.out.println(googleId);
+
+        return ResponseEntity.ok(responseData);
     }
 }

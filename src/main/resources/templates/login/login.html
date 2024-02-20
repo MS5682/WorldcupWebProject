@@ -13,6 +13,7 @@
 	<link rel="stylesheet" th:href="@{../login/css/style.css}">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 	<script src="https://apis.google.com/js/platform.js" async defer></script>
+
 </head>
 <body>
 <th:block th:include="main/header :: header"></th:block>
@@ -48,12 +49,21 @@
 						<div class="form-group">
 							<button type="submit" class="btn btn-primary rounded submit  px-5 w-100">로그인</button>
 						</div>
-						<div class="form-group w-100">
-							<div class="g-signin2" data-longtitle="true" data-width="349" data-onsuccess="onGoogleSignIn" ></div>
-						</div>
-						<div class="form-group w-100">
-							<img class="w-100 rounded" style="height:36px; object-fit: cover; cursor:pointer;" th:src="@{../login/images/naverlogin.png}">
-						</div>
+
+<!--						<div class="form-group w-100">-->
+<!--							<div class="g-signin2" data-longtitle="true" data-width="349" data-onsuccess="onGoogleSignIn" ></div>-->
+<!--						</div>-->
+
+
+						<div class="form-group text-right">
+							<script src="https://accounts.google.com/gsi/client" async defer></script>
+							<div id="g_id_onload"
+								 data-client_id="781563222117-ne40l3m1g7e441nm87s7lg75lupd3al5.apps.googleusercontent.com"
+								 data-callback="handleCredentialResponse">
+							</div>
+							<div class="g_id_signin"  data-type="standard"></div>
+                      </div>
+
 
 					</form>
 					<p>계정이 없으신가요? <a th:href="@{/worldcup/signup}">&nbsp;&nbsp;회원가입</a></p>
@@ -65,43 +75,70 @@
 <th:block th:include="main/footer :: footer"></th:block>
 
 <script>
-	function onSignIn(googleUser) {
-	  var profile = googleUser.getBasicProfile();
-	  console.log('ID: ' + profile.getId());
-	  console.log('Name: ' + profile.getName());
-	  console.log('Image URL: ' + profile.getImageUrl());
-	  console.log('Email: ' + profile.getEmail());
+	function handleCredentialResponse(response) {
+       // Google Sign-In 후 처리
+       console.log('Credential Response:', response);
+       var googleId = response.credential;
+        $.ajax({
+		   type: "POST",
+		   url: "/worldcup/login/google",
+		   data: {
+			   googleId: googleId
+		   },
+		   success: function (response) {
+
+			   console.log('Google login successful');
+			   var redirectUrl = response.redirectUrl;
+			   window.location.href = redirectUrl;
+
+		   },
+		   error: function () {
+			   alert("구글 로그인에 실패했습니다.");
+		   }
+		 });
+	   }
 
 
-	  $.ajax({
-		type: "POST",
-		url: "/worldcup/login/google",
-		data: {
-			googleId: profile.getId(),
-			googleName: profile.getName()
-		},
-		success: function (response) {
-
-			window.location.href="/worldcup/list";
-		},
-		error: function () {
-			alert("구글 로그인에 실패했습니다.");
-		}
-	  });
-	}
 
 
-	/*<![CDATA[*/
 
-    // 실패 메시지 가져오기
-    var errorMessage = "[[${msg}]]";
+<!--   function onSignIn(googleUser) {-->
+<!--     var profile = googleUser.getBasicProfile();-->
+<!--     console.log('ID: ' + profile.getId());-->
+<!--     console.log('Name: ' + profile.getName());-->
+<!--     console.log('Image URL: ' + profile.getImageUrl());-->
+<!--     console.log('Email: ' + profile.getEmail());-->
 
-    // 실패 메시지가 있으면 알림창 띄우기
-    if (errorMessage.trim() !== '') {
-        alert(errorMessage);
-    }
 
-    /*]]>*/
+<!--     $.ajax({-->
+<!--       type: "POST",-->
+<!--       url: "/worldcup/login/google",-->
+<!--       data: {-->
+<!--           googleId: profile.getId(),-->
+<!--           googleName: profile.getName()-->
+<!--       },-->
+<!--       success: function (response) {-->
+
+<!--           console.log('Google login successful');-->
+<!--       },-->
+<!--       error: function () {-->
+<!--           alert("구글 로그인에 실패했습니다.");-->
+<!--       }-->
+<!--     });-->
+<!--   }-->
+
+
+   /*<![CDATA[*/
+
+   // 실패 메시지 가져오기
+   var errorMessage = "[[${msg}]]";
+
+   // 실패 메시지가 있으면 알림창 띄우기
+   if (errorMessage.trim() !== '') {
+       alert(errorMessage);
+   }
+
+   /*]]>*/
 </script>
 
 
