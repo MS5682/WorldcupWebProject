@@ -83,6 +83,7 @@ public class WorldcupController {
             return "redirect:/";
         }
         worldcupDTO.setId(userId);
+        worldcupDTO.setDisclosure((byte) 0);
         int worldcupNum = worldcupService.register(worldcupDTO);
         redirectAttributes.addAttribute("worldcupNum",worldcupNum);
         return "redirect:/worldcup/edit";
