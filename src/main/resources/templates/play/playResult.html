@@ -104,7 +104,7 @@
             </tr>
             <tr class="worldcup-result-tr">
                 <td class="worldcup-result-td">
-                    <table class="table table-striped">
+                    <table class="table table-striped" id="result-section">
                         <thead>
                         <tr>
                             <th scope="col" style="width: 5%">등수</th>
@@ -152,6 +152,7 @@
                                                 </select>
                                             </div>
                                             <input class="form-control" name="keyword" placeholder="키워드를 입력하세요" >
+                                            <input type="hidden" name="pageLoc" value="result">
                                             <div>
                                                 <button class="btn btn-success btn-search" type="button">검색하기</button>
                                                 <button class="btn btn-danger btn-clear" type="button">새로고침</button>
@@ -168,7 +169,8 @@
                                                 worldcupNum=${worldcup.worldcupNum},
                                                 page=${choices.start - 1},
                                                 type=${pageRequestDTO.type},
-                                                keyword=${pageRequestDTO.keyword}
+                                                keyword=${pageRequestDTO.keyword},
+                                                pageLoc=result
                 )}" tabindex="-1">Prev</a>
                                         </li>
                                         <li th:class=" ' page-item ' + ${choices.page == page?'active':''}"
@@ -177,7 +179,8 @@
                                                 worldcupNum=${worldcup.worldcupNum},
                                                 page=${page},
                                                 type=${pageRequestDTO.type},
-                                                keyword=${pageRequestDTO.keyword}
+                                                keyword=${pageRequestDTO.keyword},
+                                                pageLoc=result
                 )}">[[${page}]]</a>
                                         </li>
                                         <li class="page-item" th:if="${choices.next}">
@@ -185,7 +188,8 @@
                                                 worldcupNum=${worldcup.worldcupNum},
                                                 page=${choices.end + 1},
                                                 type=${pageRequestDTO.type},
-                                                keyword=${pageRequestDTO.keyword}
+                                                keyword=${pageRequestDTO.keyword},
+                                                pageLoc=result
                 )}">Next</a>
                                         </li>
                                     </ul>
@@ -214,16 +218,16 @@
 
             <tr class="worldcup-result-tr">
                 <td class="worldcup-result-td">
-                    <div class="container" style="background-color: white">
+                    <div class="container" style="background-color: white" id="comment-section">
                         <div class="row">
-                            <div class="col border">
+                            <div class="col border-end" style="height:100%;">
                                 <p class="fs-4">댓글</p>
 
                                 <form class="row row-cols-lg-auto g-3 align-items-center">
                                     <div class="col-12" style="width: 80%">
                                         <div class="form-floating mb-3">
                                             <input type="text" class="form-control" id="replyInput" placeholder="name@example.com">
-                                            <label for="replyInput">댓글 작성</label>
+                                            <label for="replyInput">댓글을 남겨보세요</label>
                                         </div>
                                     </div>
 
@@ -232,36 +236,53 @@
                                     </div>
                                 </form>
 
-                                <!--                댓글 내용 표시 시작-->
-                                <div class="media mb-4">
+                                <div th:each="comment : ${comment.dtoList}" class="media mb-4">
+
                                     <div class="media-body">
-                                        <h6 class="mt-0">닉네임 들어감</h6>
-                                        <p class="fs-6">댓글</p>
+                                        <p class="font-weight-bold mb-1">[[${comment.id}]]
+                                            <span th:if="${comment.choiceName != null}" class="text-muted" th:text="${'('+comment.choiceName+')'}"></span>
+                                            <span class="text-muted" th:text="${#temporals.format(comment.regDate, 'yyyy/MM/dd HH:mm:ss')}"></span>
+                                            <a class="text-danger" th:if="${userId == comment.id}">삭제하기</a>
+                                        </p>
+                                        <p th:text="${comment.content}"></p>
                                     </div>
                                 </div>
-                                <!--                댓글 내용 표시 끝-->
-                                <div class="media mb-4">
-                                    <div class="media-body">
-                                        <h6 class="mt-0">닉네임 들어감</h6>
-                                        <p class="fs-6">댓글</p>
-                                    </div>
+                                <div class="text-center">
+                                    <ul class="pagination h-100 justify-content-center align-items-center">
+                                        <li class="page-item" th:if="${comment.prev}">
+                                            <a class="page-link" th:href="@{/play/playResult(
+                                                worldcupNum=${worldcup.worldcupNum},
+                                                commentPage=${comment.start - 1},
+                                                pageLoc=comment
+                )}" tabindex="-1">Prev</a>
+                                        </li>
+                                        <li th:class=" ' page-item ' + ${comment.page == page?'active':''}"
+                                            th:each="page: ${comment.pageList}" >
+                                            <a class="page-link" th:href="@{/play/playResult(
+                                                worldcupNum=${worldcup.worldcupNum},
+                                                commentPage=${page},
+                                                pageLoc=comment
+                )}">[[${page}]]</a>
+                                        </li>
+                                        <li class="page-item" th:if="${comment.next}">
+                                            <a class="page-link" th:href="@{/play/playResult(
+                                                worldcupNum=${worldcup.worldcupNum},
+                                                commentPage=${comment.end + 1},
+                                                pageLoc=comment
+                )}">Next</a>
+                                        </li>
+                                    </ul>
                                 </div>
 
-                                <div class="media mb-4">
-                                    <div class="media-body">
-                                        <h6 class="mt-0">닉네임 들어감</h6>
-                                        <p class="fs-6">댓글</p>
-                                    </div>
-                                </div>
                             </div>
-                            <div class="col border">
-                                <p class="fs-4">요청</p>
+                            <div class="col">
+                                <p class="fs-4">선택지 요청</p>
 
                                 <form class="row row-cols-lg-auto g-3 align-items-center">
                                     <div class="col-12" style="width: 80%">
                                         <div class="form-floating mb-3">
                                             <input type="text" class="form-control" id="requestInput" placeholder="name@example.com">
-                                            <label for="requestInput">댓글로 후보 요청</label>
+                                            <label for="requestInput">댓글로 후보를 요청해보세요</label>
                                         </div>
                                     </div>
 
@@ -270,25 +291,42 @@
                                     </div>
                                 </form>
 
-                                <div class="media mb-4">
+                                <div th:each="request : ${request.dtoList}" class="media mb-4">
+
                                     <div class="media-body">
-                                        <h6 class="mt-0">닉네임 들어감</h6>
-                                        <p class="fs-6">댓글</p>
+                                        <p class="font-weight-bold mb-1">[[${request.id}]]
+                                            <span th:if="${request.choiceName != null}" class="text-muted" th:text="${'('+request.choiceName+')'}"></span>
+                                            <span class="text-muted" th:text="${#temporals.format(request.regDate, 'yyyy/MM/dd HH:mm:ss')}"></span>
+                                            <a class="text-danger" th:if="${userId == request.id}">삭제하기</a>
+                                        </p>
+                                        <p th:text="${request.content}"></p>
                                     </div>
                                 </div>
-
-                                <div class="media mb-4">
-                                    <div class="media-body">
-                                        <h6 class="mt-0">닉네임 들어감</h6>
-                                        <p class="fs-6">댓글</p>
-                                    </div>
-                                </div>
-
-                                <div class="media mb-4">
-                                    <div class="media-body">
-                                        <h6 class="mt-0">닉네임 들어감</h6>
-                                        <p class="fs-6">댓글</p>
-                                    </div>
+                                <div class="text-center">
+                                    <ul class="pagination h-100 justify-content-center align-items-center">
+                                        <li class="page-item" th:if="${request.prev}">
+                                            <a class="page-link" th:href="@{/play/playResult(
+                                                worldcupNum=${worldcup.worldcupNum},
+                                                requestPage=${request.start - 1},
+                                                pageLoc=comment
+                )}" tabindex="-1">Prev</a>
+                                        </li>
+                                        <li th:class=" ' page-item ' + ${request.page == page?'active':''}"
+                                            th:each="page: ${request.pageList}" >
+                                            <a class="page-link" th:href="@{/play/playResult(
+                                                worldcupNum=${worldcup.worldcupNum},
+                                                requestPage=${page},
+                                                pageLoc=comment
+                )}">[[${page}]]</a>
+                                        </li>
+                                        <li class="page-item" th:if="${request.next}">
+                                            <a class="page-link" th:href="@{/play/playResult(
+                                                worldcupNum=${worldcup.worldcupNum},
+                                                requestPage=${request.end + 1},
+                                                pageLoc=comment
+                )}">Next</a>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -308,6 +346,23 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script th:inline="javascript">
+        window.onload = function() {
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const pageLoc = urlParams.get('pageLoc');
+
+            if (pageLoc === 'comment') {
+                var commentSection = document.getElementById('comment-section');
+                commentSection.scrollIntoView({ behavior: 'smooth' });
+            }else if (pageLoc === 'result') {
+                var commentSection = document.getElementById('result-section');
+                commentSection.scrollIntoView({ behavior: 'smooth' });
+            }
+
+        }
+
+
+
         var chartData = /*[[${chart}]]*/ '';
         chartData.sort((a, b) => b.first - a.first);
         var labels = [];
@@ -348,7 +403,7 @@
             plugins: {
                 datalabels: {
                     formatter: function (value, context) {
-                        return context.chart.data.labels[context.dataIndex] + ' ' + Math.round(value * 1.0 / context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0) * 100) + '%';
+                        return Math.round(value * 1.0 / context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0) * 100) + '%';
                     },
                     color: '#000',
                 },
