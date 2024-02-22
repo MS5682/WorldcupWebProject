@@ -1,6 +1,7 @@
 package com.world.cup.service;
 
 import com.world.cup.Choiceinterface;
+import com.world.cup.entity.Choice;
 import com.world.cup.entity.Worldcup;
 
 import java.util.List;

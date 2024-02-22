@@ -1,5 +1,7 @@
 package com.world.cup;
 
+import com.world.cup.entity.Worldcup;
+
 public interface Choiceinterface {
     int getChoiceNum();
 
@@ -10,4 +12,9 @@ public interface Choiceinterface {
     String getPath();
     String getUuid();
     String getImgName();
+
+    int getWin();
+    int getLose();
+//
+//    Worldcup getWorldCup();
 }
