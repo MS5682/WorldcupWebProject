@@ -69,7 +69,7 @@
                                     <h5 class="card-title text-center" th:text="${rank.choice[1].name}"></h5>
                                     <p>
                                         승률:
-                                        <span th:text="${#numbers.formatDecimal((sumFirst != 0 ?(rank.choice[0].first * 1.0 / sumFirst * 100) : 0), 1,1,'POINT')}"></span>% (
+                                        <span th:text="${#numbers.formatDecimal((sumFirst != 0 ?(rank.choice[1].first * 1.0 / sumFirst * 100) : 0), 1,1,'POINT')}"></span>% (
                                         <span th:text="${rank.choice[1].first}"></span> /
                                         <span th:text="${sumFirst}"></span> )
                                     </p>
@@ -89,7 +89,7 @@
                                     <h5 class="card-title text-center" th:text="${rank.choice[2].name}"></h5>
                                     <p>
                                         승률:
-                                        <span th:text="${#numbers.formatDecimal((sumFirst != 0 ?(rank.choice[0].first * 1.0 / sumFirst * 100) : 0), 1,1,'POINT')}"></span>% (
+                                        <span th:text="${#numbers.formatDecimal((sumFirst != 0 ?(rank.choice[2].first * 1.0 / sumFirst * 100) : 0), 1,1,'POINT')}"></span>% (
                                         <span th:text="${rank.choice[2].first}"></span> /
                                         <span th:text="${sumFirst}"></span> )
                                     </p>
@@ -224,28 +224,37 @@
                                 <p class="fs-4">댓글</p>
 
                                 <form class="row row-cols-lg-auto g-3 align-items-center">
-                                    <div class="col-12" style="width: 80%">
-                                        <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="replyInput" placeholder="name@example.com">
-                                            <label for="replyInput">댓글을 남겨보세요</label>
+                                        <div class="col-12" style="width: 80%">
+                                            <div class="form-floating mb-3">
+                                                    <input type="hidden" name="worldcupNum" th:value="${worldcup.worldcupNum}">
+                                                    <input type="hidden" name="choiceNum" th:value="${pageRequestDTO.choiceNum}">
+                                                    <input type="hidden" name="id" th:value="${userId}">
+                                                    <input type="hidden" name="type" value="0">
+                                                    <input type="text" class="form-control" id="replyInput" name="content">
+                                                    <label for="replyInput">댓글을 남겨보세요</label>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="col-12" style="min-width: 20px; min-height: 20px">
-                                        <button type="submit" class="btn btn-primary">작성</button>
+                                        <div class="col-12" style="min-width: 20px; min-height: 20px">
+                                            <button type="submit" class="btn btn-primary" onclick="addComment()">작성</button>
                                     </div>
                                 </form>
 
                                 <div th:each="comment : ${comment.dtoList}" class="media mb-4">
-
+                                    <form>
                                     <div class="media-body">
                                         <p class="font-weight-bold mb-1">[[${comment.id}]]
+                                            <input type="hidden" name="worldcupNum" th:value="${worldcup.worldcupNum}">
+                                            <input type="hidden" name="commentNum" th:value="${comment.commentNum}">
                                             <span th:if="${comment.choiceName != null}" class="text-muted" th:text="${'('+comment.choiceName+')'}"></span>
                                             <span class="text-muted" th:text="${#temporals.format(comment.regDate, 'yyyy/MM/dd HH:mm:ss')}"></span>
-                                            <a class="text-danger" th:if="${userId == comment.id}">삭제하기</a>
+                                            <input type="text" name="content" th:value="${comment.content}" readonly class="form-control comment-input">
+                                            <a href="#" class="text-danger edit-comment" th:if="${userId == comment.id}">수정하기</a>
+                                            <a href="#" class="text-danger cancel-edit" style="display: none;" th:if="${userId == comment.id}">취소하기</a>
+                                            <a href="#" class="text-danger delete-comment" th:if="${userId == comment.id}">삭제하기</a>
                                         </p>
-                                        <p th:text="${comment.content}"></p>
                                     </div>
+                                    </form>
                                 </div>
                                 <div class="text-center">
                                     <ul class="pagination h-100 justify-content-center align-items-center">
@@ -281,26 +290,34 @@
                                 <form class="row row-cols-lg-auto g-3 align-items-center">
                                     <div class="col-12" style="width: 80%">
                                         <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="requestInput" placeholder="name@example.com">
+                                            <input type="hidden" name="worldcupNum" th:value="${worldcup.worldcupNum}">
+                                            <input type="hidden" name="choiceNum" th:value="${pageRequestDTO.choiceNum}">
+                                            <input type="hidden" name="id" th:value="${userId}">
+                                            <input type="hidden" name="type" value="1">
+                                            <input type="text" class="form-control" id="requestInput" name="content">
                                             <label for="requestInput">댓글로 후보를 요청해보세요</label>
                                         </div>
                                     </div>
 
                                     <div class="col-12" style="min-width: 20px; min-height: 20px">
-                                        <button type="submit" class="btn btn-primary">작성</button>
+                                        <button type="submit" class="btn btn-primary" onclick="addComment()">작성</button>
                                     </div>
                                 </form>
-
                                 <div th:each="request : ${request.dtoList}" class="media mb-4">
-
-                                    <div class="media-body">
-                                        <p class="font-weight-bold mb-1">[[${request.id}]]
-                                            <span th:if="${request.choiceName != null}" class="text-muted" th:text="${'('+request.choiceName+')'}"></span>
-                                            <span class="text-muted" th:text="${#temporals.format(request.regDate, 'yyyy/MM/dd HH:mm:ss')}"></span>
-                                            <a class="text-danger" th:if="${userId == request.id}">삭제하기</a>
-                                        </p>
-                                        <p th:text="${request.content}"></p>
-                                    </div>
+                                    <form>
+                                        <div class="media-body">
+                                            <p class="font-weight-bold mb-1">[[${request.id}]]
+                                                <input type="hidden" name="worldcupNum" th:value="${worldcup.worldcupNum}">
+                                                <input type="hidden" name="commentNum" th:value="${request.commentNum}">
+                                                <span th:if="${request.choiceName != null}" class="text-muted" th:text="${'('+request.choiceName+')'}"></span>
+                                                <span class="text-muted" th:text="${#temporals.format(request.regDate, 'yyyy/MM/dd HH:mm:ss')}"></span>
+                                                <input type="text" name="content" th:value="${request.content}" readonly class="form-control request-input">
+                                                <a href="#" class="text-danger edit-request" th:if="${userId == request.id}">수정하기</a>
+                                                <a href="#" class="text-danger cancel-edit" style="display: none;" th:if="${userId == request.id}">취소하기</a>
+                                                <a href="#" class="text-danger delete-comment" th:if="${userId == request.id}">삭제하기</a>
+                                            </p>
+                                        </div>
+                                    </form>
                                 </div>
                                 <div class="text-center">
                                     <ul class="pagination h-100 justify-content-center align-items-center">
@@ -491,9 +508,137 @@
             ctx.fillText('우승 데이터 없음', canvas.width / 2, canvas.height / 2);
         }
 
+        function editComment() {
+            var button = event.target;
+            var form = button.closest('form');
+            var formData = new FormData(form);
+
+            $.ajax({
+              url: '/comment/edit',
+              type: 'POST',
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function(response) {
+                console.log(response);
+                location.reload();
+              },
+              error: function(xhr, status, error) {
+                console.error(error);
+              }
+            });
+          }
+
+
+        function addComment() {
+            var button = event.target;
+            var form = button.closest('form');
+            var formData = new FormData(form);
+            var userId = formData.get('id');
+
+            if (userId === null || userId === "") {
+                alert('댓글을 작성하려면 먼저 로그인해야 합니다.');
+                return; // 함수 종료
+            }
+
+            $.ajax({
+              url: '/comment/add',
+              type: 'POST',
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function(response) {
+                console.log(response);
+                location.reload();
+              },
+              error: function(xhr, status, error) {
+                console.error(error);
+              }
+            });
+          }
     </script>
     <script>
         $(document).ready(function () {
+            $('.edit-comment').click(function(e) {
+                e.preventDefault();
+                var $commentInput = $(this).closest('.media-body').find('.comment-input');
+                var $editBtn = $(this);
+                var $cancelBtn = $(this).closest('.media-body').find('.cancel-edit');
+
+                $commentInput.removeAttr('readonly');
+                $editBtn.hide();
+                $cancelBtn.show();
+
+                var $submitBtn = $('<button type="submit" class="btn btn-primary submit-edit" onclick="editComment()">제출</button>');
+                $commentInput.after($submitBtn);
+            });
+
+            $('.cancel-edit').click(function(e) {
+                e.preventDefault();
+                var $commentInput = $(this).closest('.media-body').find('.comment-input');
+                var $cancelBtn = $(this);
+                var $editBtn = $(this).closest('.media-body').find('.edit-comment');
+
+                $commentInput.attr('readonly', 'readonly');
+                $cancelBtn.hide();
+                $editBtn.show();
+
+                $cancelBtn.siblings('.submit-edit').remove();
+            });
+
+            $('.delete-comment').click(function(e) {
+                e.preventDefault();
+
+                var commentNum = $(this).closest('.media-body').find('input[name="commentNum"]').val();
+
+                // AJAX 요청 보내기
+                $.ajax({
+                    url: '/comment/delete',
+                    type: 'POST',
+                    data: {
+                        commentNum: commentNum
+                    },
+                    success: function(response) {
+                        console.log('댓글 삭제 성공');
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('댓글 삭제 실패:', error);
+                    }
+                });
+            });
+
+            $('.edit-request').click(function(e) {
+                e.preventDefault();
+                var $commentInput = $(this).closest('.media-body').find('.request-input');
+                var $editBtn = $(this);
+                var $cancelBtn = $(this).closest('.media-body').find('.cancel-edit');
+
+                $commentInput.removeAttr('readonly');
+                $editBtn.hide();
+                $cancelBtn.show();
+
+                var $submitBtn = $('<button type="submit" class="btn btn-primary submit-edit" onclick="editComment()">제출</button>');
+                $commentInput.after($submitBtn);
+            });
+
+            $('.cancel-edit').click(function(e) {
+                e.preventDefault();
+                var $commentInput = $(this).closest('.media-body').find('.request-input');
+                var $cancelBtn = $(this);
+                var $editBtn = $(this).closest('.media-body').find('.edit-request');
+
+                $commentInput.attr('readonly', 'readonly');
+                $cancelBtn.hide();
+                $editBtn.show();
+
+                $cancelBtn.siblings('.submit-edit').remove();
+            });
+
+
+
+
+
             var searchForm = $("#searchForm");
 
             $(".btn-search").click(function(e){
@@ -516,9 +661,8 @@
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-</body>
-
 </main>
+</body>
 <th:block th:replace="main/footer :: footer"></th:block>
 </html>
 

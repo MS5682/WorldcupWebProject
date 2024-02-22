@@ -59,9 +59,9 @@ public class PlayingController {
         pageRequestDTO.setOrder(1);
         PageResultDTO pageResultDTO = choiceService.getChoicePage(pageRequestDTO);
         worldcupDTO.setChoice(pageResultDTO.getDtoList());
-        WorldcupDTO worldcupChart = WorldcupDTO.builder().worldcupNum(worldcupDTO.getWorldcupNum()).build();
         String userId = (String) session.getAttribute("userId");
         model.addAttribute("userId", userId);
+        WorldcupDTO worldcupChart = WorldcupDTO.builder().worldcupNum(worldcupDTO.getWorldcupNum()).build();
         worldcupChart = choiceService.getTopTen(worldcupChart);
         pageRequestDTO.setCommentType(0);
         model.addAttribute("comment", commentService.getCommentPage(pageRequestDTO));

@@ -3,10 +3,12 @@ package com.world.cup.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(value={AuditingEntityListener.class})
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,4 +32,9 @@ public class Comment {
     @CreatedDate
     @Column(name="regdate",updatable = false)
     private LocalDateTime regDate;
+
+    public void changeContent(String content){
+        this.content = content;
+    }
+
 }
