@@ -219,32 +219,34 @@
     });
 
     $('.ReportBtn').click(function() {
-      console.log("1번",userId);
       if (!userId || userId.trim() === "") { // 만약 로그인한 사용자가 없다면
             alert("로그인이 필요합니다."); // 알림 창을 표시
             return;
       }else{
-        console.log("2번",userId);
         var worldCupTitle = $(this).closest('.card').find('.worldcup-name').text();
         var reporterId = userId;
         var worldcupNum = $(this).closest('.card').find('.worldcupNum').val();
 
         console.log(worldcupNum);
         $('#reportWorldCupNum').val(worldcupNum);
-        $('#reportWorldCupTitle').text(worldCupTitle);
-        $('#reporterId').text(reporterId);
+        $('#reportWorldCupTitle').text('제목 : '+worldCupTitle);
+        $('#reporterId').text('신고자 : '+reporterId);
         $('#reportContent').val('');//모달 창을 열때 신고 사유를 초기화
         $('#reportModal').modal('show');
+
+        // worldCupTitle을 reportModal 버튼의 데이터 속성에 설정
+        $('#reportModal .btn-primary').attr('data-worldcup-title', worldCupTitle);
       }
     });
 
     $('#reportModal .btn-primary').click(function() {
       var worldcupNum = $('#reportWorldCupNum').val();
-      var worldCupTitle = $('#reportWorldCupTitle').text();
       var reportContent = $('#reportContent').val();
-      var reporterId = $('#reporterId').text();
+      var reporterId = userId;
+      var worldcupTitle = $(this).attr('data-worldcup-title');
+
+      console.log(worldcupTitle);
       console.log(worldcupNum);
-      console.log(worldCupTitle);
       console.log(reportContent);
       console.log(reporterId);
 
@@ -253,7 +255,7 @@
         url: 'manager/manager_report',
         data: {
           worldcupNum :worldcupNum,
-          worldcupTitle: worldCupTitle,
+          worldcupTitle :worldcupTitle,
           reportContent: reportContent,
           reporter : reporterId
         },
