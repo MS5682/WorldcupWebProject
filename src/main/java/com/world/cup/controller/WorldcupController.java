@@ -1,10 +1,9 @@
 package com.world.cup.controller;
 
-import com.world.cup.dto.ChoiceDTO;
-import com.world.cup.dto.PageRequestDTO;
-import com.world.cup.dto.PageResultDTO;
-import com.world.cup.dto.WorldcupDTO;
+import com.world.cup.dto.*;
+import com.world.cup.entity.User;
 import com.world.cup.service.ChoiceService;
+import com.world.cup.service.EmailSendService;
 import com.world.cup.service.WorldcupService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +32,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @Controller
 @Log4j2
@@ -42,6 +42,7 @@ public class WorldcupController {
 
     private final WorldcupService worldcupService;
     private final ChoiceService choiceService;
+    private final EmailSendService emailSendService;
 
     @Autowired
     private Environment env;
@@ -239,6 +240,26 @@ public class WorldcupController {
     @Transactional
     public ResponseEntity<Boolean> delete(WorldcupDTO worldcupDTO) {
         worldcupDTO = choiceService.getChoiceToWorldcup(worldcupDTO);
+        log.info(worldcupDTO);
+        for (ChoiceDTO choiceDTO : worldcupDTO.getChoice()) {
+            if (choiceDTO.getUuid() != null) {
+                String fileName = choiceDTO.getImageURL();
+                removeFile(fileName);
+            }
+            choiceService.deleteChoice(choiceDTO);
+        }
+        worldcupService.deleteWorldcup(worldcupDTO);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteWithMsg")
+    @Transactional
+    public ResponseEntity<Boolean> deleteWithMsg(String id,WorldcupDTO worldcupDTO,int worldcupNum, String msg) {
+        worldcupDTO = choiceService.getChoiceToWorldcup(worldcupDTO);
+        CompletableFuture.runAsync(() -> {
+            MailDTO maildto = emailSendService.deleteAndMessage(id, worldcupNum, msg);
+            emailSendService.mailSend(maildto);
+        });
         log.info(worldcupDTO);
         for (ChoiceDTO choiceDTO : worldcupDTO.getChoice()) {
             if (choiceDTO.getUuid() != null) {
