@@ -43,138 +43,23 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void addChoice(CommentDTO commentDTO) {
-
+    public void addComment(CommentDTO commentDTO) {
+        Comment comment = dtoToEntity(commentDTO);
+        commentRepository.save(comment);
     }
 
     @Override
-    public void modifyChoiceName(CommentDTO commentDTO) {
-
+    @Transactional
+    public void modifyComment(CommentDTO commentDTO) {
+        Comment comment = commentRepository.getOne(commentDTO.getCommentNum());
+        if(comment != null){
+            comment.changeContent(commentDTO.getContent());
+        }
+        commentRepository.save(comment);
     }
 
     @Override
-    public void deleteChoice(CommentDTO commentDTO) {
-
+    public void deleteComment(CommentDTO commentDTO) {
+        commentRepository.deleteById(commentDTO.getCommentNum());
     }
-
-
-//    @Override
-//    @Transactional
-//    public WorldcupDTO getChoiceToWorldcup(WorldcupDTO worldcupDTO) {
-//        int worldcupNum = worldcupDTO.getWorldcupNum();
-//        List<Choice> choices = choiceRepository.getChoiceByWorldcupNum(worldcupNum, null);
-//
-//        List<ChoiceDTO> choiceDTOs = choices.stream()
-//                .map(this::entityToDto)
-//                .collect(Collectors.toList());
-//
-//        worldcupDTO.setChoice(choiceDTOs);
-//
-//        return worldcupDTO;
-//    }
-//    @Override
-//    public WorldcupDTO getTopTen(WorldcupDTO worldcupDTO) {
-//        int worldcupNum = worldcupDTO.getWorldcupNum();
-//        Pageable pageable = PageRequest.of(0, 10);
-//        List<Choice> choices = choiceRepository.getChoiceByWorldcupNum(worldcupNum, pageable);
-//
-//        List<ChoiceDTO> choiceDTOs = choices.stream()
-//                .map(this::entityToDto)
-//                .collect(Collectors.toList());
-//
-//        worldcupDTO.setChoice(choiceDTOs);
-//
-//        return worldcupDTO;
-//    }
-//    @Override
-//    public WorldcupDTO getChoiceRank(WorldcupDTO worldcupDTO) {
-//        int worldcupNum = worldcupDTO.getWorldcupNum();
-//        Pageable pageable = PageRequest.of(0, 3);
-//        List<Choice> choices = choiceRepository.getChoiceByWorldcupNum(worldcupNum, pageable);
-//
-//        List<ChoiceDTO> choiceDTOs = choices.stream()
-//                .map(this::entityToDto)
-//                .collect(Collectors.toList());
-//
-//        worldcupDTO.setChoice(choiceDTOs);
-//
-//        return worldcupDTO;
-//    }
-//
-//    @Override
-//    public PageResultDTO<ChoiceDTO, Object[]> getChoicePage(PageRequestDTO pageRequestDTO) {
-//        Function<Object[], ChoiceDTO> fn = ((en) -> entityToDto((Choice)en[0]));
-//        pageRequestDTO.setSize(5);
-//        Sort sort = null;
-//        if (pageRequestDTO.getOrder() == 0) {
-//            sort = Sort.by("choiceNum").descending();
-//        } else if(pageRequestDTO.getOrder() == 1) {
-//            sort = Sort.by("first").descending();
-//        }
-//        Pageable pageable = pageRequestDTO.getPageable(sort);
-//        Page<Object[]> result = choiceRepository.getChoiceList(pageRequestDTO.getType(),
-//                pageRequestDTO.getKeyword(),
-//                pageRequestDTO.getWorldcupNum(),
-//                pageable,
-//                null);
-//
-//
-//
-//        return new PageResultDTO<>(result,fn);
-//    }
-//
-//    @Override
-//    public Integer sumFirst(WorldcupDTO worldcupDTO) {
-//        return choiceRepository.sumFirstByWorldcupWorldcupNum(worldcupDTO.getWorldcupNum());
-//
-//    }
-//
-//    @Override
-//    public void addChoice(ChoiceDTO choiceDTO) {
-//        Choice choice = dtoToEntity(choiceDTO);
-//        choiceRepository.save(choice);
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void modifyChoiceName(ChoiceDTO choiceDTO) {
-//        Choice choice = choiceRepository.getOne(choiceDTO.getChoiceNum());
-//        if(choice != null){
-//            choice.changeName(choiceDTO.getName());
-//        }
-//        choiceRepository.save(choice);
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void modifyChoiceImg(ChoiceDTO choiceDTO) {
-//        Choice choice = choiceRepository.getOne(choiceDTO.getChoiceNum());
-//        if(choice != null){
-//            choice.changeImgName(choiceDTO.getImgName());
-//            choice.changePath(choiceDTO.getPath());
-//            choice.changeUuid(choiceDTO.getUuid());
-//        }
-//        choiceRepository.save(choice);
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void modifyChoiceVideo(ChoiceDTO choiceDTO) {
-//        Choice choice = choiceRepository.getOne(choiceDTO.getChoiceNum());
-//        if(choice != null){
-//            choice.changePath(choiceDTO.getPath());
-//            choice.changeImgName(choiceDTO.getImgName());
-//        }
-//        log.info(choiceDTO);
-//        log.info(choice);
-//        choiceRepository.save(choice);
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void deleteChoice(ChoiceDTO choiceDTO) {
-//        choiceRepository.deleteById(choiceDTO.getChoiceNum());
-//    }
-
-
 }

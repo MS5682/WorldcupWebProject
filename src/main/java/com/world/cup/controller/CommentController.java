@@ -1,10 +1,8 @@
 package com.world.cup.controller;
 
-import com.world.cup.dto.ChoiceDTO;
-import com.world.cup.dto.PageRequestDTO;
-import com.world.cup.dto.PageResultDTO;
-import com.world.cup.dto.WorldcupDTO;
+import com.world.cup.dto.*;
 import com.world.cup.service.ChoiceService;
+import com.world.cup.service.CommentService;
 import com.world.cup.service.WorldcupService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -38,5 +36,26 @@ import java.util.UUID;
 @RequestMapping("/comment")
 @RequiredArgsConstructor
 public class CommentController {
+    private final CommentService commentService;
+    @PostMapping("/add")
+    public ResponseEntity<Boolean> add(CommentDTO commentDTO, HttpSession session) {
+        commentDTO.setId((String) session.getAttribute("userId"));
+        commentService.addComment(commentDTO);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @PostMapping("/edit")
+    public ResponseEntity<Boolean> edit(CommentDTO commentDTO) {
+        commentService.modifyComment(commentDTO);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+
+    @PostMapping("/delete")
+    public ResponseEntity<Boolean> delete(CommentDTO commentDTO) {
+        commentService.deleteComment(commentDTO);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
 
 }

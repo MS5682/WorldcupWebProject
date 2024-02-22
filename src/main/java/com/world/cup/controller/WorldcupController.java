@@ -110,10 +110,12 @@ public class WorldcupController {
             return "redirect:/";
         }
         PageResultDTO pageResultDTO = choiceService.getChoicePage(pageRequestDTO);
+        Integer choiceCount = choiceService.choiceCount(pageRequestDTO.getWorldcupNum());
         worldcupDTO.setChoice(pageResultDTO.getDtoList());
         log.info(pageResultDTO.getStart());
         model.addAttribute("worldcup", worldcupDTO);
         model.addAttribute("choices", pageResultDTO);
+        model.addAttribute("choiceCount", choiceCount);
         return "/user/worldcup_edit.html";
     }
 

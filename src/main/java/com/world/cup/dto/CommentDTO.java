@@ -19,7 +19,7 @@ public class CommentDTO {
     private String content;
     private int type;
     private int worldcupNum;
-    private int choiceNum;
+    private Integer choiceNum;
     private String choiceName;
     private String id;
     private LocalDateTime regDate;

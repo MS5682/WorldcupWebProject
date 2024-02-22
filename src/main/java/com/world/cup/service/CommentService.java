@@ -9,16 +9,19 @@ import com.world.cup.entity.Worldcup;
 
 public interface CommentService {
     PageResultDTO<CommentDTO, Object[]> getCommentPage(PageRequestDTO pageRequestDTO);
-    void addChoice(CommentDTO commentDTO);
-    void modifyChoiceName(CommentDTO commentDTO);
-    void deleteChoice(CommentDTO commentDTO);
+    void addComment(CommentDTO commentDTO);
+    void modifyComment(CommentDTO commentDTO);
+    void deleteComment(CommentDTO commentDTO);
     default Comment dtoToEntity(CommentDTO commentDTO){
         Worldcup worldcup = Worldcup.builder()
                 .worldcupNum(commentDTO.getWorldcupNum())
                 .build();
-        Choice choice = Choice.builder()
-                .choiceNum(commentDTO.getChoiceNum())
-                .build();
+        Choice choice = null;
+        if(commentDTO.getChoiceNum() != null) {
+            choice = Choice.builder()
+                    .choiceNum(commentDTO.getChoiceNum())
+                    .build();
+        }
         User user = User.builder()
                 .id(commentDTO.getId())
                 .build();

@@ -16,6 +16,7 @@ public interface ChoiceService {
 
     Integer sumFirst(WorldcupDTO worldcupDTO);
 
+    Integer choiceCount(int worldcupNum);
     void addChoice(ChoiceDTO choiceDTO);
 
     void modifyChoiceName(ChoiceDTO choiceDTO);
