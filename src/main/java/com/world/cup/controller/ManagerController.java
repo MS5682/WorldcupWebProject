@@ -61,7 +61,7 @@ public class ManagerController {
 //        return("redirect:/manager/manager_memberList");
 //    }
     //Restful 방식으로 변경
-    @DeleteMapping("/{id}/manager_memberDelete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> memberDelete(@PathVariable String id){
         userService.DeleteMember(id);
         return ResponseEntity.noContent().build();
@@ -75,7 +75,7 @@ public class ManagerController {
 //        return("redirect:/manager/manager_memberList");
 //    }
     //Restful 방식으로 변경
-    @PutMapping("/{worldcupNum}/disclosureUpdate")
+    @PutMapping("/{worldcupNum}")
     public ResponseEntity<Void> updateWorldcupDisclosure(@PathVariable int worldcupNum) {
         worldcupService.updateDisclousre(worldcupNum);
         return ResponseEntity.noContent().build();
