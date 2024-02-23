@@ -116,7 +116,7 @@
 
             $.ajax({
                 type: 'PUT',
-                url: '/manager/'+worldcupNum+'/disclosureUpdate',
+                url: '/manager/'+worldcupNum,
                 success: function(response) {
                     if(confirm("비공개 처리 하시겠습니까?")){
                         alert(worldcupTitle+'이 비공개 처리되었습니다');

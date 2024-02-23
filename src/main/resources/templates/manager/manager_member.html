@@ -84,7 +84,7 @@
 
             $.ajax({
                 type: 'Delete',
-                url: '/manager/'+id+'/manager_memberDelete',
+                url: '/manager/'+id,
                 success: function(response) {
                     if(confirm("삭제하시겠습니까?")){
                         alert(id+'를 가진 회원 정보가 삭제되었습니다.');
