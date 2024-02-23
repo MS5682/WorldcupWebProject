@@ -15,10 +15,16 @@ public class Proceed {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int proceedNum;
 
+    @ManyToOne
+    private Choice choice;
+
     private int round;
 
-    private int curRound;
-    private int curSeq;
+    private int win;
+    private int lose;
+    private int first;
+
+    private int next;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Worldcup worldcup;
