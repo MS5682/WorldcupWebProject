@@ -44,7 +44,7 @@ public class ChoiceServiceImpl implements ChoiceService {
     @Override
     public WorldcupDTO getTopTen(WorldcupDTO worldcupDTO) {
         int worldcupNum = worldcupDTO.getWorldcupNum();
-        Pageable pageable = PageRequest.of(0, 10);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("first").descending());
         List<Choice> choices = choiceRepository.getChoiceByWorldcupNum(worldcupNum, pageable);
 
         List<ChoiceDTO> choiceDTOs = choices.stream()
@@ -58,7 +58,7 @@ public class ChoiceServiceImpl implements ChoiceService {
     @Override
     public WorldcupDTO getChoiceRank(WorldcupDTO worldcupDTO) {
         int worldcupNum = worldcupDTO.getWorldcupNum();
-        Pageable pageable = PageRequest.of(0, 3);
+        Pageable pageable = PageRequest.of(0, 3, Sort.by("first").descending());
         List<Choice> choices = choiceRepository.getChoiceByWorldcupNum(worldcupNum, pageable);
 
         List<ChoiceDTO> choiceDTOs = choices.stream()
@@ -96,6 +96,11 @@ public class ChoiceServiceImpl implements ChoiceService {
     public Integer sumFirst(WorldcupDTO worldcupDTO) {
         return choiceRepository.sumFirstByWorldcupWorldcupNum(worldcupDTO.getWorldcupNum());
 
+    }
+
+    @Override
+    public Integer choiceCount(int worldcupNum) {
+        return choiceRepository.getChoiceCount(worldcupNum);
     }
 
     @Override

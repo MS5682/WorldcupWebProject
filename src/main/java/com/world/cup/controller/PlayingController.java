@@ -6,6 +6,7 @@ import com.world.cup.dto.PageRequestDTO;
 import com.world.cup.dto.PageResultDTO;
 import com.world.cup.dto.WorldcupDTO;
 import com.world.cup.service.ChoiceService;
+import com.world.cup.service.CommentService;
 import com.world.cup.service.PlayingService;
 import com.world.cup.service.WorldcupService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,8 @@ public class PlayingController {
     private final WorldcupService worldcupService;
     private final ChoiceService choiceService;
     private final ProceedService proceedService;
+    private final CommentService commentService;
+
 
     @GetMapping("/playing")
     public String playing(int worldCupID, Model model) {
@@ -49,7 +52,7 @@ public class PlayingController {
     }
 
     @GetMapping("/playResult")
-    public void playResult(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model){
+    public void playResult(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model,HttpSession session){
         WorldcupDTO worldcupDTO = WorldcupDTO.builder().worldcupNum(pageRequestDTO.getWorldcupNum()).build();
         WorldcupDTO choiceRank = choiceService.getChoiceRank(worldcupDTO);
         worldcupDTO = worldcupService.getWorldcup(worldcupDTO);
@@ -57,10 +60,14 @@ public class PlayingController {
         pageRequestDTO.setOrder(1);
         PageResultDTO pageResultDTO = choiceService.getChoicePage(pageRequestDTO);
         worldcupDTO.setChoice(pageResultDTO.getDtoList());
+        String userId = (String) session.getAttribute("userId");
+        model.addAttribute("userId", userId);
         WorldcupDTO worldcupChart = WorldcupDTO.builder().worldcupNum(worldcupDTO.getWorldcupNum()).build();
         worldcupChart = choiceService.getTopTen(worldcupChart);
-
-        log.info(worldcupChart.getChoice());
+        pageRequestDTO.setCommentType(0);
+        model.addAttribute("comment", commentService.getCommentPage(pageRequestDTO));
+        pageRequestDTO.setCommentType(1);
+        model.addAttribute("request", commentService.getCommentPage(pageRequestDTO));
         model.addAttribute("worldcup", worldcupDTO);
         model.addAttribute("sumFirst", sumFirst);
         model.addAttribute("rank", choiceRank);

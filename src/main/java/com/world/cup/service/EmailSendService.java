@@ -2,8 +2,11 @@ package com.world.cup.service;
 
 import com.world.cup.dto.MailDTO;
 import com.world.cup.dto.UserDTO;
+import com.world.cup.dto.WorldcupDTO;
 import com.world.cup.entity.User;
+import com.world.cup.entity.Worldcup;
 import com.world.cup.repository.UserRepository;
+import com.world.cup.repository.WorldcupRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -12,11 +15,13 @@ import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
 
+
 @Service
 @RequiredArgsConstructor
 public class EmailSendService {
     private final UserRepository userRepository;
     private final JavaMailSender mailSender;
+    private final WorldcupRepository worldcupRepository;
     private static final String FROM_ADDRESS = "tndus28901@gmail.com";
 
     public MailDTO createMailAndChargePassword(UserDTO userDTO) {
@@ -27,6 +32,19 @@ public class EmailSendService {
         dto.setMessage("안녕하세요. 마이픽에서 보내는 임시비밀번호 안내 관련 메일 입니다.\n\n" + " " + userDTO.getId() + " " + "님의 임시 비밀번호는 "
                 + str +" 입니다.\n\n 로그인 후에 비밀번호를 변경해주세요.");
         updatePassword(str,userDTO);
+        return dto;
+    }
+
+    public MailDTO deleteAndMessage(String id,int worldcupNum,String msg) {
+        MailDTO dto = new MailDTO();
+        User user = userRepository.getUserById(id);
+        Worldcup worldcup =(Worldcup) worldcupRepository.getWorldcupByWorldcupNum(worldcupNum);
+        dto.setAddress(user.getEmail());
+        dto.setTitle("[마이픽] "+id+"님의 ["+worldcup.getTitle()+"]이 신고로 인해 삭제되었습니다.");
+        dto.setMessage("안녕하세요. 마이픽에서 보내는 월드컵 삭제 관련 메일 입니다.\n\n" + " " + id + " " + "님의 "
+                +worldcup.getTitle()+"이 신고로 인해 삭제되었습니다\n\n"
+                + "삭제 사유는 다음과 같습니다\n\n" + msg);
+
         return dto;
     }
 
