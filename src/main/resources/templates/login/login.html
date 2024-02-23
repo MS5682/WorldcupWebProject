@@ -50,9 +50,11 @@
 							<button type="submit" class="btn btn-primary rounded submit  px-5 w-100">로그인</button>
 						</div>
 
-<!--						<div class="form-group w-100">-->
-<!--							<div class="g-signin2" data-longtitle="true" data-width="349" data-onsuccess="onGoogleSignIn" ></div>-->
-<!--						</div>-->
+						<div class="form-group">
+							<a th:href="@{/worldcup/login/naver}" >
+								<img class="w-100 rounded" style="height: 40px; object-fit: cover;" th:src="@{../login/images/naverlogin.png}" alt="네이버로 로그인">
+							</a>
+						</div>
 
 
 						<div class="form-group text-right">
@@ -63,6 +65,8 @@
 							</div>
 							<div class="g_id_signin"  data-type="standard"></div>
                       </div>
+
+
 
 
 					</form>
@@ -117,34 +121,6 @@
 			return JSON.parse(jsonPayload);
 		}
 
-
-
-
-
-<!--   function onSignIn(googleUser) {-->
-<!--     var profile = googleUser.getBasicProfile();-->
-<!--     console.log('ID: ' + profile.getId());-->
-<!--     console.log('Name: ' + profile.getName());-->
-<!--     console.log('Image URL: ' + profile.getImageUrl());-->
-<!--     console.log('Email: ' + profile.getEmail());-->
-
-
-<!--     $.ajax({-->
-<!--       type: "POST",-->
-<!--       url: "/worldcup/login/google",-->
-<!--       data: {-->
-<!--           googleId: profile.getId(),-->
-<!--           googleName: profile.getName()-->
-<!--       },-->
-<!--       success: function (response) {-->
-
-<!--           console.log('Google login successful');-->
-<!--       },-->
-<!--       error: function () {-->
-<!--           alert("구글 로그인에 실패했습니다.");-->
-<!--       }-->
-<!--     });-->
-<!--   }-->
 
 
    /*<![CDATA[*/
