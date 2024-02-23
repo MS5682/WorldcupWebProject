@@ -13,6 +13,10 @@ public interface UserService {
 
     void googleSignup(GoogleDTO googleDTO);
 
+    void naverSignup(GoogleDTO googleDTO);
+
+    String checkPassword(String email);
+
     boolean login(UserDTO userDTO);
 
     String findId(String email);
@@ -20,6 +24,8 @@ public interface UserService {
     boolean findPassword(String id,String password);
 
     boolean editPassword(String id,String newPassword);
+
+
     boolean isIdExists(String id);
 
     boolean isEmailExists(String email);
@@ -46,6 +52,13 @@ public interface UserService {
         User user = User.builder().id(googleDTO.getGid()).email(googleDTO.getEmail()).password("google")
               .userRole("user")
               .build();
+
+        return user;
+    }
+    default User naverDtoToEntity(GoogleDTO googleDTO){
+        User user = User.builder().id(googleDTO.getGid()).email(googleDTO.getEmail()).password("naver")
+                .userRole("user")
+                .build();
 
         return user;
     }
