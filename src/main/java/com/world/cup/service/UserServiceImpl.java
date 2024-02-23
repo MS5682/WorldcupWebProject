@@ -43,7 +43,24 @@ public class UserServiceImpl implements UserService{
         User user = googleDtoToEntity(googleDTO);
         userRepository.save(user);
 
+    }
 
+    @Override
+    public void naverSignup(GoogleDTO googleDTO) {
+        if(!userRepository.existsByEmail(googleDTO.getEmail())){
+            User user = naverDtoToEntity(googleDTO);
+            userRepository.save(user);
+        }
+
+    }
+
+    @Override
+    public String checkPassword(String email) {
+        Optional<User> result = userRepository.findByEmail(email);
+        if (result.isPresent()){
+            return result.get().getPassword();
+        }
+        return null;
     }
 
     @Override
@@ -55,14 +72,17 @@ public class UserServiceImpl implements UserService{
     @Override
     public String findId(String email) {
         Optional<User> result = userRepository.findByEmail(email);
-        if(result.get().getPassword().equals("google")){
-            return "구글아이디로 가입된 계정";
-        }else{
-            if(result.isPresent()){
-                return result.get().getId();
-            }else {
-                return null;
+        if(result.isPresent()){
+            if(result.get().getPassword().equals("google")){
+                return "구글아이디로 가입된 계정";
+            }else if(result.get().getPassword().equals("naver")){
+                return "네이버아이디로 가입된 계정";
             }
+            else {
+                return result.get().getId();
+            }
+        }else {
+            return null;
         }
 
 
