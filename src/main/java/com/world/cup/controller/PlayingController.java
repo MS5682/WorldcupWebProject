@@ -90,4 +90,10 @@ public class PlayingController {
 
         return ResponseEntity.ok("success");
     }
+
+    @PostMapping("/playing/finalsave")
+    public ResponseEntity<String> finalsave(@RequestBody SaveDTO saveDTO) {
+
+        return ResponseEntity.ok("success");
+    }
 }
