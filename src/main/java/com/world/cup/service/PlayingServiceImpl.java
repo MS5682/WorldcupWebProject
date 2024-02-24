@@ -27,4 +27,11 @@ public class PlayingServiceImpl implements PlayingService {
 
         return title;
     }
+
+    @Override
+    public List<Choiceinterface> selectQuiz(int worldCupID) {
+        List<Choiceinterface> quiz = playingRepository.selectCandi(worldCupID);
+
+        return quiz;
+    }
 }
