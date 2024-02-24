@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>퀴즈</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/album/">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+    <link th:href="@{/css/quiz.css}" rel="stylesheet">
+</head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<body>
+    <div class="modal fade" id="startQuizModal" tabindex="-1" aria-labelledby="startQuizModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="startQuizModalLabel" th:text="${worldcup.title}"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    총 <span th:text="${count}"></span>개의 후보가 있습니다.
+
+                    <select id="quiz" class="form-select totalRound" aria-label="Default select example" style="margin-bottom: 5px">
+                        <option selected>몇개의 퀴즈를 푸실건가요?</option>
+                        <option th:if="${count} >= 10" th:value="10">10개 풀기</option>
+                        <option th:if="${count} >= 20" th:value="20">20개 풀기</option>
+                        <option th:if="${count} >= 30" th:value="30">30개 풀기</option>
+                        <option th:if="${count} >= 40" th:value="40">40개 풀기</option>
+                        <option th:if="${count} >= 50" th:value="50">50개 풀기</option>
+                        <option th:unless="${count} >= 10" th:value="${count}">[[${count}]]개 풀기</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <h5>정답은 공백 없이 입력해주세요</h5>
+                    <button type="button" class="btn btn-primary startBtn">시작</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <main>
+        <input type="hidden" name="worldcupNum" id="worldcupNum" th:value="${worldcup.worldcupNum}">
+        <div class="text-bg-dark p-3" style="min-height: 100vh">
+            <h1 class="position-absolute start-50 translate-middle mt-5 worldcup-name" th:text="${worldcup.title}"></h1>
+            <div class="container">
+                <div id="image-container" class="quiz">
+
+                </div>
+                <div id="input-container">
+                    <input type="text" id="answer-input" placeholder="정답을 입력하세요">
+                    <button type="button" class="btn btn-primary answer">></button>
+                    <div id="result-message" style="display: none;"></div>
+                    <button type="button" id="next-button" class="btn btn-primary m-2" style="display: none;">다음</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+<script th:inline="javascript">
+
+    var quizData = [[${quiz}]]; // 퀴즈 데이터
+    var usedIndexes = new Set(); // 변수명 수정 및 Set 객체 이름 수정
+    var count = 0;
+    var quizNum;
+
+    // 페이지 로드 시 초기화
+    $(function() {
+        $('#startQuizModal').modal('show');
+
+        // 정답 확인 버튼 클릭 이벤트
+        $('.answer').click(function() {
+            var userAnswer = $('#answer-input').val();
+            var correctAnswer = $('#answer-input').data('answer');
+            if(userAnswer.trim()===""){
+                alert("정답을 입력하세요");
+                return;
+            }
+            if (userAnswer.trim().toLowerCase() === correctAnswer.toLowerCase()) {
+                $('#result-message').html('<h2 class="m-2" style="color:blue;">정답입니다</h2>').show();
+                $('#next-button').show();
+                count++;
+            } else {
+                $('#result-message').html('<h2 class="m-2" style="color:red;">오답입니다</h2>').show();
+                $('#next-button').show();
+            }
+
+            //입력창과 버튼 숨기기
+            $('#answer-input').hide();
+            $('.answer').hide();
+        });//// 정답 확인 버튼 클릭 이벤트 끝
+
+        // 초기화 함수(퀴즈 불러오기)
+        function initialize() {
+            showRandomQuiz();
+            $('#answer-input').val(''); // 입력창 비우기
+            $('#result-message').hide(); // 결과 메시지 숨기기
+            $('#next-button').hide(); // 다음 퀴즈 버튼 숨기기
+
+        }// 초기화 함수(퀴즈 불러오기) 끝
+
+        // 이미지 및 퀴즈 업데이트 함수
+        function updateQuiz(index) {
+            var quiz = quizData[index];
+            console.log(quiz.type);
+            if(quiz.type===1){ //사진일 경우
+                $('.quiz').html('<img src="../../uploads/' + quiz.path + "/" + quiz.uuid + "_" + quiz.imgName + '"'+
+                 'style="min-width: 100%; height: 50vh; margin-top: 10px"/>');
+                $('#answer-input').data('answer', quiz.name); // 정답 데이터 설정
+            }else if(quiz.type===0){//영상일 경우
+                $('.quiz').html('<iframe style="min-width: 100%; height: 50vh; margin-top: 10px"' +
+                    'src="https://www.youtube.com/embed/' + quiz.imgName + '">' +
+                    '</iframe>');
+                $('#answer-input').data('answer', quiz.name); // 정답 데이터 설정
+            }
+        }// 이미지 및 퀴즈 업데이트 함수 끝
+
+        // 랜덤한 퀴즈 표시 함수
+        function showRandomQuiz() {
+            // 모든 퀴즈를 완료했으면 결과 페이지로 이동
+            if (usedIndexes.size === quizNum) {
+                console.log(quizNum);
+                window.location.href = "/play/playResult?worldcupNum="+$('#worldcupNum').val(); //quiz가 끝나면 result로 이동
+                return;
+            }
+
+            var randomIndex;
+            // 사용되지 않은 랜덤한 인덱스 생성
+            while (true) {
+                randomIndex = Math.floor(Math.random() * quizData.length);
+                if (!usedIndexes.has(randomIndex)) {
+                    usedIndexes.add(randomIndex);
+                    break;
+                }
+            }
+
+            // 랜덤한 퀴즈 표시
+            updateQuiz(randomIndex);
+        }// 랜덤한 퀴즈 표시 함수 끝
+
+
+        // 다음 퀴즈 버튼 클릭 이벤트
+        $('#next-button').click(function() {
+            initialize();
+            $('#answer-input').show().focus();
+            $('.answer').show();
+        });//다음 퀴즈 버튼 끝
+
+        //시작 버튼
+        $('.startBtn').on('click', function () {
+            quizNum =  parseInt($('#quiz').val());
+            console.log(quizNum);
+            initialize();
+            $('#startQuizModal').modal('hide');
+            $('#answer-input').focus();
+        });// 시작 버튼 클릭 끝
+
+        //엔터키로 버튼 클릭
+        $(document).keypress(function(event) {
+            if (event.which === 13) {
+                if($('#answer-input').is(':visible')){
+                    $('.answer').click(); //입력창이 있을 경우 정답 확인 버튼 클릭
+                }else{
+                    $('#next-button').click(); // 다음 퀴즈 버튼 클릭
+                }
+            }
+        });//엔터키로 버튼 클릭 끝
+    });
+
+</script>
+</html>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

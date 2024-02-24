@@ -91,4 +91,14 @@ public class PlayingController {
 
         return ResponseEntity.ok("success");
     }
+
+    @GetMapping("/playing/quiz")
+    public String quiz(int worldCupID,Model model){
+
+        model.addAttribute("worldcup", playingService.worldCupTitle(worldCupID));
+        model.addAttribute("quiz", playingService.selectQuiz(worldCupID));
+        model.addAttribute("count", playingService.selectQuiz(worldCupID).size());
+
+        return "/play/quiz.html";
+    }
 }
