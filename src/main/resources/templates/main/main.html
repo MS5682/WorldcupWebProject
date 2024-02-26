@@ -97,9 +97,10 @@
 
                   <div class="btn-group">
                     <input type="hidden" class="worldcupNum" th:value="${worldcupDTO.worldcupNum}">
-                    <a th:href="@{/play/playing(worldCupID = ${worldcupDTO.worldcupNum})}"><button type="button" class="btn btn-sm btn-outline-secondary startBtn">시작하기</button></a>
-                    <a th:href="@{/play/playResult(worldcupNum = ${worldcupDTO.worldcupNum})}"><button type="button" class="btn btn-sm btn-outline-secondary">결과보기</button></a>
-                    <button type="button" class="btn btn-sm btn-outline-secondary ReportBtn" th:text="신고하기"
+                    <a th:href="@{/play/playing/quiz(worldCupID = ${worldcupDTO.worldcupNum})}"><button type="button" class="btn btn-sm btn-outline-secondary quizBtn">퀴즈</button></a>
+                    <a th:href="@{/play/playing(worldCupID = ${worldcupDTO.worldcupNum})}"><button type="button" class="btn btn-sm btn-outline-secondary startBtn">월드컵</button></a>
+                    <a th:href="@{/play/playResult(worldcupNum = ${worldcupDTO.worldcupNum})}"><button type="button" class="btn btn-sm btn-outline-secondary">결과</button></a>
+                    <button type="button" class="btn btn-sm btn-outline-secondary ReportBtn" th:text="신고"
                              data-bs-target="#reportModal" ></button>
                   </div>
                 </div>

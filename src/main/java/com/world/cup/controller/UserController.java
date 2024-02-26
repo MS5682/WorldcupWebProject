@@ -223,8 +223,8 @@ public class UserController {
                                                                 @RequestParam("googleEmail") String googleEmail,
                                                   HttpSession session, HttpServletResponse response) {
 
-        session.setAttribute("googleId", googleId);
-        session.setAttribute("userId", googleId);
+//        session.setAttribute("googleId", googleId);
+//        session.setAttribute("userId", googleId);
 
         if(googleId!=null){
             GoogleDTO googleDTO = new GoogleDTO();
@@ -232,6 +232,20 @@ public class UserController {
             googleDTO.setEmail(googleEmail);
             userService.googleSignup(googleDTO);
         }
+
+        Map<String, String> responseData = new HashMap<>();
+//        responseData.put("redirectUrl", "/");
+
+        return ResponseEntity.ok(responseData);
+    }
+    @PostMapping("/login/google/success")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>>  loginWithGoogleSuccess(@RequestParam("googleId") String googleId,
+                                                                @RequestParam("googleEmail") String googleEmail,
+                                                                HttpSession session, HttpServletResponse response) {
+
+        session.setAttribute("googleId", googleId);
+        session.setAttribute("userId", googleId);
 
         Map<String, String> responseData = new HashMap<>();
         responseData.put("redirectUrl", "/");

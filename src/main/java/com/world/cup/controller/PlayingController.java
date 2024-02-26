@@ -9,6 +9,7 @@ import com.world.cup.service.ChoiceService;
 import com.world.cup.service.CommentService;
 import com.world.cup.service.PlayingService;
 import com.world.cup.service.WorldcupService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -52,7 +53,7 @@ public class PlayingController {
     }
 
     @GetMapping("/playResult")
-    public void playResult(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model,HttpSession session){
+    public void playResult(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model, HttpSession session){
         WorldcupDTO worldcupDTO = WorldcupDTO.builder().worldcupNum(pageRequestDTO.getWorldcupNum()).build();
         WorldcupDTO choiceRank = choiceService.getChoiceRank(worldcupDTO);
         worldcupDTO = worldcupService.getWorldcup(worldcupDTO);
@@ -91,9 +92,20 @@ public class PlayingController {
         return ResponseEntity.ok("success");
     }
 
+<<<<<<< HEAD
     @PostMapping("/playing/finalsave")
     public ResponseEntity<String> finalsave(@RequestBody SaveDTO saveDTO) {
 
         return ResponseEntity.ok("success");
+=======
+    @GetMapping("/playing/quiz")
+    public String quiz(int worldCupID,Model model){
+
+        model.addAttribute("worldcup", playingService.worldCupTitle(worldCupID));
+        model.addAttribute("quiz", playingService.selectQuiz(worldCupID));
+        model.addAttribute("count", playingService.selectQuiz(worldCupID).size());
+
+        return "/play/quiz.html";
+>>>>>>> origin/main
     }
 }

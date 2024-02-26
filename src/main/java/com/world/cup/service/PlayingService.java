@@ -10,4 +10,6 @@ public interface PlayingService {
     List<Choiceinterface> selectCandi(int worldCupID);
 
     Worldcup worldCupTitle(int worldCupID);
+
+    List<Choiceinterface> selectQuiz(int worldCupID);
 }

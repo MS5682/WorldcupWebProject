@@ -1,0 +1,54 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  #image-container {
+    position: relative;
+    margin-bottom: 20px;
+    width: 50%;
+    display:flex;
+    justify-content: center;
+  }
+  #image-container img {
+    display: block;
+    margin: 0 auto;
+  }
+  #input-container {
+    display: flex;
+    justify-content: center;
+    width:70%;
+  }
+  #input-container input[type="text"] {
+    width:100%;
+    height: 50px; /* 입력창 높이 조정 */
+    font-size: 20px; /* 입력창 글꼴 크기 조정 */
+    margin-right: 15px;
+    border: 2px solid blue;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 191, 255, 0.5);
+  }
+  #input-container button.answer {
+    min-width: 80px; /* 버튼 너비 조정 */
+    height: 50px; /* 버튼 높이 조정 */
+    font-size: 30px; /* 버튼 글꼴 크기 조정 */
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #input-container button#next-button {
+    width: 80px; /* 버튼 너비 조정 */
+    height: 50px; /* 버튼 높이 조정 */
+    font-size: 20px; /* 버튼 글꼴 크기 조정 */
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }

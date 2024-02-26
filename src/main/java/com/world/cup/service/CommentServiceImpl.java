@@ -3,6 +3,7 @@ package com.world.cup.service;
 import com.world.cup.dto.*;
 import com.world.cup.entity.Choice;
 import com.world.cup.entity.Comment;
+import com.world.cup.entity.User;
 import com.world.cup.repository.ChoiceRepository;
 import com.world.cup.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public PageResultDTO<CommentDTO, Object[]> getCommentPage(PageRequestDTO pageRequestDTO) {
-        Function<Object[], CommentDTO> fn = ((en) -> entityToDto((Comment) en[0]));
+        Function<Object[], CommentDTO> fn = ((en) -> entityToDto((Comment) en[0], (User) en[1]));
         Sort sort = Sort.by("regDate").descending();
         Pageable pageable = pageRequestDTO.getCommentPageable(sort);
         if(pageRequestDTO.getCommentType() == 1){
