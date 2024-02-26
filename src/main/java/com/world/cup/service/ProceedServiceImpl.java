@@ -1,6 +1,5 @@
 package com.world.cup.service;
 
-import com.world.cup.Proceedinterface;
 import com.world.cup.dto.SaveDTO;
 import com.world.cup.entity.Choice;
 import com.world.cup.entity.Proceed;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Builder
@@ -100,29 +100,48 @@ public class ProceedServiceImpl implements ProceedService {
         }
     }
 
-//    @Override
-//    public boolean havesave(String userId, int worldcupNum) {
-//        List<Proceed> checksave = repository.endPlayResult(userId, worldcupNum);
-//
-//        System.out.println("확인용");
-//        System.out.println(checksave);
-//        System.out.println(checksave.isEmpty());
-//        if (checksave.isEmpty()) {
-//            return false;
-//        } else {
-//            return true;
-//        }
-//    }
-//
-//    @Override
-//    public List<Proceedinterface> savefileload(String userId, int worldcupNum) {
-//        List<Proceedinterface> savefile = repository.loadCandi(userId, worldcupNum);
-//
-//        return savefile;
-//    }
-//
-//    @Override
-//    public int findChoiceNum(int proceedNum) {
-//        return repository.findchoicenum(proceedNum);
-//    }
+    @Override
+    public List<Choice> savefileload(String userId, int worldcupNum) {
+
+        List<Proceed> proceedList = repository.findProceedsByUserIdAndWorldcup_WorldcupNum(userId, worldcupNum);
+
+        System.out.println("proceedList 확인---------------------------");
+        System.out.println(proceedList);
+
+        List<Choice> choiceList = new ArrayList<>();
+
+        for (Proceed p : proceedList) {
+            Choice c = Choice.builder()
+                    .choiceNum(p.getChoice().getChoiceNum())
+                    .name(p.getChoice().getName())
+                    .type(p.getChoice().getType())
+                    .worldcup(p.getChoice().getWorldcup())
+                    .imgName(p.getChoice().getImgName())
+                    .path(p.getChoice().getPath())
+                    .uuid(p.getChoice().getUuid())
+                    .win(p.getWin())
+                    .lose(p.getLose())
+                    .build();
+            choiceList.add(c);
+        }
+
+        System.out.println("choiceList 확인");
+        System.out.println(choiceList);
+
+        return choiceList;
+    }
+
+    @Override
+    public boolean havesave(String userId, int worldcupNum) {
+        List<Proceed> checksave = repository.endPlayResult(userId, worldcupNum);
+
+        System.out.println("확인용");
+        System.out.println(checksave);
+        System.out.println(checksave.isEmpty());
+        if (checksave.isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

@@ -1,41 +1,31 @@
-// var saveplay = true
-//
-// $(document).ready(function () { // 세이브 파일 체크
-//     if ($('#issave').val() == 'true') {
-//         console.log('저장있음')
-//         if (confirm('저장된 월드컵이 있습니다. 이어서 진행하시겠습니까?')) {
-//             $.ajax({
-//                 type: 'get',
-//                 url: '/play/playing/loadsave',
-//                 data: {
-//                     userId: 'test1234',
-//                     worldcupId: $('#worldNum').val()
-//                 },
-//                 dataType: 'text',
-//                 success: function (result) {
-//                     savedCandi = document.querySelector('#candi')
-//                     savedCandi.value = result;
-//                     saveplay = false
-//
-//                     console.log(savedCandi)
-//
-//                     savestart();
-//                 },
-//                 error: function (request, status, error) {
-//                     console.log(error)
-//                 }
-//             })
-//         } else {
-//             $('.modal').modal('show');
-//         }
-//     } else {
-//         console.log('저장없음')
-//         $('.modal').modal('show');
-//     }
-// });
+var saveplay = true
 
-$(document).ready(function () {
-    $('.modal').modal('show');
+$(document).ready(function () { // 세이브 파일 체크
+    if ($('#issave').val() == 'true') {
+        console.log('저장있음')
+        if (confirm('저장된 월드컵이 있습니다. 이어서 진행하시겠습니까?')) {
+            $.ajax({
+                type: 'get',
+                url: '/play/playing/loadsave',
+                data: {
+                    userId: 'test1234',
+                    worldcupId: $('#worldNum').val()
+                },
+                dataType: 'text',
+                success: function (result) {
+                    console.log(result);
+                },
+                error: function (request, status, error) {
+                    console.log(error)
+                }
+            })
+        } else {
+            $('.modal').modal('show');
+        }
+    } else {
+        console.log('저장없음')
+        $('.modal').modal('show');
+    }
 });
 
 $('.form-check-input').on('click', function () {    // 타이머 설정 시 타이머 시간 보이게 하기

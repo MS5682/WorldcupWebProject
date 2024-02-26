@@ -1,10 +1,13 @@
 package com.world.cup.controller;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.world.cup.dto.PageRequestDTO;
 import com.world.cup.dto.PageResultDTO;
 import com.world.cup.dto.WorldcupDTO;
+import com.world.cup.entity.Choice;
 import com.world.cup.service.ChoiceService;
 import com.world.cup.service.CommentService;
 import com.world.cup.service.PlayingService;
@@ -22,6 +25,8 @@ import com.world.cup.service.ProceedService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @Log4j2
 @RequestMapping("/play")
@@ -36,9 +41,9 @@ public class PlayingController {
 
     @GetMapping("/playing")
     public String playing(int worldCupID, Model model) {
-//        boolean checksave = proceedService.havesave("test1234", worldCupID);
-//        System.out.println("checksave 확인");
-//        System.out.println(checksave);
+        boolean checksave = proceedService.havesave("test1234", worldCupID);
+        System.out.println("checksave 확인");
+        System.out.println(checksave);
 
         ObjectMapper mapper = new ObjectMapper();
         String json = null;
@@ -50,37 +55,31 @@ public class PlayingController {
         model.addAttribute("title", playingService.worldCupTitle(worldCupID));
         model.addAttribute("count", playingService.selectCandi(worldCupID).size());
         model.addAttribute("candi", json);
-//        model.addAttribute("issave", checksave);
+        model.addAttribute("issave", checksave);
 
         return "/play/playing";
     }
 
-//    @GetMapping("/playing/loadsave")
-//    public ResponseEntity<String> saveplay(String userId, int worldcupId, Model model) {
-//        List<Proceedinterface> candi = proceedService.savefileload(userId, worldcupId);
-//        int[] choiceNumList = null;
-//
-//        for (int i=0; i<candi.size(); i++) {
-//            choiceNumList[i] = candi.get(i).getProceedNum();
-//        }
-//
-//        ObjectMapper mapper = new ObjectMapper();
-//
-//        String json = null;
-//        try {
-//            json = mapper.writeValueAsString(candi);
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
-//
-//        System.out.println("json 확인");
-//        System.out.println(json);
-//
-//        model.addAttribute("candi", json);
-//        model.addAttribute("choiceNum", choiceNumList);
-//
-//        return ResponseEntity.ok(json);
-//    }
+    @GetMapping("/playing/loadsave")
+    public ResponseEntity<String> saveplay(String userId, int worldcupId) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+
+        String json = null;
+        try {
+            json = mapper.writeValueAsString(proceedService.savefileload(userId, worldcupId));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        List<Choice> choiceList = proceedService.savefileload(userId, worldcupId);
+        System.out.println("controller choiceList----------------------");
+        System.out.println(choiceList);
+
+        System.out.println("json 확인");
+        System.out.println(json);
+
+        return ResponseEntity.ok(json);
+    }
 
     @GetMapping("/playResult")
     public void playResult(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model, HttpSession session){
