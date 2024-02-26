@@ -23,6 +23,7 @@ public class SaveDTO {
     private Choice choice;
 
     private int next;
+    private String userId;
 
     private List<ChoiceDTO> winner;
     private List<ChoiceDTO> loser;
