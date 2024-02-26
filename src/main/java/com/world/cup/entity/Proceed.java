@@ -18,7 +18,7 @@ public class Proceed {
     @ManyToOne
     private Choice choice;
 
-    private int round;
+    private int roundNext;
 
     private int win;
     private int lose;

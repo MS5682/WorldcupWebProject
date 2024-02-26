@@ -14,7 +14,7 @@ import java.util.List;
 @ToString
 public class SaveDTO {
     private int proceedNum;
-    private int round;
+    private int roundNext;
     private int win;
     private int lose;
     private int first;

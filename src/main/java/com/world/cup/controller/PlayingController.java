@@ -8,7 +8,6 @@ import com.world.cup.dto.PageRequestDTO;
 import com.world.cup.dto.PageResultDTO;
 import com.world.cup.dto.WorldcupDTO;
 import com.world.cup.entity.Choice;
-import com.world.cup.entity.Proceed;
 import com.world.cup.service.ChoiceService;
 import com.world.cup.service.CommentService;
 import com.world.cup.service.PlayingService;
