@@ -311,6 +311,7 @@ public class UserController {
                         googleDTO.setGid(naverUserId);
                         googleDTO.setEmail(naverUserEmail);
                         userService.naverSignup(googleDTO);
+
                         return "redirect:/";
                     }
 
