@@ -1,5 +1,9 @@
 package com.world.cup.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -30,11 +34,15 @@ public class Worldcup{
     private int viewCnt;
 
     @CreatedDate
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     @Column(name="regdate",updatable = false)
     private LocalDateTime regDate;
 
     @CreatedDate
     @LastModifiedDate
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     @Column(name="moddate")
     private LocalDateTime modDate;
 
