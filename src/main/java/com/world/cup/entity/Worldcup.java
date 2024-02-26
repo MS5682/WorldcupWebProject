@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @EntityListeners(value={AuditingEntityListener.class})
@@ -30,11 +31,12 @@ public class Worldcup{
 
     @CreatedDate
     @Column(name="regdate",updatable = false)
-    private LocalDate regDate;
+    private LocalDateTime regDate;
 
+    @CreatedDate
     @LastModifiedDate
     @Column(name="moddate")
-    private LocalDate modDate;
+    private LocalDateTime modDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;

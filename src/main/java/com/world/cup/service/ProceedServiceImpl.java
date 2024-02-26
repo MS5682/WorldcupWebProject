@@ -1,16 +1,24 @@
 package com.world.cup.service;
 
+import com.world.cup.Proceedinterface;
 import com.world.cup.dto.SaveDTO;
+import com.world.cup.entity.Choice;
 import com.world.cup.entity.Proceed;
+import com.world.cup.entity.User;
 import com.world.cup.entity.Worldcup;
+import com.world.cup.repository.PlayingRepository;
 import com.world.cup.repository.ProceedRepository;
 import lombok.Builder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Builder
 public class ProceedServiceImpl implements ProceedService {
     private ProceedRepository repository;
+    private PlayingRepository playingRepository;
 
     @Override
     public void save(SaveDTO saveDTO) {
@@ -20,7 +28,7 @@ public class ProceedServiceImpl implements ProceedService {
         for (int i=0; i<saveDTO.getWinner().size(); i++) {
             Proceed p = Proceed.builder()
                     .round(saveDTO.getRound())
-                    .user(null)
+                    .user(User.builder().id("test1234").build())
                     .worldcup(Worldcup.builder().worldcupNum(saveDTO.getWorldNum()).build())
                     .choice(convertEntity(saveDTO.getWinner().get(i)))
                     .next(1)
@@ -34,10 +42,12 @@ public class ProceedServiceImpl implements ProceedService {
     @Override
     public void autosave(SaveDTO saveDTO) {
         Proceed p = Proceed.builder()
-                .proceedNum(repository.findByUserAndChoice(saveDTO.getUser(), convertEntity(saveDTO.getWinner().get(0))).getProceedNum())
+                .proceedNum(repository.findByUser_IdAndChoice(saveDTO.getUserId(), convertEntity(saveDTO.getWinner().get(0))).getProceedNum())
                 .round(saveDTO.getRound())
                 .win(saveDTO.getWinner().get(0).getWin())
                 .lose(saveDTO.getWinner().get(0).getLose())
+                .first(saveDTO.getWinner().get(0).getFirst())
+                .user(User.builder().id(saveDTO.getUserId()).build())
                 .worldcup(Worldcup.builder().worldcupNum(saveDTO.getWorldNum()).build())
                 .choice(convertEntity(saveDTO.getWinner().get(0)))
                 .next(1)
@@ -48,10 +58,12 @@ public class ProceedServiceImpl implements ProceedService {
         repository.save(p);
 
         p = Proceed.builder()
-                .proceedNum(repository.findByUserAndChoice(saveDTO.getUser(), convertEntity(saveDTO.getLoser().get(0))).getProceedNum())
+                .proceedNum(repository.findByUser_IdAndChoice(saveDTO.getUserId(), convertEntity(saveDTO.getLoser().get(0))).getProceedNum())
                 .round(saveDTO.getRound())
                 .win(saveDTO.getLoser().get(0).getWin())
                 .lose(saveDTO.getLoser().get(0).getLose())
+                .first(saveDTO.getLoser().get(0).getFirst())
+                .user(User.builder().id(saveDTO.getUserId()).build())
                 .worldcup(Worldcup.builder().worldcupNum(saveDTO.getWorldNum()).build())
                 .choice(convertEntity(saveDTO.getLoser().get(0)))
                 .next(0)
@@ -63,5 +75,54 @@ public class ProceedServiceImpl implements ProceedService {
         repository.save(p);
     }
 
+    @Override
+    public void finalsave(SaveDTO saveDTO) {
+        List<Proceed> resultAll = repository.endPlayResult(saveDTO.getUserId(), saveDTO.getWorldNum());
 
+        for (Proceed p : resultAll) {
+
+            Choice c = Choice.builder()
+                    .choiceNum(p.getChoice().getChoiceNum())
+                    .name(p.getChoice().getName())
+                    .type(p.getChoice().getType())
+                    .worldcup(p.getWorldcup())
+                    .imgName(p.getChoice().getImgName())
+                    .path(p.getChoice().getPath())
+                    .uuid(p.getChoice().getUuid())
+                    .win(p.getWin())
+                    .lose(p.getLose())
+                    .first(p.getFirst())
+                    .build();
+            System.out.println(c);
+            playingRepository.save(c);
+
+            repository.delete(p);
+        }
+    }
+
+//    @Override
+//    public boolean havesave(String userId, int worldcupNum) {
+//        List<Proceed> checksave = repository.endPlayResult(userId, worldcupNum);
+//
+//        System.out.println("확인용");
+//        System.out.println(checksave);
+//        System.out.println(checksave.isEmpty());
+//        if (checksave.isEmpty()) {
+//            return false;
+//        } else {
+//            return true;
+//        }
+//    }
+//
+//    @Override
+//    public List<Proceedinterface> savefileload(String userId, int worldcupNum) {
+//        List<Proceedinterface> savefile = repository.loadCandi(userId, worldcupNum);
+//
+//        return savefile;
+//    }
+//
+//    @Override
+//    public int findChoiceNum(int proceedNum) {
+//        return repository.findchoicenum(proceedNum);
+//    }
 }
