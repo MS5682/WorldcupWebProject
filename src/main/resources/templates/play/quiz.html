@@ -56,6 +56,23 @@
             </div>
         </div>
     </main>
+    <!-- 모달 창 -->
+    <div class="modal fade" id="quizResultModal" tabindex="-1" aria-labelledby="quizResultModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="quizResultModalLabel">퀴즈 결과</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="quizResultModalBody">
+                    <!-- 결과가 여기에 표시됩니다 -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="redirectLink()">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 <script th:inline="javascript">
 
@@ -90,6 +107,8 @@
             $('.answer').hide();
         });//// 정답 확인 버튼 클릭 이벤트 끝
 
+
+
         // 초기화 함수(퀴즈 불러오기)
         function initialize() {
             showRandomQuiz();
@@ -104,7 +123,7 @@
             var quiz = quizData[index];
             console.log(quiz.type);
             if(quiz.type===1){ //사진일 경우
-                $('.quiz').html('<img src="../../uploads/' + quiz.path + "/" + quiz.uuid + "_" + quiz.imgName + '"'+
+                $('.quiz').html('<img src="/worldcup/choice/display?fileName=' + quiz.path + "/" + quiz.uuid + "_" + quiz.imgName + '"'+
                  'style="min-width: 100%; height: 50vh; margin-top: 10px"/>');
                 $('#answer-input').data('answer', quiz.name); // 정답 데이터 설정
             }else if(quiz.type===0){//영상일 경우
@@ -119,11 +138,9 @@
         function showRandomQuiz() {
             // 모든 퀴즈를 완료했으면 결과 페이지로 이동
             if (usedIndexes.size === quizNum) {
-                console.log(quizNum);
-                window.location.href = "/play/playResult?worldcupNum="+$('#worldcupNum').val(); //quiz가 끝나면 result로 이동
+                showResultModal();
                 return;
             }
-
             var randomIndex;
             // 사용되지 않은 랜덤한 인덱스 생성
             while (true) {
@@ -137,6 +154,13 @@
             // 랜덤한 퀴즈 표시
             updateQuiz(randomIndex);
         }// 랜덤한 퀴즈 표시 함수 끝
+
+        function showResultModal() {
+            var totalQuestions = quizNum;
+            $('#quizResultModalLabel').html('퀴즈 결과');
+            $('#quizResultModalBody').html('총 문제 수: ' + totalQuestions + '<br>맞춘 문제 수: ' + count);
+            $('#quizResultModal').modal('show');
+        }
 
 
         // 다음 퀴즈 버튼 클릭 이벤트
@@ -166,6 +190,11 @@
             }
         });//엔터키로 버튼 클릭 끝
     });
+
+    function redirectLink() {
+
+        window.location.href = "/";
+    }
 
 </script>
 </html>
