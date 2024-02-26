@@ -1,9 +1,44 @@
-$(document).ready(function () {
+// var saveplay = true
+//
+// $(document).ready(function () { // 세이브 파일 체크
+//     if ($('#issave').val() == 'true') {
+//         console.log('저장있음')
+//         if (confirm('저장된 월드컵이 있습니다. 이어서 진행하시겠습니까?')) {
+//             $.ajax({
+//                 type: 'get',
+//                 url: '/play/playing/loadsave',
+//                 data: {
+//                     userId: 'test1234',
+//                     worldcupId: $('#worldNum').val()
+//                 },
+//                 dataType: 'text',
+//                 success: function (result) {
+//                     savedCandi = document.querySelector('#candi')
+//                     savedCandi.value = result;
+//                     saveplay = false
+//
+//                     console.log(savedCandi)
+//
+//                     savestart();
+//                 },
+//                 error: function (request, status, error) {
+//                     console.log(error)
+//                 }
+//             })
+//         } else {
+//             $('.modal').modal('show');
+//         }
+//     } else {
+//         console.log('저장없음')
+//         $('.modal').modal('show');
+//     }
+// });
 
+$(document).ready(function () {
     $('.modal').modal('show');
 });
 
-$('.form-check-input').on('click', function () {
+$('.form-check-input').on('click', function () {    // 타이머 설정 시 타이머 시간 보이게 하기
     if ($('.form-check-input').is(':checked')) {
         $('.limitTime').css("visibility", "visible");
     } else {
@@ -11,7 +46,7 @@ $('.form-check-input').on('click', function () {
     }
 })
 
-$('.totalRound').on('click', function () {
+$('.totalRound').on('click', function () {  // 전체 라운드 선택 안할시 확인 버튼 안보이게 하기
     if ($('.totalRound').val() == 0) {
         $('.okButton').css("visibility", "hidden")
     } else {
@@ -19,6 +54,7 @@ $('.totalRound').on('click', function () {
     }
 })
 
+// 타이머 기능
 var timerID;
 var count;
 
@@ -27,13 +63,11 @@ function timer(time) {
 
     timerID = setInterval(function () {
         count--;
-        console.log('타이머 남은 시간 : ' + count);
         var timerText = document.querySelector('.viewTimer');
         timerText.innerHTML = '<h2>' + count + "</h2>";
 
         if (count == 0) {
             ranNum = Math.floor(Math.random() * 2 + 1)
-            console.log('1, 2 무작위 숫자 : ' + ranNum);
             randomClick(ranNum);
 
             count = time / 1000;
@@ -41,11 +75,13 @@ function timer(time) {
     }, 1000)
 }
 
-function shuffle(array) {
+// 타이머 기능 끝
+
+function shuffle(array) {   // 후보 섞기
     array.sort(() => Math.random() - 0.5)
 }
 
-function randomClick(num) {
+function randomClick(num) { // 타이머 시간 끝나면 랜덤하기 클릭
     if (num == 1) {
         $('.oddImg').click();
     } else if (num == 2) {
@@ -58,16 +94,35 @@ var currentRound;
 var nextRound;
 var progress = 0;
 
-var allCandiList = $('#candi').val();
+// 후보 받고
+var allCandiList
 var outCandiList = [];
 
-var candi = JSON.parse(allCandiList);
+var candi
 
-console.log(candi[0].name)
 
+// function savestart() {
+//     console.log('saveplay 확인용')
+//     console.log(saveplay)
+//
+//     if (saveplay) { // 저장한걸로 하면 false
+//         allCandiList = $('#candi').val();
+//         candi = JSON.parse(allCandiList);
+//         shuffle(candi)  // 후보 섞음
+//     } else {
+//         // 확인 버튼을 안누르기 때문에 확인 버튼 누르면 하는걸 여기서 해야함
+//         allCandiList = $('#candi').val();
+//         console.log('allcandilist')
+//         console.log(allCandiList)
+//         candi = allCandiList;
+//         console.log('저장된 후보들')
+//         console.log(candi)
+//     }
+// }
+
+allCandiList = $('#candi').val();
+candi = JSON.parse(allCandiList);
 shuffle(candi)
-
-console.log(candi)
 
 leftCandiName = document.querySelector('.leftName')
 rightCandiName = document.querySelector('.rightName')
@@ -76,16 +131,17 @@ rightImg = document.querySelector('.evenImg')
 
 var candiOrder = 0;
 
-$('.okButton').on('click', function () {
+var title = $('.worldcup-name').text();
+
+$('.okButton').on('click', function () {    // 사직 버튼 누르면 월드컵 초기 세팅
     var name = document.querySelector('.worldcup-name');
     for (i = 0; i < $('.totalRound').val(); i++) {
         totalRound = totalRound * 2;
     }
 
     candi.length = totalRound;
-    console.log(candi)
 
-    name.innerText += ' ' + totalRound + '강';
+    name.innerText = title + ' ' + totalRound + '강';
     currentRound = totalRound;
     nextRound = totalRound / 2;
 
@@ -97,22 +153,15 @@ $('.okButton').on('click', function () {
         time = $('.limitTime').val() * 1000 * 60;
 
         timer(time);
-        console.log('타이머에 적용 될 숫자 : ' + time);
     }
     $('.modal').modal('hide');
 
     leftCandiName.innerText = candi[candiOrder].name
     rightCandiName.innerText = candi[candiOrder + 1].name
 
-    console.log('왼쪽 첫글자')
-    console.log(candi[candiOrder].path.charAt(0))
-    console.log('오른쪽 첫글자')
-    console.log(candi[candiOrder + 1].path.charAt(0))
-
     if (candi[candiOrder].path.charAt(0) == 2) {
         leftImg.src = '../../uploads/' + candi[candiOrder].path + '/' + candi[candiOrder].uuid + '_' + candi[candiOrder].imgName
     } else if (candi[candiOrder].path.charAt(0) == 'h') {
-        console.log('h 확인용')
         $('.left').html(
             '<iframe style="min-width: 100%; height: 80vh; margin-top: 10px"' +
             'src="https://www.youtube.com/embed/' + candi[candiOrder].imgName + '">' +
@@ -125,7 +174,6 @@ $('.okButton').on('click', function () {
     if (candi[candiOrder + 1].path.charAt(0) == 2) {
         rightImg.src = '../../uploads/' + candi[candiOrder + 1].path + '/' + candi[candiOrder + 1].uuid + '_' + candi[candiOrder + 1].imgName
     } else if (candi[candiOrder + 1].path.charAt(0) == 'h') {
-        console.log('h 확인용')
         $('.right').html(
             '<iframe style="min-width: 100%; height: 80vh; margin-top: 10px"' +
             'src="https://www.youtube.com/embed/' + candi[candiOrder + 1].imgName + '">' +
@@ -136,10 +184,7 @@ $('.okButton').on('click', function () {
 
     startsave()
 
-    console.log(candi)
-
     candiOrder += 1;
-    console.log($('#worldNum').val())
 })
 
 function returnClick() {
@@ -148,7 +193,6 @@ function returnClick() {
 }
 
 function changeCandi() {
-    console.log('배열 순서' + candiOrder)
     leftCandiName.innerText = candi[candiOrder].name
     rightCandiName.innerText = candi[candiOrder + 1].name
 
@@ -159,7 +203,6 @@ function changeCandi() {
             '<p class="text-center leftName">' + candi[candiOrder].name + '</p>'
         )
     } else if (candi[candiOrder].path.charAt(0) == 'h') {
-        console.log('h 확인용')
         $('.left').html(
             '<iframe style="min-width: 100%; height: 80vh; margin-top: 10px"' +
             'src="https://www.youtube.com/embed/' + candi[candiOrder].imgName + '">' +
@@ -175,7 +218,6 @@ function changeCandi() {
             '<p class="text-center rightName">' + candi[candiOrder + 1].name + '</p>'
         )
     } else if (candi[candiOrder + 1].path.charAt(0) == 'h') {
-        console.log('h 확인용')
         $('.right').html(
             '<iframe style="min-width: 100%; height: 80vh; margin-top: 10px"' +
             'src="https://www.youtube.com/embed/' + candi[candiOrder + 1].imgName + '">' +
@@ -193,9 +235,9 @@ $('.left').on('click', function () {
     outCandiList.push(candi[candiOrder]);
     candi.splice(candiOrder, 1)
 
-    console.log('배열 이동 확인')
-    console.log(candi)
-    console.log(outCandiList)
+    if (candi.length <= 1) {
+        candi[0].first += 1;
+    }
 
     clearInterval(timerID);
 
@@ -208,17 +250,16 @@ $('.left').on('click', function () {
     $('.right').css("pointer-events", "none")
 
     currentRound -= 2;
-    console.log('라운드 진행 : ' + currentRound);
     progress += 1;
 
     $('.progress-bar').css("width", progress / (totalRound - 1) * 100 + "%");
+
+    leftsave();
 
     checkRound();
 
     setTimeout(returnClick, 2000);
     setTimeout(changeCandi, 2000);
-
-    leftsave();
 
     timer(time);
 })
@@ -229,9 +270,9 @@ $('.right').on('click', function () {
     outCandiList.push(candi[candiOrder - 1]);
     candi.splice(candiOrder - 1, 1)
 
-    console.log('배열 이동 확인')
-    console.log(candi)
-    console.log(outCandiList)
+    if (candi.length <= 1) {
+        candi[0].first += 1;
+    }
 
     clearInterval(timerID);
 
@@ -244,17 +285,16 @@ $('.right').on('click', function () {
     $('.right').css("pointer-events", "none")
 
     currentRound -= 2;
-    console.log('라운드 진행 : ' + currentRound);
     progress += 1;
 
     $('.progress-bar').css("width", progress / (totalRound - 1) * 100 + "%");
+
+    rightsave()
 
     checkRound();
 
     setTimeout(returnClick, 2000);
     setTimeout(changeCandi, 2000);
-
-    rightsave()
 
     timer(time);
 })
@@ -263,11 +303,11 @@ function checkRound() {
     if (currentRound == 0) {
         var name = document.querySelector('.worldcup-name');
         if (nextRound > 4) {
-            name.innerText = ' ' + nextRound + '강';
+            name.innerText = title + ' ' + nextRound + '강';
         } else if (nextRound == 4) {
-            name.innerText = ' ' + '준결승';
+            name.innerText = title + ' ' + '준결승';
         } else if (nextRound == 2) {
-            name.innerText = ' ' + '결승';
+            name.innerText = title + ' ' + '결승';
         }
 
         var progressbar = document.querySelector('.progress-bar');
@@ -283,13 +323,11 @@ function checkRound() {
 
         currentRound = nextRound;
         nextRound = currentRound / 2;
-
-        console.log('마지막 nextRound 체크 : ' + nextRound)
     }
 
     if (nextRound == 0.5) {
-        alert('끝')
         alert('결과창으로 넘어가기')
+
         clearInterval(timerID)
 
         finalsave()
@@ -324,13 +362,14 @@ function leftsave() {
             winner: [candi[candiOrder - 1]],
             loser: [outCandiList.at(-1)],
             round: nextRound,
+            userId: 'test1234',
             worldNum: $('#worldNum').val()
         }),
         success: function (result) {
             console.log(result)
         },
         error: function (request, status, error) {
-            console.log(error)
+            alert(error);
         }
     })
 }
@@ -344,13 +383,14 @@ function rightsave() {
             winner: [candi[candiOrder]],
             loser: [outCandiList.at(-1)],
             round: nextRound,
+            userId: 'test1234',
             worldNum: $('#worldNum').val()
         }),
         success: function (result) {
             console.log(result)
         },
         error: function (request, status, error) {
-            console.log(error)
+            alert(error)
         }
     })
 }
@@ -361,8 +401,9 @@ function finalsave() {
         url: 'playing/finalsave',
         contentType: 'application/json',
         data: JSON.stringify({
-            winner: [candi[candiOrder]],
+            winner: [candi[0]],
             loser: [outCandiList.at(-1)],
+            userId: 'test1234',
             worldNum: $('#worldNum').val()
         }),
         success: function (result) {
