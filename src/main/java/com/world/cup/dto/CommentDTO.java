@@ -22,5 +22,7 @@ public class CommentDTO {
     private Integer choiceNum;
     private String choiceName;
     private String id;
+    private String email;
+    private String password;
     private LocalDateTime regDate;
 }

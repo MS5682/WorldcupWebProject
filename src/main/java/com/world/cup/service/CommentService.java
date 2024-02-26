@@ -37,14 +37,16 @@ public interface CommentService {
         return comment;
     }
 
-    default CommentDTO entityToDto(Comment comment){
+    default CommentDTO entityToDto(Comment comment, User user){
         CommentDTO commentDTO = CommentDTO.builder()
                 .content(comment.getContent())
                 .commentNum(comment.getCommentNum())
                 .regDate(comment.getRegDate())
-                .id(comment.getUser().getId())
                 .worldcupNum(comment.getWorldcup().getWorldcupNum())
                 .type(comment.getType())
+                .id(user.getId())
+                .password(user.getPassword())
+                .email(user.getEmail())
                 .build();
         if(comment.getChoice() != null){
             commentDTO.setChoiceNum(comment.getChoice().getChoiceNum());
