@@ -15,11 +15,9 @@ public interface ProceedService {
 
     boolean havesave(String userId, int worldcupNum);
 
-//    List<Proceedinterface> savefileload(String userId, int worldcupNum);
-
-//    int findChoiceNum(int proceedNum);
-
     List<Choice> savefileload(String userId, int worldcupNum);
+
+    int[] round(String userId, int worldcupNum);
 
     default Choice convertEntity(ChoiceDTO choiceDTO) {
         Choice newChoice = Choice.builder().choiceNum(choiceDTO.getChoiceNum()).build();

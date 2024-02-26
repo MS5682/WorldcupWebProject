@@ -111,24 +111,38 @@ public class ProceedServiceImpl implements ProceedService {
         List<Choice> choiceList = new ArrayList<>();
 
         for (Proceed p : proceedList) {
-            Choice c = Choice.builder()
-                    .choiceNum(p.getChoice().getChoiceNum())
-                    .name(p.getChoice().getName())
-                    .type(p.getChoice().getType())
-                    .worldcup(p.getChoice().getWorldcup())
-                    .imgName(p.getChoice().getImgName())
-                    .path(p.getChoice().getPath())
-                    .uuid(p.getChoice().getUuid())
-                    .win(p.getWin())
-                    .lose(p.getLose())
-                    .build();
-            choiceList.add(c);
+            if (p.getNext() == 1) {
+                Choice c = Choice.builder()
+                        .choiceNum(p.getChoice().getChoiceNum())
+                        .name(p.getChoice().getName())
+                        .type(p.getChoice().getType())
+                        .imgName(p.getChoice().getImgName())
+                        .path(p.getChoice().getPath())
+                        .uuid(p.getChoice().getUuid())
+                        .win(p.getWin())
+                        .lose(p.getLose())
+                        .build();
+                choiceList.add(c);
+            }
+
         }
 
         System.out.println("choiceList 확인");
         System.out.println(choiceList);
 
         return choiceList;
+    }
+
+    @Override
+    public int[] round(String userId, int worldcupNum) {
+        List<Proceed> proceedList = repository.findProceedsByUserIdAndWorldcup_WorldcupNum(userId, worldcupNum);
+
+        int[] nextArr = new int[proceedList.size()];
+
+        for (int i=0;i<proceedList.size();i++) {
+            nextArr[i] = proceedList.get(i).getRound();
+        }
+        return nextArr;
     }
 
     @Override
@@ -144,4 +158,6 @@ public class ProceedServiceImpl implements ProceedService {
             return true;
         }
     }
+
+
 }

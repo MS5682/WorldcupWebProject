@@ -4,6 +4,8 @@ $(document).ready(function () { // 세이브 파일 체크
     if ($('#issave').val() == 'true') {
         console.log('저장있음')
         if (confirm('저장된 월드컵이 있습니다. 이어서 진행하시겠습니까?')) {
+            saveplay = false;
+
             $.ajax({
                 type: 'get',
                 url: '/play/playing/loadsave',
@@ -13,13 +15,34 @@ $(document).ready(function () { // 세이브 파일 체크
                 },
                 dataType: 'text',
                 success: function (result) {
-                    console.log(result);
+                    candi = JSON.parse(result);
+                    console.log(candi)
+
+                    $.ajax({
+                        type: 'get',
+                        url: '/play/playing/next',
+                        data: {
+                            userId: 'test1234',
+                            worldcupId: $('#worldNum').val()
+                        },
+                        success: function (result) {
+                            nextVal = result;
+                            for (i=0;i<candi.length;i++) {
+                                candi[i].round = nextVal[i]
+                            }
+
+                            console.log(candi)
+
+                            savestart()
+                        }
+                    })
                 },
                 error: function (request, status, error) {
                     console.log(error)
                 }
             })
         } else {
+            // 저장 삭제 ajax 추가
             $('.modal').modal('show');
         }
     } else {
@@ -91,28 +114,58 @@ var outCandiList = [];
 var candi
 
 
-// function savestart() {
-//     console.log('saveplay 확인용')
-//     console.log(saveplay)
-//
-//     if (saveplay) { // 저장한걸로 하면 false
-//         allCandiList = $('#candi').val();
-//         candi = JSON.parse(allCandiList);
-//         shuffle(candi)  // 후보 섞음
-//     } else {
-//         // 확인 버튼을 안누르기 때문에 확인 버튼 누르면 하는걸 여기서 해야함
-//         allCandiList = $('#candi').val();
-//         console.log('allcandilist')
-//         console.log(allCandiList)
-//         candi = allCandiList;
-//         console.log('저장된 후보들')
-//         console.log(candi)
-//     }
-// }
+function savestart() {
+    console.log('saveplay 확인용')
+    console.log(saveplay)
 
-allCandiList = $('#candi').val();
-candi = JSON.parse(allCandiList);
-shuffle(candi)
+    if (saveplay) { // 저장한걸로 하면 false
+        allCandiList = $('#candi').val();
+        candi = JSON.parse(allCandiList);
+        shuffle(candi)  // 후보 섞음
+    } else {
+        // 확인 버튼을 안누르기 때문에 확인 버튼 누르면 하는걸 여기서 해야함
+        console.log('분리')
+        // for (i=0;i<allCandiList.length;i++) {
+        //
+        // }
+
+        console.log(candiOrder)
+
+        console.log('화면표시 기능 시작')
+        console.log(candi[candiOrder].name)
+        leftCandiName.innerText = candi[candiOrder].name
+        rightCandiName.innerText = candi[candiOrder + 1].name
+
+        if (candi[candiOrder].path.charAt(0) == 2) {
+            leftImg.src = '../../uploads/' + candi[candiOrder].path + '/' + candi[candiOrder].uuid + '_' + candi[candiOrder].imgName
+        } else if (candi[candiOrder].path.charAt(0) == 'h') {
+            $('.left').html(
+                '<iframe style="min-width: 100%; height: 80vh; margin-top: 10px"' +
+                'src="https://www.youtube.com/embed/' + candi[candiOrder].imgName + '">' +
+                '</iframe>' +
+                '<p class="text-center leftName">' + candi[candiOrder].name + '</p>'
+            );
+
+        }
+
+        if (candi[candiOrder + 1].path.charAt(0) == 2) {
+            rightImg.src = '../../uploads/' + candi[candiOrder + 1].path + '/' + candi[candiOrder + 1].uuid + '_' + candi[candiOrder + 1].imgName
+        } else if (candi[candiOrder + 1].path.charAt(0) == 'h') {
+            $('.right').html(
+                '<iframe style="min-width: 100%; height: 80vh; margin-top: 10px"' +
+                'src="https://www.youtube.com/embed/' + candi[candiOrder + 1].imgName + '">' +
+                '</iframe>' +
+                '<p class="text-center rightName">' + candi[candiOrder + 1].name + '</p>'
+            );
+        }
+
+        candiOrder += 1;
+    }
+}
+
+// allCandiList = $('#candi').val();
+// candi = JSON.parse(allCandiList);
+// shuffle(candi)
 
 leftCandiName = document.querySelector('.leftName')
 rightCandiName = document.querySelector('.rightName')
