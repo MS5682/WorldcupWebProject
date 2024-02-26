@@ -94,6 +94,318 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script th:inline="javascript">
+        $(document).ready(function() {
+            $('.modal').modal('show');
+        });
+
+        $('.form-check-input').on('click', function () {
+            if ($('.form-check-input').is(':checked')) {
+                $('.limitTime').css("visibility", "visible");
+            } else {
+                $('.limitTime').css("visibility", "hidden");
+            }
+        })
+
+        $('.totalRound').on('click', function () {
+            if ($('.totalRound').val() == 0) {
+                $('.okButton').css("visibility", "hidden")
+            } else {
+                $('.okButton').css("visibility", "visible")
+            }
+        })
+
+        var timerID;
+        var count;
+
+        function timer(time) {
+            count = time / 1000;
+
+            timerID = setInterval(function () {
+                count--;
+                console.log('타이머 남은 시간 : ' + count);
+                var timerText = document.querySelector('.viewTimer');
+                timerText.innerHTML = '<h2>' + count + "</h2>";
+
+                if (count == 0) {
+                    ranNum = Math.floor(Math.random() * 2 + 1)
+                    console.log('1, 2 무작위 숫자 : ' + ranNum);
+                    randomClick(ranNum);
+
+                    count = time / 1000;
+                }
+            }, 1000)
+        }
+
+        function shuffle(array) {
+            array.sort(() => Math.random() - 0.5)
+        }
+
+        function randomClick(num) {
+            if (num == 1) {
+                $('.oddImg').click();
+            } else if (num == 2) {
+                $('.evenImg').click();
+            }
+        }
+
+        var totalRound = 1;
+        var currentRound;
+        var nextRound;
+        var progress = 0;
+
+        var allCandiList = $('#candi').val();
+        var outCandiList = [];
+
+        var candi = JSON.parse(allCandiList);
+
+        console.log(candi[0].name)
+
+        shuffle(candi)
+
+        console.log(candi)
+
+        leftCandiName = document.querySelector('.leftName')
+        rightCandiName = document.querySelector('.rightName')
+        leftImg = document.querySelector('.oddImg')
+        rightImg = document.querySelector('.evenImg')
+
+        var candiOrder = 0;
+
+        $('.okButton').on('click', function () {
+            var name = document.querySelector('.worldcup-name');
+            for (i = 0; i < $('.totalRound').val(); i++) {
+                totalRound = totalRound * 2;
+            }
+
+            candi.length = totalRound;
+            console.log(candi)
+
+            name.innerText += ' ' + totalRound + '강';
+            currentRound = totalRound;
+            nextRound = totalRound/2;
+
+            var progressbar = document.querySelector('.progress-bar');
+            progressbar.innerText = currentRound + '강';
+
+            if ($('.form-check-input').is(':checked')) {
+                console.log('고른 제한 시간 : ' + $('.limitTime').val())
+                time = $('.limitTime').val() * 1000 * 60;
+
+                timer(time);
+                console.log('타이머에 적용 될 숫자 : ' + time);
+            }
+            $('.modal').modal('hide');
+
+            leftCandiName.innerText = candi[candiOrder].name
+            rightCandiName.innerText = candi[candiOrder + 1].name
+
+            console.log('왼쪽 첫글자')
+            console.log(candi[candiOrder].path.charAt(0))
+            console.log('오른쪽 첫글자')
+            console.log(candi[candiOrder + 1].path.charAt(0))
+
+            if (candi[candiOrder].path.charAt(0) == 2) {
+                leftImg.src = '/worldcup/choice/display?fileName=' + candi[candiOrder].path + '/' + candi[candiOrder].uuid + '_' + candi[candiOrder].imgName
+            } else if (candi[candiOrder].path.charAt(0) == 'h') {
+                console.log('h 확인용')
+                $('.left').html(
+                    '<iframe style="min-width: 100%; height: 80vh; margin-top: 10px"' +
+                    'src="https://www.youtube.com/embed/' + candi[candiOrder].imgName + '">' +
+                    '</iframe>' +
+                    '<p class="text-center leftName">' + candi[candiOrder].name + '</p>'
+                );
+
+            }
+
+            if (candi[candiOrder + 1].path.charAt(0) == 2) {
+                rightImg.src = '/worldcup/choice/display?fileName=' + candi[candiOrder + 1].path + '/' + candi[candiOrder + 1].uuid + '_' + candi[candiOrder + 1].imgName
+            } else if (candi[candiOrder + 1].path.charAt(0) == 'h') {
+                console.log('h 확인용')
+                $('.right').html(
+                    '<iframe style="min-width: 100%; height: 80vh; margin-top: 10px"' +
+                    'src="https://www.youtube.com/embed/' + candi[candiOrder + 1].imgName + '">' +
+                    '</iframe>' +
+                    '<p class="text-center rightName">' + candi[candiOrder + 1].name + '</p>'
+                );
+            }
+
+            for (var i = 0; i < candi.length; i++) {
+                candi[i].winCount = 0;
+                candi[i].totalCount = 0;
+            }
+
+            candi[candiOrder].totalCount += 1;
+            candi[candiOrder + 1].totalCount += 1;
+
+            console.log(candi)
+
+            candiOrder += 1;
+        })
+
+        function returnClick() {
+            $('.oddImg').css("pointer-events", "auto")
+            $('.evenImg').css("pointer-events", "auto")
+        }
+
+        function changeCandi() {
+            leftCandiName.innerText = candi[candiOrder].name
+            rightCandiName.innerText = candi[candiOrder + 1].name
+
+            if (candi[candiOrder].path.charAt(0) == 2) {
+                if ($('.left').html().charAt(2) == 'f') {
+                    $('.left').html(
+                        '<img src="/worldcup/choice/display?fileName=' + candi[candiOrder].path + '/' + candi[candiOrder].uuid + '_' + candi[candiOrder].imgName + '" ' +
+                        'class="img-thumbnail oddImg" style="min-width: 100%; height: 80vh; margin-top: 10px">' +
+                        '<p class="text-center leftName">' + candi[candiOrder].name + '</p>'
+                    )
+                } else {
+                    leftImg.src = '/worldcup/choice/display?fileName=' + candi[candiOrder].path + '/' + candi[candiOrder].uuid + '_' + candi[candiOrder].imgName
+                }
+            } else if (candi[candiOrder].path.charAt(0) == 'h') {
+                console.log('h 확인용')
+                $('.left').html(
+                    '<iframe style="min-width: 100%; height: 80vh; margin-top: 10px"' +
+                    'src="https://www.youtube.com/embed/' + candi[candiOrder].imgName + '">' +
+                    '</iframe>' +
+                    '<p class="text-center leftName">' + candi[candiOrder].name + '</p>'
+                );
+            }
+
+            if (candi[candiOrder + 1].path.charAt(0) == 2) {
+                if ($('.right').html().charAt(2) == 'f') {
+                    $('.right').html(
+                        '<img src="/worldcup/choice/display?fileName='+ candi[candiOrder + 1].path + '/' + candi[candiOrder + 1].uuid + '_' + candi[candiOrder + 1].imgName + '" ' +
+                        'class="img-thumbnail evenImg" style="min-width: 100%; height: 80vh; margin-top: 10px">' +
+                        '<p class="text-center rightName">' + candi[candiOrder + 1].name + '</p>'
+                    )
+                } else {
+                    rightImg.src = '/worldcup/choice/display?fileName=' + candi[candiOrder + 1].path + '/' + candi[candiOrder + 1].uuid + '_' + candi[candiOrder + 1].imgName
+                }
+            } else if (candi[candiOrder + 1].path.charAt(0) == 'h') {
+                console.log('h 확인용')
+                $('.right').html(
+                    '<iframe style="min-width: 100%; height: 80vh; margin-top: 10px"' +
+                    'src="https://www.youtube.com/embed/' + candi[candiOrder + 1].imgName + '">' +
+                    '</iframe>' +
+                    '<p class="text-center rightName">' + candi[candiOrder + 1].name + '</p>'
+                );
+            }
+
+            candi[candiOrder].totalCount += 1;
+            candi[candiOrder + 1].totalCount += 1;
+
+            candiOrder += 1;
+        }
+
+        $('.left').on('click', function () {
+            candi[candiOrder - 1].winCount += 1;
+            outCandiList.push(candi[candiOrder]);
+            candi.splice(candiOrder, 1)
+
+            console.log('배열 이동 확인')
+            console.log(candi)
+            console.log(outCandiList)
+
+            clearInterval(timerID);
+
+            // $('.oddImg').animate({minWidth: '1500px'}, 2000)
+            // $('.evenImg').animate({minWidth: '0px'}, 2000)
+            // $('.oddImg').animate({minWidth: '100%'})
+            // $('.evenImg').animate({minWidth: '100%'})
+
+            $('.oddImg').css("pointer-events", "none")
+            $('.evenImg').css("pointer-events", "none")
+
+            currentRound -= 2;
+            console.log('라운드 진행 : ' + currentRound);
+            progress += 1;
+
+            $('.progress-bar').css("width", progress / (totalRound - 1) * 100 + "%");
+
+            checkRound();
+
+            setTimeout(returnClick, 2000);
+            setTimeout(changeCandi, 2000);
+
+            timer(time);
+        })
+
+        $('.right').on('click', function () {
+            candi[candiOrder].winCount += 1;
+            outCandiList.push(candi[candiOrder - 1]);
+            candi.splice(candiOrder - 1, 1)
+
+            clearInterval(timerID);
+
+            // $('.evenImg').animate({minWidth: '1500px'}, 2000)
+            // $('.oddImg').animate({minWidth: '0px'}, 2000)
+            // $('.evenImg').animate({width: '100%'})
+            // $('.oddImg').animate({width: '100%'})
+
+            $('.oddImg').css("pointer-events", "none")
+            $('.evenImg').css("pointer-events", "none")
+
+            currentRound -= 2;
+            console.log('라운드 진행 : ' + currentRound);
+            progress += 1;
+
+            $('.progress-bar').css("width", progress / (totalRound - 1) * 100 + "%");
+
+            checkRound();
+
+            setTimeout(returnClick, 2000);
+            setTimeout(changeCandi, 2000);
+
+            timer(time);
+        })
+
+        function checkRound() {
+            if (currentRound == 0) {
+                var name = document.querySelector('.worldcup-name');
+                if (nextRound > 4) {
+                    name.innerText = ' ' + nextRound + '강';
+                } else if (nextRound == 4) {
+                    name.innerText = ' ' + '준결승';
+                } else if (nextRound == 2) {
+                    name.innerText = ' ' + '결승';
+                }
+
+                var progressbar = document.querySelector('.progress-bar');
+                if (nextRound > 4) {
+                    progressbar.innerText = ' ' + nextRound + '강';
+                } else if (nextRound == 4) {
+                    progressbar.innerText = ' ' + '준결승';
+                } else if (nextRound == 2) {
+                    progressbar.innerText = ' ' + '결승';
+                }
+
+                candiOrder = 0;
+
+                currentRound = nextRound;
+                nextRound = currentRound / 2;
+
+                console.log('마지막 nextRound 체크 : ' + nextRound)
+
+                defeatarr = []
+            }
+
+            function save() {
+                $.ajax()
+            }
+
+            if (nextRound == 0.5) {
+                alert('끝')
+                alert('결과창으로 넘어가기')
+                clearInterval(timerID)
+
+                location.replace('playResult?worldcupNum=' + $('#worldNum').val())
+            }
+        }
+    </script>
+
     <script src="/js/playingnosaveScript.js"></script>
+
 </body>
 </html>
