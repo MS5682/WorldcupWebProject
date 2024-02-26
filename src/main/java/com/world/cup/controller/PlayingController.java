@@ -36,7 +36,9 @@ public class PlayingController {
 
     @GetMapping("/playing")
     public String playing(int worldCupID, Model model) {
-
+//        boolean checksave = proceedService.havesave("test1234", worldCupID);
+//        System.out.println("checksave 확인");
+//        System.out.println(checksave);
 
         ObjectMapper mapper = new ObjectMapper();
         String json = null;
@@ -48,9 +50,37 @@ public class PlayingController {
         model.addAttribute("title", playingService.worldCupTitle(worldCupID));
         model.addAttribute("count", playingService.selectCandi(worldCupID).size());
         model.addAttribute("candi", json);
+//        model.addAttribute("issave", checksave);
 
         return "/play/playing";
     }
+
+//    @GetMapping("/playing/loadsave")
+//    public ResponseEntity<String> saveplay(String userId, int worldcupId, Model model) {
+//        List<Proceedinterface> candi = proceedService.savefileload(userId, worldcupId);
+//        int[] choiceNumList = null;
+//
+//        for (int i=0; i<candi.size(); i++) {
+//            choiceNumList[i] = candi.get(i).getProceedNum();
+//        }
+//
+//        ObjectMapper mapper = new ObjectMapper();
+//
+//        String json = null;
+//        try {
+//            json = mapper.writeValueAsString(candi);
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
+//
+//        System.out.println("json 확인");
+//        System.out.println(json);
+//
+//        model.addAttribute("candi", json);
+//        model.addAttribute("choiceNum", choiceNumList);
+//
+//        return ResponseEntity.ok(json);
+//    }
 
     @GetMapping("/playResult")
     public void playResult(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model, HttpSession session){
@@ -88,6 +118,13 @@ public class PlayingController {
     @PostMapping("/playing/autosave")
     public ResponseEntity<String> autosave(@RequestBody SaveDTO saveDTO) {
         proceedService.autosave(saveDTO);
+
+        return ResponseEntity.ok("success");
+    }
+
+    @PostMapping("/playing/finalsave")
+    public ResponseEntity<String> finalsave(@RequestBody SaveDTO saveDTO) {
+        proceedService.finalsave(saveDTO);
 
         return ResponseEntity.ok("success");
     }

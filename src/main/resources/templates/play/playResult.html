@@ -410,7 +410,7 @@
                 },
                 datalabels: {
                     formatter: function (value, context) {
-                        return context.chart.data.labels[context.dataIndex] + ' ' +  Math.round(value * 1.0 / context.chart.getDatasetMeta(0).total * 100) + "%";
+                        return context.chart.data.labels[context.dataIndex];
                     },
                     color: '#000'
                 },
@@ -420,20 +420,9 @@
             }
          }
         var barOptions = {
-         scales: {
-            y: {
-                ticks: {
-                    callback: function(value, index, values) {
-                        return Math.round(value / total * 100) + '%'; // 백분율로 변환하여 표시
-                    }
-                }
-            }
-        },
             plugins: {
                 datalabels: {
-                    formatter: function (value, context) {
-                        return Math.round(value * 1.0 / context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0) * 100) + '%';
-                    },
+
                     color: '#000',
                 },
                 legend: {

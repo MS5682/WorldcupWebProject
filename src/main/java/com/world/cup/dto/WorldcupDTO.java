@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +22,8 @@ public class WorldcupDTO {
     private String description;
     private Byte disclosure;
     private int viewCnt;
-    private LocalDate regDate;
-    private LocalDate modDate;
+    private LocalDateTime regDate;
+    private LocalDateTime modDate;
     @Builder.Default
     private List<ChoiceDTO> choice = new ArrayList<>();;
     private String id;
