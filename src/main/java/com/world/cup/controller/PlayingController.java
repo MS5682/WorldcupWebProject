@@ -2,12 +2,9 @@ package com.world.cup.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.world.cup.Proceedinterface;
 import com.world.cup.dto.PageRequestDTO;
 import com.world.cup.dto.PageResultDTO;
 import com.world.cup.dto.WorldcupDTO;
-import com.world.cup.entity.Choice;
-import com.world.cup.entity.Proceed;
 import com.world.cup.service.ChoiceService;
 import com.world.cup.service.CommentService;
 import com.world.cup.service.PlayingService;
@@ -24,9 +21,6 @@ import com.world.cup.dto.SaveDTO;
 import com.world.cup.service.ProceedService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @Log4j2
@@ -128,13 +122,13 @@ public class PlayingController {
         return ResponseEntity.ok("success");
     }
 
-<<<<<<< HEAD
     @PostMapping("/playing/finalsave")
     public ResponseEntity<String> finalsave(@RequestBody SaveDTO saveDTO) {
         proceedService.finalsave(saveDTO);
 
         return ResponseEntity.ok("success");
-=======
+    }
+
     @GetMapping("/playing/quiz")
     public String quiz(int worldCupID,Model model){
 
@@ -143,6 +137,5 @@ public class PlayingController {
         model.addAttribute("count", playingService.selectQuiz(worldCupID).size());
 
         return "/play/quiz.html";
->>>>>>> origin/main
     }
 }
