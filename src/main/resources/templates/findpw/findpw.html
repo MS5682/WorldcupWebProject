@@ -39,11 +39,11 @@
 							<div  th:if="${msg}" >
 								<p class="text-center fs-6"  id="msg" th:text="${msg}"></p>
 							</div>
-
 								<button  th:if="!${msg}" type="submit" class="btn btn-primary rounded submit w-100">비밀번호 찾기</button>
 							<a th:href="@{/worldcup/findpw}" style="font-size:10px;" th:if="${success}==false" id="reFindPwBtn"><button type="button" class="btn btn-primary rounded w-100">비밀번호 다시 찾기</button></a>
 							<a th:href="@{/worldcup/login}" style="font-size:10px;" th:if="${success}==true" id="toLoginBtn"><button type="button" class="btn btn-primary rounded w-100">로그인 화면으로</button></a>
 	         			 </form>
+
 	       		 	</div>
 				</div>
 			</div>
