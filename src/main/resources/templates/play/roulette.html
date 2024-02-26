@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+    <style>
+        .container{
+            width:1400px;
+        }
+        #win {
+            width: 500px;
+            height: 300px;
+        }
+    </style>
+
+</head>
+<th:block th:replace="main/header :: header"></th:block>
+
+<body>
+<main>
+    <div class="album py-5 bg-body-tertiary">
+        <div class="container d-flex justify-content-center">
+            <table class="worldcup-result">
+                <tr class="worldcup-result-tr">
+                    <td colspan="2" class="text-center" >
+                        <p class="text-center fs-1 fw-bold" th:text="${worldcup.title} +' 룰렛'"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">
+                        <div class="d-flex justify-content-center py-5">
+                            <input class="btn btn-warning" type="button" value="룰렛 돌리기" style="float:left;" id='spin' />
+                        </div>
+
+                        <canvas id="canvas"></canvas>
+
+                    </td>
+                    <td >
+                        <div id="win" class="d-flex justify-content-center">
+
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <script th:inline="javascript">
+           var chartData = /*[[${worldcup.choice}]]*/ '';
+           chartData.sort((a, b) => b.first - a.first);
+           var options = [];
+           var choices = [];
+           chartData.forEach(function(choice) {
+               options.push(choice.name);
+               choices.push(choice);
+           });
+           var startAngle = 0;
+           var arc = Math.PI / (options.length / 2);
+           var spinTimeout = null;
+
+           var spinArcStart = 10;
+           var spinTime = 0;
+           var spinTimeTotal = 0;
+
+           var canvas = document.getElementById("canvas");
+           var ctx = canvas.getContext("2d");
+
+           var canvasWidth = 1000;
+           var canvasHeight = 1000;
+           var centerX = canvasWidth / 2;
+           var centerY = canvasHeight / 2;
+
+           canvas.width = canvasWidth;
+           canvas.height = canvasHeight;
+
+           document.getElementById("spin").addEventListener("click", spin);
+
+           function byte2Hex(n) {
+               var nybHexString = "0123456789ABCDEF";
+               return String(nybHexString.substr((n >> 4) & 0x0F,1)) + nybHexString.substr(n & 0x0F,1);
+           }
+
+           function RGB2Color(r,g,b) {
+               return '#' + byte2Hex(r) + byte2Hex(g) + byte2Hex(b);
+           }
+
+           function getColor(item, maxitem) {
+               var phase = 0;
+               var center = 128;
+               var width = 127;
+               var frequency = Math.PI*2/maxitem;
+
+               red   = Math.sin(frequency*item+2+phase) * width + center;
+               green = Math.sin(frequency*item+0+phase) * width + center;
+               blue  = Math.sin(frequency*item+4+phase) * width + center;
+
+               return RGB2Color(red,green,blue);
+           }
+
+           function drawRouletteWheel() {
+               var outsideRadius = 400;
+               var textRadius = 320;
+               var insideRadius = 100;
+
+               ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+               ctx.strokeStyle = "black";
+               ctx.lineWidth = 2;
+               ctx.font = 'bold 12px Helvetica, Arial';
+
+               for(var i = 0; i < options.length; i++) {
+                   var angle = startAngle + i * arc;
+                   ctx.fillStyle = getColor(i, options.length);
+
+                   ctx.beginPath();
+                   ctx.arc(centerX, centerY, outsideRadius, angle, angle + arc, false);
+                   ctx.arc(centerX, centerY, insideRadius, angle + arc, angle, true);
+
+                   ctx.fill();
+
+                   ctx.save();
+                   ctx.shadowOffsetX = -1;
+                   ctx.shadowOffsetY = -1;
+                   ctx.shadowBlur    = 0;
+                   ctx.fillStyle = "black";
+                   ctx.translate(centerX + Math.cos(angle + arc / 2) * textRadius,
+                                   centerY + Math.sin(angle + arc / 2) * textRadius);
+                   ctx.rotate(angle + arc / 2 + Math.PI / 2);
+
+                   var maxSize = 36; // 최대 크기
+                    var minSize = 12; // 최소 크기
+                    var maxInterval = 30;
+                    var minInterval = 12;
+
+                    var numOptions = options.length;
+
+                    var fontSize = maxSize - (maxSize - minSize) * (numOptions / 10);
+                     var IntervalSize = maxInterval - (maxInterval - minInterval) * (numOptions / 10);
+                     if(IntervalSize < minInterval)
+                        IntervalSize = minInterval;
+
+                    ctx.font = 'bold ' + fontSize + 'px Helvetica, Arial';
+
+                   var text = options[i];
+                   for (var j = 0; j < text.length; j++) {
+                       ctx.fillText(text[j], 0, j * IntervalSize);
+                   }
+
+                   ctx.restore();
+               }
+
+               //Arrow
+               ctx.fillStyle = "black";
+               ctx.beginPath();
+               ctx.moveTo(centerX - 4, centerY - (outsideRadius + 5));
+               ctx.lineTo(centerX + 4, centerY - (outsideRadius + 5));
+               ctx.lineTo(centerX + 4, centerY - (outsideRadius - 5));
+               ctx.lineTo(centerX + 9, centerY - (outsideRadius - 5));
+               ctx.lineTo(centerX + 0, centerY - (outsideRadius - 13));
+               ctx.lineTo(centerX - 9, centerY - (outsideRadius - 5));
+               ctx.lineTo(centerX - 4, centerY - (outsideRadius - 5));
+               ctx.lineTo(centerX - 4, centerY - (outsideRadius + 5));
+               ctx.fill();
+           }
+
+           function spin() {
+               spinAngleStart = Math.random() * 20 + 20;
+               spinTime = 0;
+               spinTimeTotal = Math.random() * 2 + 3 * 1000;
+               rotateWheel();
+           }
+
+           function rotateWheel() {
+               spinTime += 30;
+               if(spinTime >= spinTimeTotal) {
+                   stopRotateWheel();
+                   return;
+               }
+               var spinAngle = spinAngleStart - easeOut(spinTime, 0, spinAngleStart, spinTimeTotal);
+               startAngle += (spinAngle * Math.PI / 180);
+               drawRouletteWheel();
+               spinTimeout = setTimeout('rotateWheel()', 30);
+           }
+
+           function stopRotateWheel() {
+               clearTimeout(spinTimeout);
+               var degrees = startAngle * 180 / Math.PI + 90;
+               var arcd = arc * 180 / Math.PI;
+               var index = Math.floor((360 - degrees % 360) / arcd);
+               ctx.save();
+               ctx.font = 'bold 30px Helvetica';
+               var text = options[index]
+               ctx.fillText(text, centerX - ctx.measureText(text).width / 2, centerY + 10);
+               ctx.restore();
+
+               var choiceInfo = choices[index];
+               console.log(choiceInfo);
+
+               if(choiceInfo.type == 1)
+                var link = `<img src="/worldcup/choice/display?fileName=${choiceInfo.imageURL}" style="max-width: 100%; max-height: 100%;">`;
+               else
+                var link = `<iframe width="500" height="300" src="https://www.youtube.com/embed/${choiceInfo.imgName}" picture-in-picture; web-share" allowfullscreen/>`;
+
+
+               document.querySelector("#win").innerHTML = link;
+
+
+           }
+
+           function easeOut(t, b, c, d) {
+               var ts = (t/=d)*t;
+               var tc = ts*t;
+               return b+c*(tc + -3*ts + 3*t);
+           }
+
+           drawRouletteWheel();
+        </script>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</main>
+</body>
+<th:block th:replace="main/footer :: footer"></th:block>
+</html>
+
