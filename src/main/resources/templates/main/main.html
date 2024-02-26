@@ -90,14 +90,14 @@
                 <!-- Description and other content for each worldcupDTO -->
                 <p class="card-text" th:text="${worldcupDTO.description}"></p>
                 <div class="d-flex justify-content-between align-items-center">
-                  <small class="text-body-secondary" th:if="${worldcupDTO.modDate.equals(worldcupDTO.regDate)}"
-                         th:text="'등록일 ' + ${worldcupDTO.regDate}"></small>
-                  <small class="text-body-secondary" th:unless="${worldcupDTO.modDate.equals(worldcupDTO.regDate)}"
-                         th:text="'수정일 ' + ${worldcupDTO.modDate}"></small>
-
+                  <small class="text-body-secondary" th:if="${worldcupDTO.modDate != null and worldcupDTO.modDate.equals(worldcupDTO.regDate)}"
+                         th:text="'등록일 ' + ${#temporals.format(worldcupDTO.regDate, 'yyyy-MM-dd')}"></small>
+                  <small class="text-body-secondary" th:unless="${worldcupDTO.modDate != null and worldcupDTO.modDate.equals(worldcupDTO.regDate)}"
+                         th:text="'수정일 ' + ${#temporals.format(worldcupDTO.modDate, 'yyyy-MM-dd')}"></small>
                   <div class="btn-group">
                     <input type="hidden" class="worldcupNum" th:value="${worldcupDTO.worldcupNum}">
                     <a th:href="@{/play/playing/quiz(worldCupID = ${worldcupDTO.worldcupNum})}"><button type="button" class="btn btn-sm btn-outline-secondary quizBtn">퀴즈</button></a>
+                    <a th:href="@{/play/playing/roulette(worldcupNum = ${worldcupDTO.worldcupNum})}"><button type="button" class="btn btn-sm btn-outline-secondary roulette">룰렛</button></a>
                     <a th:href="@{/play/playing(worldCupID = ${worldcupDTO.worldcupNum})}"><button type="button" class="btn btn-sm btn-outline-secondary startBtn">월드컵</button></a>
                     <a th:href="@{/play/playResult(worldcupNum = ${worldcupDTO.worldcupNum})}"><button type="button" class="btn btn-sm btn-outline-secondary">결과</button></a>
                     <button type="button" class="btn btn-sm btn-outline-secondary ReportBtn" th:text="신고"

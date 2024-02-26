@@ -76,6 +76,15 @@ public class PlayingController {
         model.addAttribute("choices", pageResultDTO);
     }
 
+    @GetMapping("/playing/roulette")
+    public String roulette(WorldcupDTO worldcupDTO,Model model){
+        worldcupDTO = worldcupService.getWorldcup(worldcupDTO);
+        worldcupDTO = choiceService.getChoiceToWorldcup(worldcupDTO);
+        model.addAttribute("worldcup", worldcupDTO);
+
+        return "/play/roulette.html";
+    }
+
     @PostMapping("/playing/save")
     public ResponseEntity<String> save(@RequestBody SaveDTO saveDTO) {
         System.out.println("saveDTO 확인용-----------------------------------");
