@@ -36,7 +36,7 @@
             </tr>
             <tr th:if="${winner != null}">
                 <td>
-                    <p class="text-center fs-1 fw-bold">⭐우승자⭐</p>
+                    <p class="text-center fs-1 fw-bold">⭐우승자 : [[${winner.name}]]⭐</p>
                     <div class="text-center d-flex justify-content-center align-items-center" >
                         <img th:if="${winner.type == 1}" th:src="@{/worldcup/choice/display(fileName=${winner.getImageURL()})}" style="max-width: 500px; max-height: 500px;">
                         <img th:if="${winner.type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${winner.imgName} + '/0.jpg'}" style="max-width: 500px; max-height: 500px;">
