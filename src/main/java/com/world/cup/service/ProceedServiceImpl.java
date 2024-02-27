@@ -21,8 +21,6 @@ public class ProceedServiceImpl implements ProceedService {
 
     @Override
     public void save(SaveDTO saveDTO) {
-        System.out.println("월드컵 넘버 확인");
-        System.out.println(saveDTO.getWorldNum());
 
         for (int i=0; i<saveDTO.getWinner().size(); i++) {
             Proceed p = Proceed.builder()
@@ -32,8 +30,7 @@ public class ProceedServiceImpl implements ProceedService {
                     .choice(convertEntity(saveDTO.getWinner().get(i)))
                     .next(1)
                     .build();
-            System.out.println("Proceed 확인----------------------------------");
-            System.out.println(p);
+
             repository.save(p);
         }
     }
@@ -52,8 +49,6 @@ public class ProceedServiceImpl implements ProceedService {
                 .next(1)
                 .build();
 
-        System.out.println("이긴 거---------------------------");
-        System.out.println(p);
         repository.save(p);
 
         p = Proceed.builder()
@@ -67,9 +62,6 @@ public class ProceedServiceImpl implements ProceedService {
                 .choice(convertEntity(saveDTO.getLoser().get(0)))
                 .next(0)
                 .build();
-
-        System.out.println("진 거-----------------------");
-        System.out.println(p);
 
         repository.save(p);
     }
@@ -92,7 +84,7 @@ public class ProceedServiceImpl implements ProceedService {
                     .lose(p.getLose())
                     .first(p.getFirst())
                     .build();
-            System.out.println(c);
+
             playingRepository.save(c);
 
             repository.delete(p);
@@ -103,9 +95,6 @@ public class ProceedServiceImpl implements ProceedService {
     public List<Choice> savefileload(String userId, int worldcupNum) {
 
         List<Proceed> proceedList = repository.findProceedsByUserIdAndWorldcup_WorldcupNum(userId, worldcupNum);
-
-        System.out.println("proceedList 확인---------------------------");
-        System.out.println(proceedList);
 
         List<Choice> choiceList = new ArrayList<>();
 
@@ -126,21 +115,23 @@ public class ProceedServiceImpl implements ProceedService {
 
         }
 
-        System.out.println("choiceList 확인");
-        System.out.println(choiceList);
-
         return choiceList;
     }
 
     @Override
     public int[] round(String userId, int worldcupNum) {
         List<Proceed> proceedList = repository.findProceedsByUserIdAndWorldcup_WorldcupNum(userId, worldcupNum);
+        int i = 0;
 
         int[] nextArr = new int[proceedList.size()];
 
-        for (int i=0;i<proceedList.size();i++) {
-            nextArr[i] = proceedList.get(i).getRoundNext();
+        for (Proceed p : proceedList) {
+            if (p.getNext() == 1) {
+                nextArr[i] = p.getRoundNext();
+                i++;
+            }
         }
+
         return nextArr;
     }
 
@@ -155,9 +146,6 @@ public class ProceedServiceImpl implements ProceedService {
     public boolean havesave(String userId, int worldcupNum) {
         List<Proceed> checksave = repository.endPlayResult(userId, worldcupNum);
 
-        System.out.println("확인용");
-        System.out.println(checksave);
-        System.out.println(checksave.isEmpty());
         if (checksave.isEmpty()) {
             return false;
         } else {
