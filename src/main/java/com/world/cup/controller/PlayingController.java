@@ -37,8 +37,10 @@ public class PlayingController {
 
 
     @GetMapping("/playing")
-    public String playing(int worldCupID, Model model) {
-        boolean checksave = proceedService.havesave("test1234", worldCupID);
+    public String playing(int worldCupID, Model model, HttpSession session) {
+        String userId = (String) session.getAttribute("userId");
+
+        boolean checksave = proceedService.havesave(userId, worldCupID);
 
         ObjectMapper mapper = new ObjectMapper();
         String json = null;
@@ -47,10 +49,12 @@ public class PlayingController {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+
         model.addAttribute("title", playingService.worldCupTitle(worldCupID));
         model.addAttribute("count", playingService.selectCandi(worldCupID).size());
         model.addAttribute("candi", json);
         model.addAttribute("issave", checksave);
+        model.addAttribute("userId", userId);
 
         return "/play/playing";
     }
@@ -138,10 +142,16 @@ public class PlayingController {
     }
 
     @PostMapping("/playing/finalsave")
-    public ResponseEntity<String> finalsave(@RequestBody SaveDTO saveDTO) {
+    public String finalsave(@RequestBody SaveDTO saveDTO) {
         proceedService.finalsave(saveDTO);
 
-        return ResponseEntity.ok("success");
+        return "redirect:playResult?worldcupNum=" + saveDTO.getWorldNum();
+    }
+
+    @PostMapping("/playing/nologinsave")
+    public String nologinsave(@RequestBody Choice c, Choice[] choices) {
+        proceedService.nologinsave(c, choices);
+        return null;
     }
 
     @GetMapping("/playing/quiz")

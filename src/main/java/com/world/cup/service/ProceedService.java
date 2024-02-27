@@ -13,6 +13,8 @@ public interface ProceedService {
 
     void finalsave(SaveDTO saveDTO);
 
+    void nologinsave(Choice c, Choice[] choices);
+
     boolean havesave(String userId, int worldcupNum);
 
     List<Choice> savefileload(String userId, int worldcupNum);

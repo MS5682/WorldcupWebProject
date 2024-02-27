@@ -11,6 +11,7 @@ import lombok.Builder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -21,11 +22,10 @@ public class ProceedServiceImpl implements ProceedService {
 
     @Override
     public void save(SaveDTO saveDTO) {
-
         for (int i=0; i<saveDTO.getWinner().size(); i++) {
             Proceed p = Proceed.builder()
                     .roundNext(saveDTO.getRoundNext())
-                    .user(User.builder().id("test1234").build())
+                    .user(User.builder().id(saveDTO.getUserId()).build())
                     .worldcup(Worldcup.builder().worldcupNum(saveDTO.getWorldNum()).build())
                     .choice(convertEntity(saveDTO.getWinner().get(i)))
                     .next(1)
@@ -92,6 +92,12 @@ public class ProceedServiceImpl implements ProceedService {
     }
 
     @Override
+    public void nologinsave(Choice c, Choice[] choices) {
+        playingRepository.save(c);
+        playingRepository.saveAll(Arrays.asList(choices));
+    }
+
+    @Override
     public List<Choice> savefileload(String userId, int worldcupNum) {
 
         List<Proceed> proceedList = repository.findProceedsByUserIdAndWorldcup_WorldcupNum(userId, worldcupNum);
@@ -146,11 +152,7 @@ public class ProceedServiceImpl implements ProceedService {
     public boolean havesave(String userId, int worldcupNum) {
         List<Proceed> checksave = repository.endPlayResult(userId, worldcupNum);
 
-        if (checksave.isEmpty()) {
-            return false;
-        } else {
-            return true;
-        }
+        return !checksave.isEmpty();
     }
 
 
