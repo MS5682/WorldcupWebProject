@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Builder
@@ -27,7 +26,7 @@ public class ProceedServiceImpl implements ProceedService {
 
         for (int i=0; i<saveDTO.getWinner().size(); i++) {
             Proceed p = Proceed.builder()
-                    .round(saveDTO.getRound())
+                    .roundNext(saveDTO.getRoundNext())
                     .user(User.builder().id("test1234").build())
                     .worldcup(Worldcup.builder().worldcupNum(saveDTO.getWorldNum()).build())
                     .choice(convertEntity(saveDTO.getWinner().get(i)))
@@ -43,7 +42,7 @@ public class ProceedServiceImpl implements ProceedService {
     public void autosave(SaveDTO saveDTO) {
         Proceed p = Proceed.builder()
                 .proceedNum(repository.findByUser_IdAndChoice(saveDTO.getUserId(), convertEntity(saveDTO.getWinner().get(0))).getProceedNum())
-                .round(saveDTO.getRound())
+                .roundNext(saveDTO.getRoundNext())
                 .win(saveDTO.getWinner().get(0).getWin())
                 .lose(saveDTO.getWinner().get(0).getLose())
                 .first(saveDTO.getWinner().get(0).getFirst())
@@ -59,7 +58,7 @@ public class ProceedServiceImpl implements ProceedService {
 
         p = Proceed.builder()
                 .proceedNum(repository.findByUser_IdAndChoice(saveDTO.getUserId(), convertEntity(saveDTO.getLoser().get(0))).getProceedNum())
-                .round(saveDTO.getRound())
+                .roundNext(saveDTO.getRoundNext())
                 .win(saveDTO.getLoser().get(0).getWin())
                 .lose(saveDTO.getLoser().get(0).getLose())
                 .first(saveDTO.getLoser().get(0).getFirst())
@@ -140,7 +139,7 @@ public class ProceedServiceImpl implements ProceedService {
         int[] nextArr = new int[proceedList.size()];
 
         for (int i=0;i<proceedList.size();i++) {
-            nextArr[i] = proceedList.get(i).getRound();
+            nextArr[i] = proceedList.get(i).getRoundNext();
         }
         return nextArr;
     }

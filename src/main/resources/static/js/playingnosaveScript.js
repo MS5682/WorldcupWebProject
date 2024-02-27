@@ -28,7 +28,7 @@ $(document).ready(function () { // 세이브 파일 체크
                         success: function (result) {
                             nextVal = result;
                             for (i=0;i<candi.length;i++) {
-                                candi[i].round = nextVal[i]
+                                candi[i].roundnext = nextVal[i]
                             }
 
                             console.log(candi)
@@ -124,11 +124,27 @@ function savestart() {
         shuffle(candi)  // 후보 섞음
     } else {
         // 확인 버튼을 안누르기 때문에 확인 버튼 누르면 하는걸 여기서 해야함
-        console.log('분리')
-        // for (i=0;i<allCandiList.length;i++) {
-        //
-        // }
+        lastround = candi[candi.length - 1].roundnext;
+        for (i=0;i<candi.length;i++) {
+            if (candi[i].roundnext < lastround) {
+                candiOrder++
+            }
+        }
 
+        candiOrder = candiOrder - 2;
+        if (candi.length < 5) {
+            nextRound = 2
+        } else if (candi.length < 9) {
+            nextRound = 4
+        } else if (candi.length < 17) {
+            nextRound = 8
+        } else if (candi.length < 33) {
+            nextRound = 16
+        } else if (candi.length < 65) {
+            nextRound = 32
+        }
+
+        console.log('candiorder')   // 4
         console.log(candiOrder)
 
         console.log('화면표시 기능 시작')
@@ -384,7 +400,7 @@ function startsave() {
         contentType: 'application/json',
         data: JSON.stringify({
             winner: candi,
-            round: nextRound * 2,
+            roundNext: nextRound * 2,
             worldNum: $('#worldNum').val()
         }),
         success: function (result) {
@@ -404,7 +420,7 @@ function leftsave() {
         data: JSON.stringify({
             winner: [candi[candiOrder - 1]],
             loser: [outCandiList.at(-1)],
-            round: nextRound,
+            roundNext: nextRound,
             userId: 'test1234',
             worldNum: $('#worldNum').val()
         }),
@@ -425,7 +441,7 @@ function rightsave() {
         data: JSON.stringify({
             winner: [candi[candiOrder]],
             loser: [outCandiList.at(-1)],
-            round: nextRound,
+            roundNext: nextRound,
             userId: 'test1234',
             worldNum: $('#worldNum').val()
         }),
