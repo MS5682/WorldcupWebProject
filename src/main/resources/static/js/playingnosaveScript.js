@@ -1,4 +1,5 @@
 var saveplay = true
+var userId = $('#userId').val();
 
 $(document).ready(function () { // 세이브 파일 체크
     if ($('#issave').val() == 'true') {
@@ -9,7 +10,7 @@ $(document).ready(function () { // 세이브 파일 체크
                 type: 'get',
                 url: '/play/playing/loadsave',
                 data: {
-                    userId: 'test1234', // 아이디
+                    userId: userId,
                     worldcupId: $('#worldNum').val()
                 },
                 dataType: 'text',
@@ -20,7 +21,7 @@ $(document).ready(function () { // 세이브 파일 체크
                         type: 'get',
                         url: '/play/playing/next',
                         data: {
-                            userId: 'test1234', // 아이디
+                            userId: userId,
                             worldcupId: $('#worldNum').val()
                         },
                         success: function (result) {
@@ -43,7 +44,7 @@ $(document).ready(function () { // 세이브 파일 체크
                 type: 'get',
                 url: '/play/playing/savedelete',
                 data: {
-                    userId: 'test1234', // 아이디
+                    userId: userId,
                     worldcupId: $('#worldNum').val()
                 },
                 success: function (result) {
@@ -390,69 +391,81 @@ function checkRound() {
 
         clearInterval(timerID)
 
-        finalsave()
+        if (userId == '') {
+            nologinsave()
+        } else {
+            finalsave()
+        }
     }
 }
 
 function startsave() {
-    $.ajax({
-        type: 'post',
-        url: 'playing/save',
-        contentType: 'application/json',
-        data: JSON.stringify({
-            winner: candi,
-            roundNext: nextRound * 2,
-            worldNum: $('#worldNum').val()
-        }),
-        success: function (result) {
-            console.log(result)
-        },
-        error: function (request, status, error) {
-            console.log(error)
-        }
-    })
+    if (userId != '') {
+        $.ajax({
+            type: 'post',
+            url: 'playing/save',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                winner: candi,
+                roundNext: nextRound * 2,
+                worldNum: $('#worldNum').val()
+            }),
+            success: function (result) {
+                console.log(result)
+            },
+            error: function (request, status, error) {
+                console.log(error)
+            }
+        })
+    }
+
 }
 
 function leftsave() {
-    $.ajax({
-        type: 'post',
-        url: 'playing/autosave',
-        contentType: 'application/json',
-        data: JSON.stringify({
-            winner: [candi[candiOrder - 1]],
-            loser: [outCandiList.at(-1)],
-            roundNext: nextRound,
-            userId: 'test1234', // 아이디
-            worldNum: $('#worldNum').val()
-        }),
-        success: function (result) {
-            console.log(result)
-        },
-        error: function (request, status, error) {
-            alert(error);
-        }
-    })
+    if (userId != '') {
+        $.ajax({
+            type: 'post',
+            url: 'playing/autosave',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                winner: [candi[candiOrder - 1]],
+                loser: [outCandiList.at(-1)],
+                roundNext: nextRound,
+                userId: userId,
+                worldNum: $('#worldNum').val()
+            }),
+            success: function (result) {
+                console.log(result)
+            },
+            error: function (request, status, error) {
+                alert(error);
+            }
+        })
+    }
+
 }
 
 function rightsave() {
-    $.ajax({
-        type: 'post',
-        url: 'playing/autosave',
-        contentType: 'application/json',
-        data: JSON.stringify({
-            winner: [candi[candiOrder]],
-            loser: [outCandiList.at(-1)],
-            roundNext: nextRound,
-            userId: 'test1234', // 아이디
-            worldNum: $('#worldNum').val()
-        }),
-        success: function (result) {
-            console.log(result)
-        },
-        error: function (request, status, error) {
-            alert(error)
-        }
-    })
+    if (userId != '') {
+        $.ajax({
+            type: 'post',
+            url: 'playing/autosave',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                winner: [candi[candiOrder]],
+                loser: [outCandiList.at(-1)],
+                roundNext: nextRound,
+                userId: userId,
+                worldNum: $('#worldNum').val()
+            }),
+            success: function (result) {
+                console.log(result)
+            },
+            error: function (request, status, error) {
+                alert(error)
+            }
+        })
+    }
 }
 
 function finalsave() {
@@ -463,11 +476,31 @@ function finalsave() {
         data: JSON.stringify({
             winner: [candi[0]],
             loser: [outCandiList.at(-1)],
-            userId: 'test1234', // 아이디
+            userId: userId,
             worldNum: $('#worldNum').val()
         }),
         success: function (result) {
-            // location.replace("playResult?worldCupID=" + $('#worldNum').val())
+            // 이긴거 번호 보내기
+            // location.replace("playResult?worldcupNum=" + $('#worldNum').val())
+        },
+        error: function (request, status, error) {
+            console.log(error)
+        }
+    })
+}
+
+function nologinsave() {
+    $.ajax({
+        type: 'post',
+        url: 'playing/nologinsave',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            choice: candi,
+            choices: outCandiList
+        }),
+        success: function (result) {
+            // 이긴거 번호 보내기
+            // location.replace("playResult?worldcupNum=" + $('#worldNum').val())
         },
         error: function (request, status, error) {
             console.log(error)
