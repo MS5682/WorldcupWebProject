@@ -93,6 +93,11 @@ public class ChoiceServiceImpl implements ChoiceService {
     }
 
     @Override
+    public ChoiceDTO getChoice(ChoiceDTO choiceDTO) {
+        return entityToDto(choiceRepository.getOne(choiceDTO.getChoiceNum()));
+    }
+
+    @Override
     public Integer sumFirst(WorldcupDTO worldcupDTO) {
         return choiceRepository.sumFirstByWorldcupWorldcupNum(worldcupDTO.getWorldcupNum());
 

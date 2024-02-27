@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.world.cup.dto.PageRequestDTO;
-import com.world.cup.dto.PageResultDTO;
-import com.world.cup.dto.WorldcupDTO;
+import com.world.cup.dto.*;
 import com.world.cup.entity.Choice;
 import com.world.cup.service.ChoiceService;
 import com.world.cup.service.CommentService;
@@ -20,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.world.cup.dto.SaveDTO;
 import com.world.cup.service.ProceedService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -91,6 +88,10 @@ public class PlayingController {
     @GetMapping("/playResult")
     public void playResult(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model, HttpSession session){
         WorldcupDTO worldcupDTO = WorldcupDTO.builder().worldcupNum(pageRequestDTO.getWorldcupNum()).build();
+        if(pageRequestDTO.getChoiceNum() != null) {
+            ChoiceDTO winner = choiceService.getChoice(ChoiceDTO.builder().choiceNum(pageRequestDTO.getChoiceNum()).build());
+            model.addAttribute("winner", winner);
+        }
         WorldcupDTO choiceRank = choiceService.getChoiceRank(worldcupDTO);
         worldcupDTO = worldcupService.getWorldcup(worldcupDTO);
         Integer sumFirst = choiceService.sumFirst(worldcupDTO);
@@ -104,6 +105,7 @@ public class PlayingController {
         pageRequestDTO.setCommentType(0);
         model.addAttribute("comment", commentService.getCommentPage(pageRequestDTO));
         pageRequestDTO.setCommentType(1);
+
         model.addAttribute("request", commentService.getCommentPage(pageRequestDTO));
         model.addAttribute("worldcup", worldcupDTO);
         model.addAttribute("sumFirst", sumFirst);

@@ -26,7 +26,7 @@ public class CommentListRepositoryImpl extends QuerydslRepositorySupport impleme
 
 
     @Override
-    public Page<Object[]> getCommentList(Integer choiceNum, int worldcupNum, int commentType, Pageable pageable) {
+    public Page<Object[]> getCommentList(int worldcupNum, int commentType, Pageable pageable) {
         QComment comment = QComment.comment;
         QUser user = QUser.user;
         JPQLQuery<Tuple> jpqlQuery = from(comment)
@@ -36,9 +36,6 @@ public class CommentListRepositoryImpl extends QuerydslRepositorySupport impleme
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         booleanBuilder.and(comment.worldcup.worldcupNum.eq(worldcupNum));
         booleanBuilder.and(comment.type.eq(commentType));
-        if (choiceNum != null) {
-            booleanBuilder.and(comment.choice.choiceNum.eq(choiceNum));
-        }
 
         jpqlQuery.where(booleanBuilder);
 
