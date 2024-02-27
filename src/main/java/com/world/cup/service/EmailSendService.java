@@ -40,10 +40,19 @@ public class EmailSendService {
         User user = userRepository.getUserById(id);
         Worldcup worldcup =(Worldcup) worldcupRepository.getWorldcupByWorldcupNum(worldcupNum);
         dto.setAddress(user.getEmail());
-        dto.setTitle("[마이픽] "+id+"님의 ["+worldcup.getTitle()+"]이 신고로 인해 삭제되었습니다.");
-        dto.setMessage("안녕하세요. 마이픽에서 보내는 월드컵 삭제 관련 메일 입니다.\n\n" + " " + id + " " + "님의 "
-                +worldcup.getTitle()+"이 신고로 인해 삭제되었습니다\n\n"
-                + "삭제 사유는 다음과 같습니다\n\n" + msg);
+
+        if (user.getPassword().equals("google") || user.getPassword().equals("naver")){
+            dto.setTitle("[마이픽] "+user.getEmail()+"님의 ["+worldcup.getTitle()+"]이 신고로 인해 삭제되었습니다.");
+            dto.setMessage("안녕하세요. 마이픽에서 보내는 월드컵 삭제 관련 메일 입니다.\n\n" + " " + user.getEmail() + " " + "님의 "
+                    +worldcup.getTitle()+"이 신고로 인해 삭제되었습니다\n\n"
+                    + "삭제 사유는 다음과 같습니다\n\n" + msg);
+        }else {
+            dto.setTitle("[마이픽] "+id+"님의 ["+worldcup.getTitle()+"]이 신고로 인해 삭제되었습니다.");
+            dto.setMessage("안녕하세요. 마이픽에서 보내는 월드컵 삭제 관련 메일 입니다.\n\n" + " " + id + " " + "님의 "
+                    +worldcup.getTitle()+"이 신고로 인해 삭제되었습니다\n\n"
+                    + "삭제 사유는 다음과 같습니다\n\n" + msg);
+
+        }
 
         return dto;
     }
