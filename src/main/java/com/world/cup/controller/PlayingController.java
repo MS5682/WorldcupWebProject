@@ -88,6 +88,13 @@ public class PlayingController {
         return ResponseEntity.ok(nextArr);
     }
 
+    @GetMapping("/playing/savedelete")
+    public ResponseEntity<String> savedelete(String userId, int worldcupId) {
+        proceedService.savedelete(userId, worldcupId);
+
+        return ResponseEntity.ok("success");
+    }
+
     @GetMapping("/playResult")
     public void playResult(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model, HttpSession session){
         WorldcupDTO worldcupDTO = WorldcupDTO.builder().worldcupNum(pageRequestDTO.getWorldcupNum()).build();

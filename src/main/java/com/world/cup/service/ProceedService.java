@@ -19,6 +19,8 @@ public interface ProceedService {
 
     int[] round(String userId, int worldcupNum);
 
+    void savedelete(String userId, int worldcupNum);
+
     default Choice convertEntity(ChoiceDTO choiceDTO) {
         Choice newChoice = Choice.builder().choiceNum(choiceDTO.getChoiceNum()).build();
         return newChoice;
