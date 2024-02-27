@@ -15,6 +15,8 @@ public interface WorldcupService {
 
     PageResultDTO<WorldcupDTO, Object[]> getWorldcupList(PageRequestDTO pageRequestDTO);
 
+    PageResultDTO<WorldcupDTO, Object[]> getProceedWorldcupList(PageRequestDTO pageRequestDTO);
+
     int register(WorldcupDTO worldcupDTO);
 
     WorldcupDTO getWorldcup(WorldcupDTO worldcupDTO);

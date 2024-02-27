@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.115.4">
+  <title>진행중인 이상형 월드컵</title>
+
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/album/">
+
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+
+  <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+
+<th:block th:include="main/header :: header"></th:block>
+<main>
+
+  <div class="album py-5 bg-body-tertiary">
+    <div class="container">
+      <div class="mb-5"><h2>진행중인 이상형 월드컵      </h2></div>
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-5 mb-5">
+
+        <th:block th:each="worldcupDTO : ${result.dtoList}">
+          <div class="col">
+            <div class="card shadow-sm">
+              <div class="worldcup-name" th:text="${worldcupDTO.title}"></div>
+
+              <div class="inner-row row row-cols-1 row-cols-sm-2 row-cols-md-2 g-1">
+                <th:block th:each="choiceDTO : ${worldcupDTO.choice}">
+                  <div class="inner-row-item col">
+                    <img th:if="${choiceDTO.type == 1}" th:src="@{/worldcup/choice/display(fileName=${choiceDTO.getImageURL()})}" style="width: 100%; height: 200px;">
+                    <img th:if="${choiceDTO.type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${choiceDTO.imgName} + '/0.jpg'}" style="width: 100%; height: 200px;">
+                    <svg th:if="${choiceDTO.imgName == null}" class="bd-placeholder-img card-img-top" width="100%" height="200px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: No Image" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">No Image</text></svg>
+                    <div class="choice-name" th:if="${choiceDTO.name != null}" th:text="${choiceDTO.name}"></div>
+                    <div class="choice-name" th:if="${choiceDTO.name == null}" th:text="'선택지 없음'"></div>
+                  </div>
+                </th:block>
+              </div>
+
+              <div class="card-body">
+                <!-- Description and other content for each worldcupDTO -->
+                <p class="card-text" th:text="${worldcupDTO.description}"></p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <small class="text-body-secondary" th:if="${worldcupDTO.modDate != null and worldcupDTO.modDate.equals(worldcupDTO.regDate)}"
+                         th:text="'등록일 ' + ${#temporals.format(worldcupDTO.regDate, 'yyyy-MM-dd')}"></small>
+                  <small class="text-body-secondary" th:unless="${worldcupDTO.modDate != null and worldcupDTO.modDate.equals(worldcupDTO.regDate)}"
+                         th:text="'수정일 ' + ${#temporals.format(worldcupDTO.modDate, 'yyyy-MM-dd')}"></small>
+
+                  <div class="btn-group">
+                    <a th:href="@{/play/playing/quiz(worldCupID = ${worldcupDTO.worldcupNum})}"><button type="button" class="btn btn-sm btn-outline-secondary quizBtn">퀴즈</button></a>
+                    <a th:href="@{/play/playing/roulette(worldcupNum = ${worldcupDTO.worldcupNum})}"><button type="button" class="btn btn-sm btn-outline-secondary roulette">룰렛</button></a>
+                    <a th:href="@{/play/playing(worldCupID = ${worldcupDTO.worldcupNum})}"><button type="button" class="btn btn-sm btn-outline-secondary startBtn">월드컵</button></a>
+                    <a th:href="@{/play/playResult(worldcupNum = ${worldcupDTO.worldcupNum})}"><button type="button" class="btn btn-sm btn-outline-secondary">결과</button></a>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </th:block>
+      </div>
+      <div class="text-center">
+        <ul class="pagination h-100 justify-content-center align-items-center">
+          <li class="page-item" th:if="${result.prev}">
+            <a class="page-link" th:href="@{/worldcup/list(page=${result.start - 1}
+                )}" tabindex="-1">Prev</a>
+          </li>
+          <li th:class=" ' page-item ' + ${result.page == page?'active':''}"
+              th:each="page: ${result.pageList}" >
+            <a class="page-link" th:href="@{/worldcup/list(page=${page}
+                )}">[[${page}]]</a>
+          </li>
+          <li class="page-item" th:if="${result.next}">
+            <a class="page-link" th:href="@{/worldcup/list(page=${result.end + 1}
+                )}">Next</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
+
+<th:block th:include="main/footer :: footer"></th:block>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+
+  $(document).ready(function() {
+    var searchForm = $("#searchForm");
+
+    $(".btn-search").click(function(e){
+      searchForm.submit();
+    });
+
+    $(".btn-clear").click(function(e){
+      searchForm.empty().submit();
+    });
+
+    $('.editBtn').click(function() {
+      var worldcupNum = $(this).closest('.card-body').find('input[name="worldcupNum"]').val();
+
+      window.location.href = '/worldcup/edit?worldcupNum=' + worldcupNum;
+    });
+    });
+</script>
+<script>
+  function deleteWorldcup() {
+    if (confirm('정말로 삭제하시겠습니까?')) {
+      var button = event.target;
+      var form = button.closest('form');
+      var formData = new FormData(form);
+
+      $.ajax({
+        url: '/worldcup/delete',
+        type: 'DELETE',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+          console.log(response);
+          location.reload();
+        },
+        error: function(xhr, status, error) {
+          console.error(error);
+          alert('삭제에 실패했습니다.');
+        }
+      });
+    }
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

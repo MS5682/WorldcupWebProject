@@ -64,6 +64,21 @@ public class WorldcupController {
         return "/user/my_worldcup.html";
     }
 
+    @GetMapping("/proceed/list")
+    public String proceedList(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, HttpSession session,
+                       Model model, RedirectAttributes redirectAttributes){
+        String userId = (String) session.getAttribute("userId");
+
+        if (userId == null || userId.isEmpty()) {
+            redirectAttributes.addFlashAttribute("message", "로그인 후 이용해주세요.");
+            return "redirect:/";
+        }
+
+        pageRequestDTO.setUserId(userId);
+        model.addAttribute("result", worldcupService.getProceedWorldcupList(pageRequestDTO));
+        return "/user/proceed_worldcup.html";
+    }
+
     @GetMapping("/register")
     public String getRegister(HttpSession session, RedirectAttributes redirectAttributes){
         String userId = (String) session.getAttribute("userId");

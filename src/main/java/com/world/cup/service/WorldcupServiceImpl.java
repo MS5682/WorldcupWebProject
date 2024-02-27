@@ -48,6 +48,23 @@ public class WorldcupServiceImpl implements WorldcupService{
     }
 
     @Override
+    public PageResultDTO<WorldcupDTO, Object[]> getProceedWorldcupList(PageRequestDTO pageRequestDTO){
+        Function<Object[], WorldcupDTO> fn = ((en) -> entityToDto((Worldcup)en[0], (String) en[1],(String) en[2],
+                (Byte) en[3],(Byte) en[4],(String) en[5],(String) en[6],(String) en[7],(String) en[8],
+                (String) en[9],(String) en[10]));
+
+        Sort sort = Sort.by("worldcupNum").descending();
+
+        Page<Object[]> result = worldcupRepository.getProceedWorldcupList
+                (
+                        pageRequestDTO.getPageable(sort),
+                        pageRequestDTO.getUserId()
+                        );
+
+        return new PageResultDTO<>(result,fn);
+    }
+
+    @Override
     public int register(WorldcupDTO worldcupDTO) {
         log.info(worldcupDTO);
         Worldcup worldcup = dtoToEntity(worldcupDTO);
