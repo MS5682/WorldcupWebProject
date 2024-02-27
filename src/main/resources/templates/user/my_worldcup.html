@@ -100,10 +100,10 @@
                 <!-- Description and other content for each worldcupDTO -->
                 <p class="card-text" th:text="${worldcupDTO.description}"></p>
                 <div class="d-flex justify-content-between align-items-center">
-                  <small class="text-body-secondary" th:if="${worldcupDTO.modDate.equals(worldcupDTO.regDate)}"
-                         th:text="'등록일 ' + ${worldcupDTO.regDate}"></small>
-                  <small class="text-body-secondary" th:unless="${worldcupDTO.modDate.equals(worldcupDTO.regDate)}"
-                         th:text="'수정일 ' + ${worldcupDTO.modDate}"></small>
+                  <small class="text-body-secondary" th:if="${worldcupDTO.modDate != null and worldcupDTO.modDate.equals(worldcupDTO.regDate)}"
+                         th:text="'등록일 ' + ${#temporals.format(worldcupDTO.regDate, 'yyyy-MM-dd')}"></small>
+                  <small class="text-body-secondary" th:unless="${worldcupDTO.modDate != null and worldcupDTO.modDate.equals(worldcupDTO.regDate)}"
+                         th:text="'수정일 ' + ${#temporals.format(worldcupDTO.modDate, 'yyyy-MM-dd')}"></small>
 
                   <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-outline-secondary editBtn">수정하기</button>
