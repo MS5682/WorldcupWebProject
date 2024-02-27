@@ -135,12 +135,17 @@ public class ProceedServiceImpl implements ProceedService {
     @Override
     public int[] round(String userId, int worldcupNum) {
         List<Proceed> proceedList = repository.findProceedsByUserIdAndWorldcup_WorldcupNum(userId, worldcupNum);
+        int i = 0;
 
         int[] nextArr = new int[proceedList.size()];
 
-        for (int i=0;i<proceedList.size();i++) {
-            nextArr[i] = proceedList.get(i).getRoundNext();
+        for (Proceed p : proceedList) {
+            if (p.getNext() == 1) {
+                nextArr[i] = p.getRoundNext();
+                i++;
+            }
         }
+
         return nextArr;
     }
 

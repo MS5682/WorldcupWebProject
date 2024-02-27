@@ -10,7 +10,7 @@ $(document).ready(function () { // 세이브 파일 체크
                 type: 'get',
                 url: '/play/playing/loadsave',
                 data: {
-                    userId: 'test1234',
+                    userId: 'test1234', // 아이디
                     worldcupId: $('#worldNum').val()
                 },
                 dataType: 'text',
@@ -22,7 +22,7 @@ $(document).ready(function () { // 세이브 파일 체크
                         type: 'get',
                         url: '/play/playing/next',
                         data: {
-                            userId: 'test1234',
+                            userId: 'test1234', // 아이디
                             worldcupId: $('#worldNum').val()
                         },
                         success: function (result) {
@@ -47,7 +47,7 @@ $(document).ready(function () { // 세이브 파일 체크
                 type: 'get',
                 url: '/play/playing/savedelete',
                 data: {
-                    userId: 'test1234',
+                    userId: 'test1234', // 아이디
                     worldcupId: $('#worldNum').val()
                 },
                 success: function (result) {
@@ -119,7 +119,7 @@ function randomClick(num) { // 타이머 시간 끝나면 랜덤하기 클릭
 }
 
 var totalRound = 1;
-var currentRound;
+var currentRound = 0;
 var nextRound;
 var progress = 0;
 
@@ -145,17 +145,15 @@ function savestart() {
             if (candi[i].roundnext < lastround) {
                 candiOrder++
             }
+
+            console.log('반복문 실행 횟수 : ' + i);
+
+            if (candi[i].roundnext == lastround) {
+                currentRound++;
+                console.log('currentround : ' + currentRound)
+            }
         }
 
-        if (candiOrder != 0) {
-            candiOrder = candiOrder / 2
-        }
-
-        // if (candiOrder != 0) {
-        //     candiOrder = candiOrder - 2;
-        // }
-
-        currentRound = candi.length
         if (candi.length < 5) {
             nextRound = 2
         } else if (candi.length < 9) {
@@ -412,6 +410,9 @@ function checkRound() {
 
         finalsave()
     }
+
+    console.log('candiorder : ' + candiOrder)
+    console.log('currentround : ' + currentRound)
 }
 
 function startsave() {
@@ -442,7 +443,7 @@ function leftsave() {
             winner: [candi[candiOrder - 1]],
             loser: [outCandiList.at(-1)],
             roundNext: nextRound,
-            userId: 'test1234',
+            userId: 'test1234', // 아이디
             worldNum: $('#worldNum').val()
         }),
         success: function (result) {
@@ -463,7 +464,7 @@ function rightsave() {
             winner: [candi[candiOrder]],
             loser: [outCandiList.at(-1)],
             roundNext: nextRound,
-            userId: 'test1234',
+            userId: 'test1234', // 아이디
             worldNum: $('#worldNum').val()
         }),
         success: function (result) {
@@ -483,7 +484,7 @@ function finalsave() {
         data: JSON.stringify({
             winner: [candi[0]],
             loser: [outCandiList.at(-1)],
-            userId: 'test1234',
+            userId: 'test1234', // 아이디
             worldNum: $('#worldNum').val()
         }),
         success: function (result) {
