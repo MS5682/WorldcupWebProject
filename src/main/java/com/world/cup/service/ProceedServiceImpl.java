@@ -145,6 +145,13 @@ public class ProceedServiceImpl implements ProceedService {
     }
 
     @Override
+    public void savedelete(String userId, int worldcupNum) {
+        List<Proceed> proceedList = repository.endPlayResult(userId, worldcupNum);
+
+        repository.deleteAll(proceedList);
+    }
+
+    @Override
     public boolean havesave(String userId, int worldcupNum) {
         List<Proceed> checksave = repository.endPlayResult(userId, worldcupNum);
 

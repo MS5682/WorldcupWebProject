@@ -43,11 +43,27 @@ $(document).ready(function () { // 세이브 파일 체크
             })
         } else {
             // 저장 삭제 ajax 추가
-            $('.modal').modal('show');
+            $.ajax({
+                type: 'get',
+                url: '/play/playing/savedelete',
+                data: {
+                    userId: 'test1234',
+                    worldcupId: $('#worldNum').val()
+                },
+                success: function (result) {
+                    console.log(result)
+                    console.log('삭제')
+                    $('.modal').modal('show');
+
+                    savestart()
+                }
+            })
         }
     } else {
         console.log('저장없음')
         $('.modal').modal('show');
+
+        savestart()
     }
 });
 
@@ -131,7 +147,15 @@ function savestart() {
             }
         }
 
-        candiOrder = candiOrder - 2;
+        if (candiOrder != 0) {
+            candiOrder = candiOrder / 2
+        }
+
+        // if (candiOrder != 0) {
+        //     candiOrder = candiOrder - 2;
+        // }
+
+        currentRound = candi.length
         if (candi.length < 5) {
             nextRound = 2
         } else if (candi.length < 9) {
@@ -144,11 +168,6 @@ function savestart() {
             nextRound = 32
         }
 
-        console.log('candiorder')   // 4
-        console.log(candiOrder)
-
-        console.log('화면표시 기능 시작')
-        console.log(candi[candiOrder].name)
         leftCandiName.innerText = candi[candiOrder].name
         rightCandiName.innerText = candi[candiOrder + 1].name
 
@@ -174,6 +193,8 @@ function savestart() {
                 '<p class="text-center rightName">' + candi[candiOrder + 1].name + '</p>'
             );
         }
+
+        console.log('candiorder : ' + candiOrder)
 
         candiOrder += 1;
     }
