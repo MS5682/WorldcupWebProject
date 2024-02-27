@@ -317,7 +317,7 @@ $('.left').on('click', function () {
 
     leftsave();
 
-    checkRound();
+    checkRound(candi[0].choiceNum);
 
     setTimeout(returnClick, 2000);
     setTimeout(changeCandi, 2000);
@@ -352,7 +352,7 @@ $('.right').on('click', function () {
 
     rightsave()
 
-    checkRound();
+    checkRound(candi[0].choiceNum);
 
     setTimeout(returnClick, 2000);
     setTimeout(changeCandi, 2000);
@@ -360,7 +360,7 @@ $('.right').on('click', function () {
     timer(time);
 })
 
-function checkRound() {
+function checkRound(choiceNum) {
     if (currentRound == 0) {
         var name = document.querySelector('.worldcup-name');
         if (nextRound > 4) {
@@ -392,9 +392,9 @@ function checkRound() {
         clearInterval(timerID)
 
         if (userId == '') {
-            nologinsave()
+            nologinsave(choiceNum)
         } else {
-            finalsave()
+            finalsave(choiceNum)
         }
     }
 }
@@ -445,7 +445,7 @@ function leftsave() {
 
 }
 
-function rightsave() {
+function rightsave(choiceNum) {
     if (userId != '') {
         $.ajax({
             type: 'post',
@@ -468,7 +468,7 @@ function rightsave() {
     }
 }
 
-function finalsave() {
+function finalsave(choiceNum) {
     $.ajax({
         type: 'post',
         url: 'playing/finalsave',
@@ -480,8 +480,9 @@ function finalsave() {
             worldNum: $('#worldNum').val()
         }),
         success: function (result) {
+
             // 이긴거 번호 보내기
-            // location.replace("playResult?worldcupNum=" + $('#worldNum').val())
+            location.replace("playResult?worldcupNum=" + $('#worldNum').val() + "&choiceNum=" + choiceNum);
         },
         error: function (request, status, error) {
             console.log(error)
@@ -489,7 +490,7 @@ function finalsave() {
     })
 }
 
-function nologinsave() {
+function nologinsave(choiceNum) {
     $.ajax({
         type: 'post',
         url: 'playing/nologinsave',
@@ -500,7 +501,7 @@ function nologinsave() {
         }),
         success: function (result) {
             // 이긴거 번호 보내기
-            // location.replace("playResult?worldcupNum=" + $('#worldNum').val())
+            location.replace("playResult?worldcupNum=" + $('#worldNum').val() + "&choiceNum=" + choiceNum)
         },
         error: function (request, status, error) {
             console.log(error)
