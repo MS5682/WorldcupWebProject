@@ -27,16 +27,26 @@
     <div class="album py-5 bg-body-tertiary">
     <div class="container">
         <table class="worldcup-result">
-            <tr class="worldcup-result-tr">
+            <tr class="worldcup-result-tr mb-5">
                 <td class="worldcup-result-td">
                     <p class="text-center fs-1 fw-bold" th:text="${worldcup.title}"></p>
 
                     <p class="text-center" th:text="'조회수 : '+${worldcup.viewCnt}"></p>
                 </td>
             </tr>
+            <tr th:if="${winner != null}">
+                <td>
+                    <p class="text-center fs-1 fw-bold">⭐우승자⭐</p>
+                    <div class="text-center d-flex justify-content-center align-items-center" >
+                        <img th:if="${winner.type == 1}" th:src="@{/worldcup/choice/display(fileName=${winner.getImageURL()})}" style="max-width: 500px; max-height: 500px;">
+                        <img th:if="${winner.type == 0}" th:src="@{'https://img.youtube.com/vi/' + ${winner.imgName} + '/0.jpg'}" style="max-width: 500px; max-height: 500px;">
+
+                    </div>
+                    </td>
+            </tr>
             <tr class="worldcup-result-tr">
                 <td class="worldcup-result-td">
-                    <p class="text-center fs-1 fw-bold">순위</p>
+                    <p class="text-center fs-1 fw-bold">전체 순위</p>
                     <div class="row">
                         <div class="col d-flex justify-content-center">
                             <div class="card" style="width: 18rem;" th:if="${rank.choice.size() > 0}">

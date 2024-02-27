@@ -35,7 +35,6 @@ public class CommentServiceImpl implements CommentService {
             pageable = pageRequestDTO.getRequestPageable(sort);
         }
         Page<Object[]> result = commentRepository.getCommentList(
-                pageRequestDTO.getChoiceNum(),
                 pageRequestDTO.getWorldcupNum(),
                 pageRequestDTO.getCommentType(),
                 pageable

@@ -4,6 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface CommentListRepository {
-    Page<Object[]> getCommentList(Integer choiceNum, int worldcupNum, int commentType, Pageable pageable);
+    Page<Object[]> getCommentList(int worldcupNum, int commentType, Pageable pageable);
 
 }

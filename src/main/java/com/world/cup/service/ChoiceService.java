@@ -14,6 +14,7 @@ public interface ChoiceService {
     WorldcupDTO getChoiceRank(WorldcupDTO worldcupDTO);
     PageResultDTO<ChoiceDTO, Object[]> getChoicePage(PageRequestDTO pageRequestDTO);
 
+    ChoiceDTO getChoice(ChoiceDTO choiceDTO);
     Integer sumFirst(WorldcupDTO worldcupDTO);
 
     Integer choiceCount(int worldcupNum);
