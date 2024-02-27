@@ -42,8 +42,6 @@ public class PlayingController {
     @GetMapping("/playing")
     public String playing(int worldCupID, Model model) {
         boolean checksave = proceedService.havesave("test1234", worldCupID);
-        System.out.println("checksave 확인");
-        System.out.println(checksave);
 
         ObjectMapper mapper = new ObjectMapper();
         String json = null;
@@ -72,11 +70,6 @@ public class PlayingController {
             e.printStackTrace();
         }
         List<Choice> choiceList = proceedService.savefileload(userId, worldcupId);
-        System.out.println("controller choiceList----------------------");
-        System.out.println(choiceList);
-
-        System.out.println("json 확인");
-        System.out.println(json);
 
         return ResponseEntity.ok(json);
     }
@@ -130,8 +123,6 @@ public class PlayingController {
 
     @PostMapping("/playing/save")
     public ResponseEntity<String> save(@RequestBody SaveDTO saveDTO) {
-        System.out.println("saveDTO 확인용-----------------------------------");
-        System.out.println(saveDTO);
         proceedService.save(saveDTO);
 
         return ResponseEntity.ok("success");

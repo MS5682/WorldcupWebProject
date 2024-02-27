@@ -1,7 +1,5 @@
 package com.world.cup;
 
-import com.world.cup.entity.Worldcup;
-
 public interface Choiceinterface {
     int getChoiceNum();
 
