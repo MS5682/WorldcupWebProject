@@ -41,8 +41,10 @@ public class UserController {
     private final EmailSendService emailSendService;
 
     @GetMapping("/login")
-    public String login(){
-
+    public String login(HttpSession session){
+        if (session.getAttribute("userId") != null) {
+            return "redirect:/";
+        }
         return "/login/login.html";
     }
 
@@ -111,6 +113,10 @@ public class UserController {
     @PostMapping("/login")
     public String login(UserDTO userDTO, HttpSession session, RedirectAttributes redirectAttributes){
         boolean loginSuccess = userService.login(userDTO);
+        if(session.getAttribute("userId")!=null){
+            redirectAttributes.addFlashAttribute("errormsg","이미 로그인 되어있습니다.");
+            return "redirect:/";
+        }
         if(loginSuccess) {
             session.setAttribute("userId", userDTO.getId());
             UserDTO userRoleDTO = userService.getUser(userDTO.getId());
