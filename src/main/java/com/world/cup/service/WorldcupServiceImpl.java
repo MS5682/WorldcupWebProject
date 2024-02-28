@@ -30,7 +30,7 @@ public class WorldcupServiceImpl implements WorldcupService{
 
         Sort sort = null;
         if (pageRequestDTO.getOrder() == 0) {
-            sort = Sort.by("worldcupNum").descending();
+            sort = Sort.by("worldcupNum").ascending();
         } else if(pageRequestDTO.getOrder() == 1) {
             sort = Sort.by("modDate").descending();
         } else if(pageRequestDTO.getOrder() == 2) {
