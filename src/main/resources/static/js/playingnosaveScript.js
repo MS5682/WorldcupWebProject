@@ -483,25 +483,48 @@ function leftsave() {
 }
 
 function rightsave(choiceNum) {
+    console.log(candi[candiOrder])
     if (userId != '') {
-        $.ajax({
-            type: 'post',
-            url: 'playing/autosave',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                winner: [candi[candiOrder]],
-                loser: [outCandiList.at(-1)],
-                roundNext: nextRound,
-                userId: userId,
-                worldNum: $('#worldNum').val()
-            }),
-            success: function (result) {
-                console.log(result)
-            },
-            error: function (request, status, error) {
-                alert('저장 실패');
-            }
-        })
+        if (candi[candiOrder] != null) {
+            $.ajax({
+                type: 'post',
+                url: 'playing/autosave',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    winner: [candi[candiOrder]],
+                    loser: [outCandiList.at(-1)],
+                    roundNext: nextRound,
+                    userId: userId,
+                    worldNum: $('#worldNum').val()
+                }),
+                success: function (result) {
+                    console.log(result)
+                },
+                error: function (request, status, error) {
+                    alert('저장 실패');
+                }
+            })
+        } else {
+            $.ajax({
+                type: 'post',
+                url: 'playing/autosave',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    winner: [candi[candiOrder-1]],
+                    loser: [outCandiList.at(-1)],
+                    roundNext: nextRound,
+                    userId: userId,
+                    worldNum: $('#worldNum').val()
+                }),
+                success: function (result) {
+                    console.log(result)
+                },
+                error: function (request, status, error) {
+                    alert('저장 실패');
+                }
+            })
+        }
+
     }
 }
 
