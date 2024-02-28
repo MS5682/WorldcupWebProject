@@ -164,7 +164,10 @@ function savestart() {
         rightCandiName.innerText = candi[candiOrder + 1].name
 
         if (candi[candiOrder].path.charAt(0) == 2) {
-            leftImg.src = '/worldcup/choice/display?fileName=' + candi[candiOrder].path + '/' + candi[candiOrder].uuid + '_' + candi[candiOrder].imgName
+            var encodedPath = encodeURIComponent(candi[candiOrder].path);
+               var encodedUUID = encodeURIComponent(candi[candiOrder].uuid);
+               var encodedImgName = encodeURIComponent(candi[candiOrder].imgName);
+               leftImg.src = '/worldcup/choice/display?fileName=' + encodedPath + '/' + encodedUUID + '_' + encodedImgName;
         } else if (candi[candiOrder].path.charAt(0) == 'h') {
             $('.left').html(
                 '<iframe style="min-width: 100%; height: 80vh; margin-top: 10px"' +
@@ -176,7 +179,10 @@ function savestart() {
         }
 
         if (candi[candiOrder + 1].path.charAt(0) == 2) {
-            rightImg.src = '/worldcup/choice/display?fileName=' + candi[candiOrder + 1].path + '/' + candi[candiOrder + 1].uuid + '_' + candi[candiOrder + 1].imgName
+             var encodedPath = encodeURIComponent(candi[candiOrder+ 1].path);
+                var encodedUUID = encodeURIComponent(candi[candiOrder+ 1].uuid);
+                var encodedImgName = encodeURIComponent(candi[candiOrder+ 1].imgName);
+                rightImg.src = '/worldcup/choice/display?fileName=' + encodedPath + '/' + encodedUUID + '_' + encodedImgName;
         } else if (candi[candiOrder + 1].path.charAt(0) == 'h') {
             $('.right').html(
                 '<iframe style="min-width: 100%; height: 80vh; margin-top: 10px"' +
@@ -230,7 +236,10 @@ $('.okButton').on('click', function () {    // 사직 버튼 누르면 월드컵
     rightCandiName.innerText = candi[candiOrder + 1].name
 
     if (candi[candiOrder].path.charAt(0) == 2) {
-        leftImg.src = '/worldcup/choice/display?fileName=' + candi[candiOrder].path + '/' + candi[candiOrder].uuid + '_' + candi[candiOrder].imgName
+         var encodedPath = encodeURIComponent(candi[candiOrder].path);
+                       var encodedUUID = encodeURIComponent(candi[candiOrder].uuid);
+                       var encodedImgName = encodeURIComponent(candi[candiOrder].imgName);
+                       leftImg.src = '/worldcup/choice/display?fileName=' + encodedPath + '/' + encodedUUID + '_' + encodedImgName;
     } else if (candi[candiOrder].path.charAt(0) == 'h') {
         $('.left').html(
             '<iframe style="min-width: 100%; height: 80vh; margin-top: 10px"' +
@@ -242,7 +251,10 @@ $('.okButton').on('click', function () {    // 사직 버튼 누르면 월드컵
     }
 
     if (candi[candiOrder + 1].path.charAt(0) == 2) {
-        rightImg.src = '/worldcup/choice/display?fileName=' + candi[candiOrder + 1].path + '/' + candi[candiOrder + 1].uuid + '_' + candi[candiOrder + 1].imgName
+        var encodedPath = encodeURIComponent(candi[candiOrder+ 1].path);
+                        var encodedUUID = encodeURIComponent(candi[candiOrder+ 1].uuid);
+                        var encodedImgName = encodeURIComponent(candi[candiOrder+ 1].imgName);
+                        rightImg.src = '/worldcup/choice/display?fileName=' + encodedPath + '/' + encodedUUID + '_' + encodedImgName;
     } else if (candi[candiOrder + 1].path.charAt(0) == 'h') {
         $('.right').html(
             '<iframe style="min-width: 100%; height: 80vh; margin-top: 10px"' +
@@ -283,10 +295,18 @@ function returnClick() {
 function changeCandi() {
     leftCandiName.innerText = candi[candiOrder].name
     rightCandiName.innerText = candi[candiOrder + 1].name
+    var encodedPath1 = encodeURIComponent(candi[candiOrder].path);
+                    var encodedUUID1 = encodeURIComponent(candi[candiOrder].uuid);
+                    var encodedImgName1 = encodeURIComponent(candi[candiOrder].imgName);
+
+      var encodedPath2 = encodeURIComponent(candi[candiOrder+ 1].path);
+                              var encodedUUID2 = encodeURIComponent(candi[candiOrder+ 1].uuid);
+                              var encodedImgName2 = encodeURIComponent(candi[candiOrder+ 1].imgName);
+
 
     if (candi[candiOrder].path.charAt(0) == 2) {
         $('.left').html(
-            '<img src="/worldcup/choice/display?fileName=' + candi[candiOrder].path + '/' + candi[candiOrder].uuid + '_' + candi[candiOrder].imgName + '" ' +
+            '<img src="/worldcup/choice/display?fileName=' + encodedPath1 + '/' + encodedUUID1 + '_' + encodedImgName1 + '" ' +
             'class="img-thumbnail oddImg" style="min-width: 100%; height: 80vh; margin-top: 10px">' +
             '<p class="text-center leftName">' + candi[candiOrder].name + '</p>'
         )
@@ -301,7 +321,7 @@ function changeCandi() {
 
     if (candi[candiOrder + 1].path.charAt(0) == 2) {
         $('.right').html(
-            '<img src="/worldcup/choice/display?fileName=' + candi[candiOrder + 1].path + '/' + candi[candiOrder + 1].uuid + '_' + candi[candiOrder + 1].imgName + '" ' +
+            '<img src="/worldcup/choice/display?fileName=' + encodedPath2 + '/' + encodedUUID2 + '_' + encodedImgName2 + '" ' +
             'class="img-thumbnail evenImg" style="min-width: 100%; height: 80vh; margin-top: 10px">' +
             '<p class="text-center rightName">' + candi[candiOrder + 1].name + '</p>'
         )
