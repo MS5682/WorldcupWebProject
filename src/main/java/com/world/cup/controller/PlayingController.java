@@ -12,6 +12,7 @@ import com.world.cup.service.PlayingService;
 import com.world.cup.service.WorldcupService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -149,9 +150,11 @@ public class PlayingController {
     }
 
     @PostMapping("/playing/nologinsave")
-    public String nologinsave(@RequestBody Choice c, Choice[] choices) {
-        proceedService.nologinsave(c, choices);
-        return null;
+    public String nologinsave(@RequestBody SaveDTO saveDTO) {
+        System.out.println("controller : " + saveDTO.getWorldNum());
+        proceedService.nologinsave(saveDTO);
+
+        return "";
     }
 
     @GetMapping("/playing/quiz")

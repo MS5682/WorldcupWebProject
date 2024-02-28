@@ -7,7 +7,9 @@ import com.world.cup.entity.User;
 import com.world.cup.entity.Worldcup;
 import com.world.cup.repository.PlayingRepository;
 import com.world.cup.repository.ProceedRepository;
+import com.world.cup.repository.WorldcupRepository;
 import lombok.Builder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.List;
 public class ProceedServiceImpl implements ProceedService {
     private ProceedRepository repository;
     private PlayingRepository playingRepository;
+    private WorldcupRepository worldcupRepository;
 
     @Override
     public void save(SaveDTO saveDTO) {
@@ -92,9 +95,16 @@ public class ProceedServiceImpl implements ProceedService {
     }
 
     @Override
-    public void nologinsave(Choice c, Choice[] choices) {
-        playingRepository.save(c);
-        playingRepository.saveAll(Arrays.asList(choices));
+    public void nologinsave(SaveDTO saveDTO) {
+        for (int i=0; i<saveDTO.getWinner().size(); i++) {
+            Choice c = convertDTO(saveDTO.getWinner().get(i), worldcupRepository, saveDTO.getWorldNum());
+            playingRepository.save(c);
+        }
+
+        for (int i=0; i<saveDTO.getLoser().size(); i++) {
+            Choice c = convertDTO(saveDTO.getLoser().get(i), worldcupRepository, saveDTO.getWorldNum());
+            playingRepository.save(c);
+        }
     }
 
     @Override
