@@ -33,13 +33,15 @@ public class ProceedServiceImpl implements ProceedService {
                     .choice(convertEntity(saveDTO.getWinner().get(i)))
                     .next(1)
                     .build();
-
+            System.out.println("ppppppp"+p);
             repository.save(p);
         }
     }
 
     @Override
     public void autosave(SaveDTO saveDTO) {
+//        System.out.println("save : " + convertEntity(saveDTO.getWinner().get(0)));
+        System.out.println("save id : " + saveDTO.getUserId());
         Proceed p = Proceed.builder()
                 .proceedNum(repository.findByUser_IdAndChoice(saveDTO.getUserId(), convertEntity(saveDTO.getWinner().get(0))).getProceedNum())
                 .roundNext(saveDTO.getRoundNext())

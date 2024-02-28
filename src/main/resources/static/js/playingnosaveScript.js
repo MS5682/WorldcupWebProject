@@ -444,9 +444,11 @@ function startsave() {
             data: JSON.stringify({
                 winner: candi,
                 roundNext: nextRound * 2,
+                userId: userId,
                 worldNum: $('#worldNum').val()
             }),
             success: function (result) {
+                console.log('성공')
                 console.log(result)
             },
             error: function (request, status, error) {
@@ -474,7 +476,7 @@ function leftsave() {
                 console.log(result)
             },
             error: function (request, status, error) {
-                alert(error);
+                alert('저장 실패');
             }
         })
     }
@@ -498,7 +500,7 @@ function rightsave(choiceNum) {
                 console.log(result)
             },
             error: function (request, status, error) {
-                alert(error)
+                alert('저장 실패');
             }
         })
     }
