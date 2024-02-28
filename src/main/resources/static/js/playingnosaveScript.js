@@ -496,10 +496,12 @@ function nologinsave(choiceNum) {
         url: 'playing/nologinsave',
         contentType: 'application/json',
         data: JSON.stringify({
-            choice: candi,
-            choices: outCandiList
+            winner: candi,
+            loser: outCandiList,
+            worldNum: $('#worldNum').val()
         }),
         success: function (result) {
+            console.log(result);
             // 이긴거 번호 보내기
             location.replace("playResult?worldcupNum=" + $('#worldNum').val() + "&choiceNum=" + choiceNum)
         },
