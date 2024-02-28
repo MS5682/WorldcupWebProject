@@ -130,6 +130,7 @@ public class PlayingController {
 
     @PostMapping("/playing/save")
     public ResponseEntity<String> save(@RequestBody SaveDTO saveDTO) {
+        System.out.println("sasasasa" + saveDTO);
         proceedService.save(saveDTO);
 
         return ResponseEntity.ok("success");
@@ -137,16 +138,17 @@ public class PlayingController {
 
     @PostMapping("/playing/autosave")
     public ResponseEntity<String> autosave(@RequestBody SaveDTO saveDTO) {
+        System.out.println("controller : " + saveDTO);
         proceedService.autosave(saveDTO);
 
         return ResponseEntity.ok("success");
     }
 
     @PostMapping("/playing/finalsave")
-    public String finalsave(@RequestBody SaveDTO saveDTO) {
+    public ResponseEntity<String> finalsave(@RequestBody SaveDTO saveDTO) {
         proceedService.finalsave(saveDTO);
 
-        return "redirect:playResult?worldcupNum=" + saveDTO.getWorldNum();
+        return ResponseEntity.ok("success");
     }
 
     @PostMapping("/playing/nologinsave")
