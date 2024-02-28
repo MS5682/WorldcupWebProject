@@ -148,16 +148,16 @@ function savestart() {
             }
         }
 
-        if (candi.length < 65) {
-            nextRound = 32
-        } else if (candi.length < 33) {
-            nextRound = 16
-        } else if (candi.length < 17) {
-            nextRound = 8
+        if (candi.length < 5) {
+            nextRound = 2
         } else if (candi.length < 9) {
             nextRound = 4
-        } else if (candi.length < 5) {
-            nextRound = 2
+        } else if (candi.length < 17) {
+            nextRound = 8
+        } else if (candi.length < 33) {
+            nextRound = 16
+        } else if (candi.length < 65) {
+            nextRound = 32
         }
 
         leftCandiName.innerText = candi[candiOrder].name
@@ -260,7 +260,7 @@ $('.okButton').on('click', function () {    // 사직 버튼 누르면 월드컵
 function saveroundmark() {
     var name = document.querySelector('.worldcup-name');
 
-    name.innerText = title + ' ' + (nextRound * 2) + '강' + '  ' + (candiOrder+1) + ' / ' + nextRound;
+    name.innerText = title + ' ' + (nextRound * 2) + '강' + '  ' + candiOrder + ' / ' + (nextRound);
 
     intext = title + ' ' + (nextRound * 2) + '강';
 
@@ -269,7 +269,8 @@ function saveroundmark() {
     progressbar.innerText = (nextRound * 2) + '강';
 
     progress = candiOrder
-
+    totalRound = nextRound * 2;
+    
     $('.progress-bar').css("width", progress / (totalRound - 1) * 100 + "%");
 
 }
