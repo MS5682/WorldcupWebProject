@@ -31,11 +31,13 @@ $(document).ready(function () { // 세이브 파일 체크
                             }
 
                             savestart()
+
+                            saveroundmark()
                         }
                     })
                 },
                 error: function (request, status, error) {
-                    console.log(error)
+                    alert('불러오기 실패')
                 }
             })
         } else {
@@ -51,6 +53,9 @@ $(document).ready(function () { // 세이브 파일 체크
                     $('.modal').modal('show');
 
                     savestart()
+                },
+                error: function (request, status, error) {
+                    alert('삭제 실패')
                 }
             })
         }
@@ -143,16 +148,16 @@ function savestart() {
             }
         }
 
-        if (candi.length < 5) {
-            nextRound = 2
-        } else if (candi.length < 9) {
-            nextRound = 4
-        } else if (candi.length < 17) {
-            nextRound = 8
+        if (candi.length < 65) {
+            nextRound = 32
         } else if (candi.length < 33) {
             nextRound = 16
-        } else if (candi.length < 65) {
-            nextRound = 32
+        } else if (candi.length < 17) {
+            nextRound = 8
+        } else if (candi.length < 9) {
+            nextRound = 4
+        } else if (candi.length < 5) {
+            nextRound = 2
         }
 
         leftCandiName.innerText = candi[candiOrder].name
@@ -194,18 +199,22 @@ var candiOrder = 0;
 
 var title = $('.worldcup-name').text();
 
+var intext = '';
+
 $('.okButton').on('click', function () {    // 사직 버튼 누르면 월드컵 초기 세팅
     var name = document.querySelector('.worldcup-name');
     for (i = 0; i < $('.totalRound').val(); i++) {
         totalRound = totalRound * 2;
     }
 
-
     candi.length = totalRound;
 
-    name.innerText = title + ' ' + totalRound + '강';
     currentRound = totalRound;
     nextRound = totalRound / 2;
+
+    name.innerText = title + ' ' + totalRound + '강' + ' ' + (candiOrder+1) + ' / ' + nextRound;
+
+    intext = title + ' ' + (nextRound * 2) + '강';
 
     var progressbar = document.querySelector('.progress-bar');
     progressbar.innerText = currentRound + '강';
@@ -247,6 +256,23 @@ $('.okButton').on('click', function () {    // 사직 버튼 누르면 월드컵
 
     candiOrder += 1;
 })
+
+function saveroundmark() {
+    var name = document.querySelector('.worldcup-name');
+
+    name.innerText = title + ' ' + (nextRound * 2) + '강' + '  ' + (candiOrder+1) + ' / ' + nextRound;
+
+    intext = title + ' ' + (nextRound * 2) + '강';
+
+
+    var progressbar = document.querySelector('.progress-bar');
+    progressbar.innerText = (nextRound * 2) + '강';
+
+    progress = candiOrder
+
+    $('.progress-bar').css("width", progress / (totalRound - 1) * 100 + "%");
+
+}
 
 function returnClick() {
     $('.left').css("pointer-events", "auto")
@@ -360,15 +386,23 @@ $('.right').on('click', function () {
     timer(time);
 })
 
+
 function checkRound(choiceNum) {
+    var name = document.querySelector('.worldcup-name');
+    var roundmark = '   ' + (candiOrder + 1) + ' / ' + nextRound;
     if (currentRound == 0) {
-        var name = document.querySelector('.worldcup-name');
         if (nextRound > 4) {
             name.innerText = title + ' ' + nextRound + '강';
+            intext = name.innerText
+            name.innerText += ' ' + '1 / ' + ( nextRound / 2 );
         } else if (nextRound == 4) {
             name.innerText = title + ' ' + '준결승';
+            intext = name.innerText
+            name.innerText += ' ' + '1 / ' + ( nextRound / 2 );
         } else if (nextRound == 2) {
             name.innerText = title + ' ' + '결승';
+            intext = name.innerText
+            name.innerText += ' ' + '1 / ' + ( nextRound / 2 );
         }
 
         var progressbar = document.querySelector('.progress-bar');
@@ -384,6 +418,8 @@ function checkRound(choiceNum) {
 
         currentRound = nextRound;
         nextRound = currentRound / 2;
+    } else {
+        name.innerText = intext + roundmark;
     }
 
     if (nextRound == 0.5) {
