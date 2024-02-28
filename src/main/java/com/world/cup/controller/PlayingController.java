@@ -12,7 +12,6 @@ import com.world.cup.service.PlayingService;
 import com.world.cup.service.WorldcupService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -130,7 +129,6 @@ public class PlayingController {
 
     @PostMapping("/playing/save")
     public ResponseEntity<String> save(@RequestBody SaveDTO saveDTO) {
-        System.out.println("sasasasa" + saveDTO);
         proceedService.save(saveDTO);
 
         return ResponseEntity.ok("success");
@@ -138,7 +136,6 @@ public class PlayingController {
 
     @PostMapping("/playing/autosave")
     public ResponseEntity<String> autosave(@RequestBody SaveDTO saveDTO) {
-        System.out.println("controller : " + saveDTO);
         proceedService.autosave(saveDTO);
 
         return ResponseEntity.ok("success");
@@ -152,11 +149,10 @@ public class PlayingController {
     }
 
     @PostMapping("/playing/nologinsave")
-    public String nologinsave(@RequestBody SaveDTO saveDTO) {
-        System.out.println("controller : " + saveDTO.getWorldNum());
+    public ResponseEntity<String> nologinsave(@RequestBody SaveDTO saveDTO) {
         proceedService.nologinsave(saveDTO);
 
-        return "";
+        return ResponseEntity.ok("success");
     }
 
     @GetMapping("/playing/quiz")

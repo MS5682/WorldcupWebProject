@@ -448,7 +448,6 @@ function startsave() {
                 worldNum: $('#worldNum').val()
             }),
             success: function (result) {
-                console.log('성공')
                 console.log(result)
             },
             error: function (request, status, error) {
