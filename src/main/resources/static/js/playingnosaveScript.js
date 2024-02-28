@@ -127,7 +127,7 @@ var allCandiList
 var outCandiList = [];
 
 var candi
-
+var candiOrder = 0;
 
 function savestart() {
 
@@ -194,8 +194,6 @@ leftCandiName = document.querySelector('.leftName')
 rightCandiName = document.querySelector('.rightName')
 leftImg = document.querySelector('.oddImg')
 rightImg = document.querySelector('.evenImg')
-
-var candiOrder = 0;
 
 var title = $('.worldcup-name').text();
 
@@ -270,7 +268,7 @@ function saveroundmark() {
 
     progress = candiOrder
     totalRound = nextRound * 2;
-    
+
     $('.progress-bar').css("width", progress / (totalRound - 1) * 100 + "%");
 
 }
@@ -484,48 +482,25 @@ function leftsave() {
 }
 
 function rightsave(choiceNum) {
-    console.log(candi[candiOrder])
     if (userId != '') {
-        if (candi[candiOrder] != null) {
-            $.ajax({
-                type: 'post',
-                url: 'playing/autosave',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    winner: [candi[candiOrder]],
-                    loser: [outCandiList.at(-1)],
-                    roundNext: nextRound,
-                    userId: userId,
-                    worldNum: $('#worldNum').val()
-                }),
-                success: function (result) {
-                    console.log(result)
-                },
-                error: function (request, status, error) {
-                    alert('저장 실패');
-                }
-            })
-        } else {
-            $.ajax({
-                type: 'post',
-                url: 'playing/autosave',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    winner: [candi[candiOrder-1]],
-                    loser: [outCandiList.at(-1)],
-                    roundNext: nextRound,
-                    userId: userId,
-                    worldNum: $('#worldNum').val()
-                }),
-                success: function (result) {
-                    console.log(result)
-                },
-                error: function (request, status, error) {
-                    alert('저장 실패');
-                }
-            })
-        }
-
+        $.ajax({
+            type: 'post',
+            url: 'playing/autosave',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                winner: [candi[candiOrder - 1]],
+                loser: [outCandiList.at(-1)],
+                roundNext: nextRound,
+                userId: userId,
+                worldNum: $('#worldNum').val()
+            }),
+            success: function (result) {
+                console.log(result)
+            },
+            error: function (request, status, error) {
+                alert('저장 실패');
+            }
+        })
     }
 }
 
